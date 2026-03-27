@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Learning Journal</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Plus+Jakarta+Sans:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;1,14..32,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0D0C14;--surface:#18171F;--surface2:#201F2A;--surface3:#28273A;
+  --text:#ECE9F8;--muted:#7C7A95;--dim:#4A4866;--border:rgba(255,255,255,0.07);
+  --accent:#FBBF24;--accent2:#A78BFA;
+  --cat-assistants:#8B5CF6;--cat-companies:#EC4899;--cat-concepts:#14B8A6;
+  --cat-dev:#3B82F6;--cat-apis:#F59E0B;--cat-platforms:#10B981;
+  --cat-build:#F97316;--cat-workflow:#6366F1;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.65;min-height:100vh;font-size:15px}
+a{color:var(--accent2);text-decoration:none}
+
+/* ── HEADER ── */
+.header{padding:3rem 2rem 2rem;max-width:1200px;margin:0 auto;border-bottom:1px solid var(--border)}
+.header-top{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem}
+.journal-title{font-family:'Syne',sans-serif;font-size:2.8rem;font-weight:800;letter-spacing:-0.03em;line-height:1}
+.journal-title span{color:var(--accent)}
+.journal-meta{font-size:0.8rem;color:var(--muted);font-family:'JetBrains Mono',monospace;padding-top:0.3rem}
+.progress-bar-wrap{background:var(--surface2);border-radius:100px;height:6px;width:220px;overflow:hidden;margin-top:0.5rem}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:100px;transition:width 0.5s ease}
+.progress-label{font-size:0.75rem;color:var(--muted);margin-top:0.3rem;font-family:'JetBrains Mono',monospace}
+
+.search-row{display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap}
+.search-wrap{position:relative;flex:1;min-width:240px}
+.search-wrap svg{position:absolute;left:0.85rem;top:50%;transform:translateY(-50%);opacity:0.4;pointer-events:none}
+#search{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:0.65rem 1rem 0.65rem 2.5rem;color:var(--text);font-family:inherit;font-size:0.9rem;outline:none;transition:border-color 0.2s}
+#search:focus{border-color:var(--accent2)}
+#search::placeholder{color:var(--muted)}
+.clear-btn{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:0.65rem 1rem;color:var(--muted);cursor:pointer;font-size:0.8rem;transition:all 0.2s}
+.clear-btn:hover{color:var(--text)}
+
+/* ── CATEGORY FILTERS ── */
+.cats{display:flex;gap:0.5rem;flex-wrap:wrap;padding:1.25rem 2rem;max-width:1200px;margin:0 auto;border-bottom:1px solid var(--border)}
+.cat-pill{display:flex;align-items:center;gap:0.4rem;padding:0.4rem 1rem;border-radius:100px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:0.8rem;font-weight:500;cursor:pointer;transition:all 0.18s;white-space:nowrap;font-family:inherit}
+.cat-pill.active,.cat-pill:hover{background:var(--surface2);color:var(--text)}
+.cat-pill.active{border-color:var(--accent2)}
+.cat-pill .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+
+/* ── CASE STUDY BANNER ── */
+.case-study{background:var(--surface);border:1px solid var(--border);border-radius:16px;margin:1.5rem 2rem;max-width:1200px;margin-left:auto;margin-right:auto;overflow:hidden}
+.case-study-header{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
+.case-study-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;display:flex;align-items:center;gap:0.6rem}
+.badge{background:var(--accent);color:#000;font-size:0.65rem;font-weight:700;padding:0.2rem 0.5rem;border-radius:4px;letter-spacing:0.05em;text-transform:uppercase}
+.chevron{color:var(--muted);transition:transform 0.3s;font-size:0.85rem}
+.chevron.open{transform:rotate(180deg)}
+/* ── CASE TABS ── */
+.case-study-header{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:0.6rem}
+.case-tabs{display:flex;overflow-x:auto;border-bottom:1px solid var(--border);scrollbar-width:none}
+.case-tabs::-webkit-scrollbar{display:none}
+.case-tab{padding:0.65rem 1rem;font-size:0.77rem;font-weight:500;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.18s;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none;font-family:inherit}
+.case-tab:hover{color:var(--text)}
+.case-tab.active{color:var(--text);border-bottom-color:var(--accent2)}
+.tab-dot{width:6px;height:6px;border-radius:50%;display:inline-block;margin-right:0.32rem;vertical-align:middle}
+.case-panel{display:none;padding:1.25rem 1.5rem}
+.case-panel.active{display:block}
+/* ── LEARNING PATHS ── */
+.paths-section{padding:1.25rem 2rem 0;max-width:1200px;margin:0 auto}
+.paths-section-title{font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;margin-bottom:0.75rem;display:flex;align-items:center;gap:0.6rem}
+.paths-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:0.55rem;margin-bottom:1rem}
+.path-card{background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:0.85rem 1rem 0.8rem;cursor:pointer;transition:all 0.18s;position:relative;text-align:left;font-family:inherit;width:100%}
+.path-card:hover{transform:translateY(-1px)}
+.path-card.active{border-width:2px}
+.pc-icon{font-size:1.1rem;margin-bottom:0.28rem;display:block}
+.pc-label{font-family:'Syne',sans-serif;font-size:0.86rem;font-weight:700;margin-bottom:0.15rem;display:block}
+.pc-sub{font-size:0.7rem;color:var(--muted);line-height:1.35;display:block}
+.pc-count{position:absolute;top:0.58rem;right:0.7rem;font-size:0.6rem;font-family:'JetBrains Mono',monospace;color:var(--dim)}
+.path-banner{background:var(--surface2);border-bottom:2px solid var(--border);padding:0.6rem 2rem;display:none;align-items:center;gap:1rem;flex-wrap:wrap;position:sticky;top:0;z-index:100}
+.path-banner.visible{display:flex}
+.pbname{font-size:0.8rem;font-weight:600;white-space:nowrap}
+.pbtrack{background:var(--surface);border-radius:100px;height:4px;flex:1;max-width:150px;overflow:hidden}
+.pbfill{height:100%;border-radius:100px;transition:width 0.4s ease;width:0%}
+.pbstep{font-size:0.7rem;color:var(--muted);font-family:'JetBrains Mono',monospace;white-space:nowrap}
+.exit-path-btn{margin-left:auto;font-size:0.7rem;background:transparent;border:1px solid var(--border);border-radius:6px;padding:0.24rem 0.62rem;cursor:pointer;color:var(--muted);font-family:inherit;transition:all 0.2s}
+.exit-path-btn:hover{color:var(--text)}
+.path-nav{display:flex;gap:0.5rem;margin-top:0.82rem}
+.pnb{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:0.5rem 0.75rem;cursor:pointer;font-family:inherit;font-size:0.76rem;color:var(--muted);transition:all 0.2s;text-align:center}
+.pnb:hover{color:var(--text);border-color:var(--accent2)}
+.pnb.fwd{background:var(--accent2);color:#fff;border-color:var(--accent2);font-weight:500}
+.pnb.fwd:hover{opacity:0.88}
+.pnb:disabled{opacity:0.3;cursor:not-allowed}
+.track-badges{display:flex;flex-wrap:wrap;gap:0.28rem;margin-top:0.38rem}
+.track-badge{font-size:0.58rem;border-radius:4px;padding:0.12rem 0.45rem;font-weight:600;letter-spacing:0.04em;white-space:nowrap}
+
+.case-study-body{padding:0 1.5rem;max-height:0;overflow:hidden;transition:max-height 0.4s ease,padding 0.3s}
+.case-study-body.open{max-height:600px;padding:1.25rem 1.5rem}
+.flow{display:flex;align-items:center;flex-wrap:wrap;gap:0;margin-bottom:1.25rem}
+.flow-node{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:0.55rem 0.85rem;font-size:0.78rem;text-align:center;min-width:90px}
+.flow-node .fn-label{font-weight:600;color:var(--text);margin-bottom:0.15rem}
+.flow-node .fn-tech{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--muted)}
+.flow-arr{color:var(--dim);font-size:1.1rem;padding:0 0.3rem;flex-shrink:0}
+.flow-note{font-size:0.82rem;color:var(--muted);line-height:1.6;padding:0.75rem 1rem;background:rgba(255,255,255,0.025);border-left:3px solid var(--accent2);border-radius:0 8px 8px 0;margin-top:0}
+
+/* ── STATS BAR ── */
+.stats{display:flex;gap:2rem;padding:1rem 2rem;max-width:1200px;margin:0 auto;border-bottom:1px solid var(--border)}
+.stat{font-size:0.78rem;color:var(--muted)}
+.stat strong{color:var(--text);font-size:1.1rem;display:block;font-family:'Syne',sans-serif;font-weight:700}
+
+/* ── GRID ── */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem;padding:1.5rem 2rem;max-width:1200px;margin:0 auto}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:border-color 0.2s,transform 0.15s;cursor:pointer}
+.card:hover{border-color:var(--surface3);transform:translateY(-1px)}
+.card.expanded{border-color:var(--accent2);background:var(--surface)}
+.card.learned .card-header::before{content:'';position:absolute;top:12px;right:12px;width:8px;height:8px;border-radius:50%;background:#22C55E}
+.card-header{position:relative;padding:1.1rem 1.25rem 0.85rem;display:flex;align-items:flex-start;gap:0.75rem}
+.cat-bar{width:3px;height:100%;border-radius:3px;flex-shrink:0;align-self:stretch;min-height:36px}
+.card-meta{flex:1;min-width:0}
+.card-term{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;line-height:1.2;margin-bottom:0.3rem;display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap}
+.card-term .new-tag{font-size:0.6rem;background:rgba(167,139,250,0.2);color:var(--accent2);border-radius:4px;padding:0.1rem 0.4rem;font-family:'JetBrains Mono',monospace;letter-spacing:0.05em;font-weight:500;flex-shrink:0}
+.card-tagline{font-size:0.8rem;color:var(--muted);line-height:1.4}
+.card-body{padding:0 1.25rem;max-height:0;overflow:hidden;transition:max-height 0.35s ease}
+.card.expanded .card-body{max-height:1200px;padding-bottom:1.25rem}
+.section-label{font-size:0.65rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--dim);font-weight:600;font-family:'JetBrains Mono',monospace;margin:1rem 0 0.4rem}
+.card-body .plain{font-size:0.875rem;color:#C4C1DC;line-height:1.7}
+.how-box{background:var(--surface2);border-radius:10px;padding:0.85rem 1rem;margin-top:0;font-size:0.82rem;color:var(--muted);line-height:1.7;border-left:3px solid var(--dim)}
+.example-box{background:rgba(251,191,36,0.07);border-radius:10px;padding:0.85rem 1rem;font-size:0.82rem;color:#C4B080;line-height:1.7;border-left:3px solid var(--accent)}
+.connects{display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:0}
+.connect-tag{font-size:0.7rem;background:var(--surface3);border:1px solid var(--border);border-radius:6px;padding:0.25rem 0.6rem;color:var(--muted);font-family:'JetBrains Mono',monospace;cursor:pointer;transition:all 0.15s}
+.connect-tag:hover{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.card-footer{padding:0.6rem 1.25rem 0.85rem;display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--border);margin-top:0.85rem}
+.cat-label{font-size:0.68rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;opacity:0.8}
+.mark-btn{font-size:0.72rem;background:transparent;border:1px solid var(--border);border-radius:6px;padding:0.3rem 0.7rem;cursor:pointer;color:var(--muted);font-family:inherit;transition:all 0.2s}
+.mark-btn:hover,.card.learned .mark-btn{background:#22C55E;color:#fff;border-color:#22C55E}
+.no-results{text-align:center;padding:4rem 2rem;color:var(--muted);font-size:0.9rem}
+.no-results strong{display:block;font-size:1.5rem;margin-bottom:0.5rem;color:var(--dim)}
+
+/* ── FOOTER ── */
+.footer{text-align:center;padding:3rem 2rem;color:var(--dim);font-size:0.78rem;max-width:1200px;margin:0 auto;border-top:1px solid var(--border);font-family:'JetBrains Mono',monospace}
+@media(max-width:640px){
+  .journal-title{font-size:2rem}
+  .grid{grid-template-columns:1fr;padding:1rem}
+  .stats{flex-wrap:wrap;gap:1rem}
+  .flow{flex-direction:column;align-items:flex-start}
+  .flow-arr{transform:rotate(90deg)}
+}
+</style>
+</head>
+<body>
+
+<div class="path-banner" id="pathBanner">
+  <span class="pbname" id="pbname"></span>
+  <div class="pbtrack"><div class="pbfill" id="pbfill"></div></div>
+  <span class="pbstep" id="pbstep"></span>
+  <button class="exit-path-btn" onclick="exitPath()">Exit path &#x2715;</button>
+</div>
+
+<div class="header">
+  <div class="header-top">
+    <div>
+      <div class="journal-title">AI Learning <span>Journal</span></div>
+      <div class="journal-meta">Your personal reference for understanding AI from the inside out</div>
+      <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
+      <div class="progress-label" id="progressLabel">0 of <span id="totalCount">0</span> concepts marked as understood</div>
+    </div>
+    <div style="text-align:right">
+      <div style="font-size:0.75rem;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:0.5rem">STARTED</div>
+      <div style="font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700" id="startDate"></div>
+    </div>
+  </div>
+  <div class="search-row">
+    <div class="search-wrap">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="search" placeholder="Search terms, definitions, examples..." autocomplete="off">
+    </div>
+    <button class="clear-btn" onclick="clearSearch()">Clear ✕</button>
+  </div>
+</div>
+
+<div class="cats" id="catFilters"></div>
+
+
+<!-- LEARNING PATHS -->
+<div class="paths-section" id="pathsSection">
+  <div class="paths-section-title"><span class="badge" style="background:var(--accent2);color:#fff">Learning Paths</span> Choose your track &mdash; terms appear in guided sequence</div>
+  <div class="paths-grid" id="pathsGrid"></div>
+</div>
+
+<!-- CASE STUDIES -->
+<div style="padding:1rem 2rem 0;max-width:1200px;margin:0 auto">
+<div class="case-study">
+  <div class="case-study-header">
+    <div class="case-study-title">
+      <span class="badge">Case Studies</span>
+      Real scenarios &mdash; every concept in action
+    </div>
+  </div>
+  <div class="case-tabs" id="caseTabs"></div>
+  <div id="casePanels"></div>
+</div>
+</div>
+
+<div class="stats">
+  <div class="stat"><strong id="totalTerms">0</strong>Terms</div>
+  <div class="stat"><strong id="visibleTerms">0</strong>Showing</div>
+  <div class="stat"><strong id="learnedTerms">0</strong>Mastered</div>
+  <div class="stat" style="margin-left:auto;align-self:center">
+    <span style="font-size:0.7rem;color:var(--dim)">Click any card to expand · Click <span style="color:#22C55E">Mark as Understood</span> to track progress · Click connection tags to jump to related terms</span>
+  </div>
+</div>
+
+<div class="grid" id="grid"></div>
+<div class="no-results" id="noResults" style="display:none"><strong>¯\_(ツ)_/¯</strong>No terms match your search</div>
+
+<div class="footer">
+  ai-learning-journal · built with Claude · add to it as you learn · you own this file
+</div>
+
+<script>
+const CATS = [
+  {key:'all', label:'All Terms', color:'#7C7A95'},
+  {key:'assistants', label:'AI Assistants', color:'#8B5CF6'},
+  {key:'companies', label:'Companies & Products', color:'#EC4899'},
+  {key:'concepts', label:'Core AI Concepts', color:'#14B8A6'},
+  {key:'dev-tools', label:'Developer Tools', color:'#3B82F6'},
+  {key:'apis', label:'APIs & Integration', color:'#F59E0B'},
+  {key:'platforms', label:'Platforms & Hosting', color:'#10B981'},
+  {key:'build-tools', label:'Build Tools & Apps', color:'#F97316'},
+  {key:'business-tools', label:'Business & Work Tools', color:'#06B6D4'},
+  {key:'strategy', label:'Strategies & Concepts', color:'#E879F9'},
+];
+
+
+const TERMS=[
+  {slug:"claude",term:"Claude",category:"assistants",isNew:false,
+  tagline:"Anthropic's AI assistant — the one you're using right now",
+  plain:"Claude is an AI assistant made by Anthropic. You interact with it by typing messages and it responds in natural language. It can write, analyze, code, reason, and hold long conversations. Unlike a search engine that retrieves existing pages, Claude generates responses based on patterns learned from training.",
+  how:"Claude is a Large Language Model. Every word you type gets converted into tokens, fed through billions of neural network parameters, and the model predicts the most likely next token. Different versions (Sonnet, Opus, Haiku) trade off capability vs. speed vs. cost.",
+  connects:["anthropic","llm","tokens","apis","claude-code","prompting","system-prompt","mcp"],
+  example:"When you ask 'What does my day look like?' in Telegram, your Python script calls the Anthropic API, passes your calendar data plus that question, and Claude generates a natural-language summary from those inputs."},
+
+  {slug:"chatgpt",term:"ChatGPT",category:"assistants",isNew:false,
+  tagline:"OpenAI's AI assistant — the product that introduced most people to conversational AI",
+  plain:"ChatGPT is OpenAI's consumer-facing AI assistant. It launched in November 2022 and essentially introduced most of the world to conversational AI. Functionally similar to Claude — you type, it responds — but built on OpenAI's GPT series of models.",
+  how:"ChatGPT runs on GPT-4 and newer models. Like Claude, it is an LLM. The differences are in training approaches, safety tuning, and system prompts. OpenAI was first to release a polished chat interface that felt natural for non-technical users.",
+  connects:["openai","llm","apis","tokens"],
+  example:"If you had built your Telegram bot using ChatGPT instead of Claude, you would call the OpenAI API instead of Anthropic's. The Python code structure is nearly identical — just different URLs, model names, and response formats."},
+
+  {slug:"perplexity",term:"Perplexity AI",category:"assistants",isNew:true,
+  tagline:"AI-powered search — answers with cited sources from the live web",
+  plain:"Perplexity is an AI assistant that searches the web in real time and gives you direct answers with citations, rather than a list of links. You ask a question, it reads multiple live sources, and writes a synthesized answer with footnotes. Think Google plus AI summarization in one step.",
+  how:"Unlike Claude or ChatGPT which rely on training data with a cutoff date, Perplexity queries live search results before generating its answer. It knows about things that happened today. It is optimized for current factual lookup rather than deep reasoning or creative tasks.",
+  connects:["llm","hallucination","rag","chatgpt","claude"],
+  example:"Instead of Googling 'best AI tools 2026', spending 15 minutes reading articles, and synthesizing yourself — you ask Perplexity and get a structured answer with sources in 10 seconds. Best tool for staying current on AI news."},
+
+  {slug:"grok",term:"Grok (xAI)",category:"assistants",isNew:true,
+  tagline:"Elon Musk's AI — built into X (Twitter), trained on real-time social data",
+  plain:"Grok is the AI assistant from xAI, Elon Musk's AI company. It is integrated into X (formerly Twitter) and has access to real-time posts and trending conversations. Positioned as a less restricted, more direct alternative to Claude and ChatGPT.",
+  how:"Grok's unique advantage is access to real-time X data — it can answer questions about what people are saying right now better than models with static training data. The xAI API is available for developers.",
+  connects:["llm","chatgpt","claude","openai"],
+  example:"If you wanted to understand public sentiment around a brand or news event in real time, Grok has structural advantages over Claude or ChatGPT because of its live connection to X's data stream."},
+
+  {slug:"deepseek",term:"DeepSeek",category:"assistants",isNew:true,
+  tagline:"Chinese open-source AI — frontier performance at a fraction of the cost",
+  plain:"DeepSeek is a Chinese AI lab that released models in late 2024 and early 2025 that matched or exceeded OpenAI's best models at dramatically lower cost, as open-source. It caused major industry disruption by showing frontier AI capability without billions in compute spending.",
+  how:"DeepSeek's models are open-weight — you can download and run them yourself via Ollama. Novel training efficiency techniques reduced compute cost by an order of magnitude. This sparked a reevaluation across the entire AI industry.",
+  connects:["llm","llama","open-source-ai","ollama","local-first-ai"],
+  example:"DeepSeek models run locally via Ollama on your Mac. For code-heavy tasks especially, DeepSeek Coder models perform remarkably well for free, locally, with no API cost."},
+
+  {slug:"openclaw",term:"OpenClaw",category:"assistants",isNew:true,
+  tagline:"Open-source personal AI agent on your machine — persistent, proactive, every messaging app",
+  plain:"OpenClaw is an open-source personal AI assistant you install on your own computer. Unlike chatting with Claude.ai in a browser, OpenClaw is always-on and operates across every messaging platform — Telegram, WhatsApp, Discord, Slack, iMessage, Signal, and 20 more. It has eyes and hands: read/write files, run shell commands, browse the web, manage calendar and email. 310,000+ GitHub stars as of early 2026.",
+  how:"OpenClaw runs as a local Node.js gateway service. It connects your messaging apps to an AI model (Claude, GPT, or local models via Ollama). It maintains persistent memory via SOUL.md and session files. Community-built Skills extend what it can do. Heartbeat tasks run on a schedule without prompting.",
+  connects:["clawdbot","moltbot","ai-agent","persistent-memory","local-first-ai","claude","mcp","ollama"],
+  example:"Your Telegram bot is a simple version of what OpenClaw does. OpenClaw takes it to its logical conclusion: one always-on agent on your Mac, reachable via every app you use, that proactively acts and remembers your preferences long-term."},
+
+  {slug:"clawdbot",term:"Clawdbot (→ OpenClaw)",category:"assistants",isNew:true,
+  tagline:"The original name for OpenClaw — same tool, three names, one wild origin story",
+  plain:"Clawdbot was the original name for what is now called OpenClaw. It launched November 2025, built by Austrian developer Peter Steinberger, and went viral almost immediately. Renamed to Moltbot (January 27 2026) after Anthropic sent trademark complaints, then three days later to OpenClaw.",
+  how:"The renaming is a lesson in how fast the AI industry moves: a project can go viral, receive a cease-and-desist from a major AI company, rebrand twice, and reach 310,000 GitHub stars — all within four months of launch.",
+  connects:["openclaw","moltbot","anthropic","open-source-ai"],
+  example:"If you see a tutorial from late 2025 or early 2026 mentioning Clawdbot or Moltbot — it is talking about the same tool you know as OpenClaw today."},
+
+  {slug:"moltbot",term:"Moltbot (→ OpenClaw)",category:"assistants",isNew:true,
+  tagline:"The middle name — OpenClaw's three-day identity between Clawdbot and its final name",
+  plain:"Moltbot was the second name for OpenClaw, used for exactly three days in late January 2026. After Anthropic's trademark complaint, Peter Steinberger chose Moltbot — keeping the lobster theme (molting = shedding to grow). He publicly admitted it never felt right.",
+  how:"The brief Moltbot era spawned related projects including MoltHub (the OpenClaw skills registry). The Molt branding stuck in the ecosystem even after the main tool moved on.",
+  connects:["openclaw","clawdbot","open-source-ai"],
+  example:"You may see MoltHub referenced in OpenClaw documentation — that is the community skills registry where people share extensions for the agent."},
+
+  {slug:"voice-ai",term:"Voice AI & Assistants",category:"assistants",isNew:true,
+  tagline:"Talking to AI instead of typing — and AI that talks back",
+  plain:"Voice AI covers two directions: speech-to-text (you speak, AI transcribes and understands) and text-to-speech (AI speaks to you). This includes classic assistants like Siri and Alexa, newer AI voice features in Claude and ChatGPT, and specialized tools like ElevenLabs for realistic voice generation.",
+  how:"Speech-to-text uses models like OpenAI's Whisper (open-source, highly accurate) to convert audio to text, which is then processed by an LLM. Text-to-speech converts LLM output to audio. Real-time voice conversation handles the full pipeline in near-real-time.",
+  connects:["llm","elevenlabs","openclaw","multi-modal"],
+  example:"On your Mac: speak a question via Whisper transcription → Claude processes it → ElevenLabs speaks the response back. This is what OpenClaw's Talk Mode does out of the box — same pipeline, packaged."},
+
+  {slug:"anthropic",term:"Anthropic",category:"companies",isNew:false,
+  tagline:"The company that makes Claude — founded by ex-OpenAI researchers, focused on AI safety",
+  plain:"Anthropic is an AI safety company founded in 2021, primarily by former OpenAI researchers including Dario and Daniela Amodei. They build Claude. Their differentiator is an emphasis on making AI systems that are safe, honest, and helpful.",
+  how:"Anthropic does AI research and ships commercial products. Their Constitutional AI approach is a key part of why Claude behaves the way it does. The API you call to use Claude is Anthropic's commercial product.",
+  connects:["claude","apis","llm","openai"],
+  example:"When your Python script calls api.anthropic.com, you are connecting to Anthropic's servers, which host Claude, process your request (prompt plus calendar data), and return a generated response."},
+
+  {slug:"openai",term:"OpenAI",category:"companies",isNew:false,
+  tagline:"The company behind ChatGPT and GPT models — started the modern AI wave",
+  plain:"OpenAI was founded in 2015 as a non-profit AI research lab. It is now a capped-profit company and the most well-known name in commercial AI. They created the GPT series, DALL-E (image generation), Whisper (speech-to-text), and Sora (video).",
+  how:"OpenAI's API structure became the de facto standard that other companies including Anthropic modeled their own APIs after. Many tools you encounter were originally built on OpenAI's API.",
+  connects:["chatgpt","apis","llm","github-copilot"],
+  example:"GPT stands for Generative Pre-trained Transformer — the architecture most modern LLMs are based on. When you hear GPT-4, that is the version that powered ChatGPT Plus."},
+
+  {slug:"hugging-face",term:"Hugging Face",category:"companies",isNew:false,
+  tagline:"The GitHub for AI models — where open-source AI lives",
+  plain:"Hugging Face is a platform for sharing, discovering, and running AI models. It hosts thousands of open-source models including LLaMA, Mistral, DeepSeek, and hundreds of specialized models. You can run models in your browser, download them, or use their hosted inference API.",
+  how:"Hugging Face's transformers Python library is the standard for working with AI models in code. Models are organized by task and free to download. Model cards explain what each model does and how it performs.",
+  connects:["llm","llama","python","ollama"],
+  example:"If you wanted to use an open-source model instead of Claude, you would find it on Hugging Face, download it via Ollama, and call a local API instead of Anthropic's."},
+
+  {slug:"llama",term:"LLaMA (Meta)",category:"companies",isNew:false,
+  tagline:"Meta's open-source LLM family — powerful models you can run yourself for free",
+  plain:"LLaMA (Large Language Model Meta AI) is Meta's family of open-source large language models. Unlike Claude or ChatGPT (closed, API-only), LLaMA model weights are publicly available — you can download and run them yourself.",
+  how:"LLaMA can be run locally using Ollama, accessed via Hugging Face, or via third-party API providers for faster inference. Being open-source means the community can fine-tune it for specific tasks.",
+  connects:["llm","ollama","hugging-face","fine-tuning"],
+  example:"If you wanted to run a fully local, private version of your Telegram bot (no API costs, no data leaving your Mac), you would use LLaMA via Ollama instead of calling the Anthropic API."},
+
+  {slug:"suno",term:"Suno",category:"companies",isNew:false,
+  tagline:"AI music generation — describe a song and get a fully produced track",
+  plain:"Suno is an AI tool that generates complete songs — with vocals, instruments, and lyrics — from a text description. Write 'upbeat pop song about Monday morning' and get a fully produced track in seconds.",
+  how:"Suno uses specialized generative AI models trained on music. The AI learned patterns in music the same way LLMs learned patterns in text — at massive scale.",
+  connects:["elevenlabs","multi-modal"],
+  example:"The songs you have created are a perfect example of multi-modal AI. The same fundamental technology that powers Claude's text generation also powers Suno's music generation — just trained on different data."},
+
+  {slug:"elevenlabs",term:"ElevenLabs",category:"companies",isNew:true,
+  tagline:"AI voice generation — convert text to ultra-realistic speech or clone any voice",
+  plain:"ElevenLabs makes AI text-to-speech and voice cloning technology. It generates highly realistic human voices from text. You can choose preset voices, clone your own voice from a short sample, and control pacing, emphasis, and tone.",
+  how:"Via the ElevenLabs API, you send text and receive an audio file. Their models learned what human speech sounds like at a fine-grained level — breathing patterns, natural pauses, emotional inflection.",
+  connects:["apis","suno","voice-ai","multi-modal"],
+  example:"Advanced Telegram bot upgrade: instead of sending Claude's text response, use ElevenLabs to generate a voice message — 'Here is your morning briefing...' delivered as spoken audio, all automated."},
+
+  {slug:"microsoft-copilot",term:"Microsoft Copilot",category:"business-tools",isNew:true,
+  tagline:"AI built into Microsoft 365 — Word, Excel, Outlook, Teams, and PowerPoint",
+  plain:"Microsoft Copilot is AI assistance built directly into the Microsoft productivity suite. In Outlook it summarizes email threads and drafts replies. In Teams it transcribes meetings and creates action items. In Word it drafts documents. In Excel it generates formulas and analyzes data.",
+  how:"Copilot is powered by OpenAI's GPT models via Microsoft's partnership with OpenAI. It has access to your organization's data through Microsoft Graph — referencing your actual emails, documents, and meetings. This is enterprise-scale RAG built into your tools.",
+  connects:["llm","openai","notion-ai","rag","gmail-api"],
+  example:"Before an important client meeting: ask Copilot in Teams to summarize everything from the last 3 months with that client. It searches your actual emails, Teams chats, and shared documents and synthesizes a briefing. RAG at enterprise scale, no setup required."},
+
+  {slug:"notion-ai",term:"Notion AI",category:"business-tools",isNew:true,
+  tagline:"AI built into your Notion workspace — write, summarize, and query your own notes",
+  plain:"Notion AI adds AI writing and reasoning capabilities inside Notion. You can ask it to summarize a page, continue writing a draft, extract action items from meeting notes, or query across your entire workspace.",
+  how:"Notion AI uses Claude and GPT models under the hood. When you ask it to summarize a page, it sends the content as context to the LLM. Ask AI lets you query your entire workspace — Notion implementing RAG over your personal knowledge base.",
+  connects:["llm","microsoft-copilot","rag","prompting"],
+  example:"A product manager's workflow: every meeting has a Notion page with raw notes. Notion AI turns those notes into a clean summary, action items with owners, and decisions made — in 30 seconds."},
+
+  {slug:"grammarly-ai",term:"Grammarly AI",category:"business-tools",isNew:true,
+  tagline:"AI writing assistant everywhere you type — grammar, tone, full drafts",
+  plain:"Grammarly evolved from grammar/spell-check into a full AI writing assistant. It works as a browser extension available everywhere you type — Gmail, LinkedIn, Google Docs, Slack, Notion, and more.",
+  how:"Grammarly works inline — it sees what you are writing in real time and makes suggestions without context-switching. The business tier adds team style guides and brand voice settings.",
+  connects:["llm","microsoft-copilot","prompting"],
+  example:"For someone who emails constantly: Grammarly as a browser extension means every email gets real-time suggestions without opening another tab. AI as an invisible layer on top of tools you already use."},
+
+  {slug:"zapier-ai",term:"Zapier AI Actions",category:"business-tools",isNew:true,
+  tagline:"Adding AI decision-making inside Zapier automations — logic that thinks, not just routes",
+  plain:"Zapier added AI capabilities letting you include ChatGPT or Claude as a thinking step inside any automation. Instead of just routing data, your Zap can ask an AI to make a judgment — classify this email, summarize this document, decide if this is urgent — then route based on the AI's output.",
+  how:"In a Zap, you add a Claude or ChatGPT action step. You provide a prompt including data from previous steps. The AI output flows into subsequent steps. This is function calling without writing code.",
+  connects:["zapier","llm","automation","gmail-api","function-calling"],
+  example:"Gmail trigger → Claude classifies email as urgent, normal, newsletter, or spam → Zapier routes: urgent to Slack, newsletter to archive, spam to junk. AI judgment baked into a no-code workflow."},
+
+  {slug:"llm",term:"LLM — Large Language Model",category:"concepts",isNew:false,
+  tagline:"The underlying technology powering Claude, ChatGPT, and most modern AI assistants",
+  plain:"A Large Language Model is a type of AI trained on massive amounts of text. It learns statistical patterns about how words, sentences, and ideas relate to each other. 'Large' refers to having billions of adjustable parameters. When you ask a question, the model generates a response token by token based on learned patterns.",
+  how:"Training involves feeding the model enormous amounts of text and having it predict the next word billions of times. After base training, models are refined with human feedback (RLHF). When you use it, 'inference' is running your input through those parameters to generate output.",
+  connects:["tokens","context-window","temperature","hallucination","training-data","fine-tuning","embeddings","prompting"],
+  example:"Claude, ChatGPT, Gemini, LLaMA, and DeepSeek are all LLMs. Despite different companies and approaches, they all work on the same principle: learn patterns from text at scale, then generate new text that follows those patterns."},
+
+  {slug:"tokens",term:"Tokens",category:"concepts",isNew:false,
+  tagline:"The basic unit of text an LLM reads and writes — roughly three-quarters of a word",
+  plain:"Tokens are how LLMs read and write text. A token is roughly 3-4 characters or about three-quarters of an English word. 'Unbelievable' = 4 tokens. 'cat' = 1 token. This matters because APIs charge per token, and models have a maximum token limit.",
+  how:"Before text goes into an LLM, a tokenizer breaks it into token IDs (numbers). The model works with these IDs. When generating a response, it outputs one token at a time — that is why streamed responses appear to type in real time.",
+  connects:["llm","context-window","apis","prompting"],
+  example:"When your Telegram bot sends your question plus calendar data to Claude, all of it gets tokenized. A detailed prompt might use 2,000 or more tokens per request — which shows up in API billing."},
+
+  {slug:"context-window",term:"Context Window",category:"concepts",isNew:true,
+  tagline:"How much the AI can see and hold in memory within a single conversation",
+  plain:"The context window is the maximum amount of text (in tokens) that an LLM can process in one request. Everything inside is what the AI sees. Anything outside is invisible to it. The AI has no persistent memory between separate conversations.",
+  how:"Modern models have large context windows (Claude up to 200K tokens — roughly 150,000 words). But this is per-conversation, not permanent. If you start a new chat, it knows nothing from before unless you explicitly include that history.",
+  connects:["tokens","llm","prompting","rag","system-prompt","persistent-memory"],
+  example:"Your Telegram bot must fetch today's calendar events and include them in the prompt because Claude does not automatically know your schedule. You are manually managing the context window."},
+
+  {slug:"prompting",term:"Prompting / Prompt Engineering",category:"concepts",isNew:false,
+  tagline:"The art and science of writing instructions that get precise, useful AI outputs",
+  plain:"A prompt is the input you give to an AI. Prompt engineering is crafting prompts strategically to get better, more consistent outputs. This ranges from being specific and clear to advanced techniques like few-shot examples and chain-of-thought instructions.",
+  how:"LLMs are very sensitive to phrasing. 'Think step by step' often improves reasoning quality significantly. Giving examples of desired output format shapes responses. Being explicit about constraints gets predictable outputs.",
+  connects:["llm","system-prompt","tokens","context-window","temperature"],
+  example:"Your bot's prompt might be: '[System: You are a personal assistant.] [Context: Today's events are...] [User: What does my day look like?]' Each part of that structure is deliberate prompt engineering."},
+
+  {slug:"system-prompt",term:"System Prompt",category:"concepts",isNew:true,
+  tagline:"Invisible instructions that define how an AI behaves before any conversation starts",
+  plain:"A system prompt is a special set of instructions given to the AI before the user conversation begins. It defines the AI's persona, rules, tone, and capabilities. The user typically does not see it. Different AI apps feel different even though they use the same model — that is usually the system prompt.",
+  how:"In the API, messages have roles: system (constant background instructions), user (what the person typed), and assistant (previous AI responses). The system message is processed first and colors everything that follows.",
+  connects:["prompting","apis","llm","context-window"],
+  example:"Your Telegram bot's system prompt might say: 'You are a helpful personal assistant. Be concise. Use bullet points for lists. If you do not know something, say so rather than guessing.' That one block shapes all responses."},
+
+  {slug:"hallucination",term:"Hallucination",category:"concepts",isNew:true,
+  tagline:"When AI confidently states something factually wrong — the most important limitation to understand",
+  plain:"Hallucination is when an LLM generates text that sounds confident and plausible but is factually incorrect or made up. The AI does not know it is wrong — it is producing text that fits the pattern of a correct-sounding answer. Every user needs to understand this.",
+  how:"LLMs predict what text should come next. If they lack training data on something, they still generate fluent text that looks like a correct answer. They are optimized for coherence, not factual accuracy. This is why RAG exists.",
+  connects:["llm","rag","training-data","fine-tuning"],
+  example:"This is why your bot fetches real calendar data rather than asking Claude to guess your schedule. Without the Calendar API data, Claude would either say it does not know or worse — make up plausible-sounding events."},
+
+  {slug:"temperature",term:"Temperature",category:"concepts",isNew:true,
+  tagline:"A dial controlling how creative vs. predictable the AI's responses are",
+  plain:"Temperature is a parameter you set when calling an AI API. Low temperature (0.0 to 0.3) means very predictable, consistent, factual. High temperature (0.7 to 1.0) means more varied, creative, occasionally surprising.",
+  how:"When generating the next token, the LLM calculates probability scores for all possible next words. Temperature adjusts how those probabilities are distributed. At zero, it always picks the highest-probability token.",
+  connects:["llm","tokens","apis","prompting"],
+  example:"For your daily briefing bot, use low temperature (0.1 to 0.2) for consistent accurate summaries. For a creative writing helper, use 0.8 for more surprising varied outputs."},
+
+  {slug:"privacy-ai",term:"AI Privacy & Data Sovereignty",category:"concepts",isNew:true,
+  tagline:"Understanding where your data goes when you use AI — and how to protect it",
+  plain:"Every time you use a cloud AI (Claude, ChatGPT, Gemini), your prompts and data travel to that company's servers. For most use cases this is fine. But for sensitive information — medical data, financial details, confidential business information — you need to understand who holds your data and under what terms.",
+  how:"A spectrum: Cloud AI — easiest, most capable, data per their privacy policy. Self-hosted cloud — you control the server. Local models via Ollama — full privacy, no data leaves your machine. Enterprise agreements — contractual data isolation guarantees.",
+  connects:["local-first-ai","self-hosted","openclaw","fine-tuning","training-data"],
+  example:"Your Telegram bot sends your email subjects and calendar events to Anthropic's API. For personal use, their privacy policy is fine. For a law firm processing client files, local-first AI or an enterprise agreement becomes a legal and ethical requirement."},
+
+  {slug:"rag",term:"RAG — Retrieval-Augmented Generation",category:"concepts",isNew:true,
+  tagline:"Giving an AI access to your own data so it can answer accurately",
+  plain:"RAG is a technique where you retrieve relevant information from an external source and inject it into the AI's context window before generating a response. This is the main solution to the hallucination problem.",
+  how:"RAG pipeline: (1) User asks a question. (2) System searches a database for relevant passages. (3) Those passages are included in the prompt to the LLM. (4) The LLM generates an answer based on the retrieved context.",
+  connects:["llm","embeddings","vector-database","context-window","hallucination","apis"],
+  example:"Your bot does manual RAG. It calls the Calendar and Gmail APIs to get today's real data, injects that into the Claude prompt, and Claude answers from facts — not guesses."},
+
+  {slug:"embeddings",term:"Embeddings",category:"concepts",isNew:true,
+  tagline:"Converting text into numbers that capture meaning — how AI understands semantic similarity",
+  plain:"Embeddings are numerical representations of text. Any piece of text can be converted into a list of numbers (a vector) that captures its meaning. Texts with similar meanings end up with similar numbers, enabling semantic search.",
+  how:"An embedding model converts text into a high-dimensional vector (e.g. 1,536 numbers). 'King' and 'Queen' will be numerically close. 'Paris' and 'France' will be close. This powers semantic search — searching by meaning rather than keywords.",
+  connects:["vector-database","rag","llm"],
+  example:"If you built a knowledge base from your meeting notes, you would create embeddings for each note, store them, and when you ask 'What did we discuss about the budget?' the system finds the most semantically similar notes."},
+
+  {slug:"vector-database",term:"Vector Database",category:"concepts",isNew:true,
+  tagline:"A database built for storing and searching embeddings at scale",
+  plain:"A vector database stores and indexes embeddings so you can search them for semantic similarity at scale. Regular databases search for exact matches. Vector databases search for meaning.",
+  how:"When you have thousands of documents you want an AI to reason over, you create embeddings for all of them and store them in a vector database (Pinecone, Weaviate, Chroma, etc.). When a question comes in, you search for the most similar embeddings and include those documents in the LLM prompt.",
+  connects:["embeddings","rag","llm"],
+  example:"Advanced email bot: instead of fetching all recent emails, you embed all your emails, store them, and when you ask 'Any emails about the Q4 report?' it searches semantically and retrieves only the most relevant ones."},
+
+  {slug:"ai-agent",term:"AI Agent",category:"concepts",isNew:true,
+  tagline:"An AI that takes sequences of actions to complete goals — not just chat, but do",
+  plain:"An AI agent is an AI system that can autonomously take a sequence of actions to accomplish a goal. Unlike a chatbot that just responds, an agent can use tools: search the web, write and run code, send emails, call APIs, and decide what to do next based on results.",
+  how:"Agents work in a loop: the LLM decides what action to take → a tool executes it → the result returns to the LLM → it decides the next action → repeat until goal complete. This is the ReAct (Reasoning + Acting) pattern.",
+  connects:["llm","function-calling","apis","claude-code","mcp","agentic-workflow"],
+  example:"Your bot receives a question → decides to call Calendar API → gets data → decides to call Claude → gets summary → sends to Telegram. That is an agent loop. An advanced agent might autonomously decide which emails need replies and draft them."},
+
+  {slug:"function-calling",term:"Function Calling / Tool Use",category:"concepts",isNew:true,
+  tagline:"Giving an AI the ability to invoke real code functions or APIs as part of its reasoning",
+  plain:"Function calling lets you define functions that the AI can choose to call. Instead of just generating text, the AI says 'I need to call get_calendar_events()' and your code executes it, returns results, and the AI uses them in its response.",
+  how:"You define functions with names, descriptions, and parameter schemas. The LLM reads these definitions and when appropriate, outputs a structured call signal. Your code executes it, returns results, and the AI continues.",
+  connects:["ai-agent","apis","llm","mcp"],
+  example:"You could define tools like get_emails, search_calendar, create_event, draft_reply for Claude to use. Instead of your Python code deciding the flow, Claude itself decides which tools to call."},
+
+  {slug:"training-data",term:"Training Data",category:"concepts",isNew:true,
+  tagline:"The massive corpus of text an LLM learned from — it shapes everything the model knows",
+  plain:"Training data is the text an LLM was trained on — web pages, books, code, academic papers, Wikipedia, and more. The training data cutoff date explains why models do not know about recent events.",
+  how:"Modern LLMs are trained on trillions of tokens of text. After base training, models go through fine-tuning and RLHF (human raters score outputs, model learns to produce higher-rated responses).",
+  connects:["llm","hallucination","fine-tuning"],
+  example:"When Claude does not know about something recent, that is a reflection of its training data cutoff. This is why building bots that fetch real-time data (Calendar, Gmail) is so powerful."},
+
+  {slug:"fine-tuning",term:"Fine-tuning",category:"concepts",isNew:true,
+  tagline:"Further training a pre-built model on your specific data to make it better at your task",
+  plain:"Fine-tuning takes an existing pre-trained model and continues training it on a smaller, task-specific dataset. The result is a model that performs better on your specific use case.",
+  how:"Fine-tuning requires examples of desired inputs and outputs, a training setup, and the base model weights. Prompt engineering can often achieve similar results more cheaply — try that first.",
+  connects:["llm","training-data","hallucination","hugging-face"],
+  example:"If you wanted your Telegram bot to always respond in your personal communication style, you could fine-tune a model on examples of your own writing."},
+
+  {slug:"multi-modal",term:"Multi-modal AI",category:"concepts",isNew:true,
+  tagline:"AI that can understand and generate more than just text — images, audio, video",
+  plain:"Multi-modal AI models can process and generate multiple types of data. Claude and GPT-4 can analyze images. Gemini can process audio and video. Suno generates music. DALL-E generates images from text.",
+  how:"Each modality requires specialized neural network components. Image encoders convert pixels to embeddings. Audio models work with spectrograms. These encoders map different data types into a shared representation space.",
+  connects:["llm","suno","elevenlabs","voice-ai"],
+  example:"You have already used multi-modal AI: text (Claude), images (DALL-E or Midjourney), music (Suno). Each is a model specialized for its modality but built on similar underlying architectures."},
+
+  {slug:"python",term:"Python",category:"dev-tools",isNew:false,
+  tagline:"The dominant language for AI work — readable, powerful, massive ecosystem",
+  plain:"Python is a programming language. It is the dominant language for AI work because all the major AI libraries are written in it. Your Telegram bot code is almost certainly Python.",
+  how:"Python code runs in the Python interpreter. You write .py files and run them with 'python script.py' in Terminal. For AI projects you use packages like anthropic (for Claude), google-api-python-client (for Gmail/Calendar), and python-telegram-bot (for Telegram).",
+  connects:["terminal","scripts","pip-npm","apis","github","json"],
+  example:"Your Telegram bot script likely imports several libraries, reads API keys from environment variables, defines functions for handling messages and fetching data, then runs an event loop."},
+
+  {slug:"terminal",term:"Terminal / CLI",category:"dev-tools",isNew:false,
+  tagline:"Text-based interface to your computer — where you run code and manage everything",
+  plain:"The terminal (command line, CLI, shell) is a text interface where you type commands to control your computer. On Mac it is Terminal.app or iTerm2. Everything you do with clicks in a GUI you can do in the terminal — often much faster.",
+  how:"When you type 'python bot.py', the shell finds Python and runs your file. 'pip install anthropic' downloads and installs a package. 'cd my-project' changes directory. 'ls' lists files.",
+  connects:["python","git","github","scripts","docker","ollama"],
+  example:"Setting up your Telegram bot involved: 'git clone [url]' (download code), 'pip install -r requirements.txt' (install dependencies), editing a .env file, and 'python bot.py' to start it."},
+
+  {slug:"github",term:"GitHub",category:"dev-tools",isNew:false,
+  tagline:"Where developers store and share code — the largest code hosting platform in the world",
+  plain:"GitHub is a website where you store Git repositories in the cloud. It is where most open-source software lives. GitHub also provides collaboration features (issues, pull requests) and AI assistance (GitHub Copilot). Owned by Microsoft.",
+  how:"You create an account, create a repository, and push local code to it. 'git remote add origin [url]' connects your local repo to GitHub. Others can fork your repo, make changes, and submit pull requests.",
+  connects:["repository","git","vs-code","github-copilot","scripts"],
+  example:"When you followed setup instructions for your Telegram bot, you probably ran 'git clone https://github.com/someone/example-bot' — downloading a repository from GitHub to your Mac."},
+
+  {slug:"repository",term:"Repository (Repo)",category:"dev-tools",isNew:false,
+  tagline:"A tracked folder for your code — with full history, collaboration, and backup",
+  plain:"A repository is a folder that Git tracks. Beyond just storing code, a repo remembers every change ever made — who changed what, when, and why. You can revert to any previous state.",
+  how:"'git init' turns a folder into a repo. 'git add' stages changes. 'git commit -m description' saves a snapshot. 'git push' uploads to GitHub. 'git pull' syncs changes from others.",
+  connects:["git","github","vs-code","scripts"],
+  example:"Your Telegram bot's code is (or should be) in a repository. When you 'git clone' to set it up on a new machine, you are copying the entire repo — code, history, and configuration."},
+
+  {slug:"vs-code",term:"VS Code",category:"dev-tools",isNew:false,
+  tagline:"Microsoft's free code editor — the most popular IDE used by developers worldwide",
+  plain:"Visual Studio Code (VS Code) is a free, open-source code editor made by Microsoft. It highlights syntax, offers autocomplete, integrates with Git, has a built-in terminal, and has thousands of extensions.",
+  how:"VS Code is technically a text editor that becomes a full IDE via extensions. Pylance for Python support. GitHub Copilot for AI autocomplete. GitLens for Git history inline.",
+  connects:["github","python","scripts","github-copilot","terminal","cursor"],
+  example:"When you edit your bot's Python file — adjusting the system prompt, adding new API calls, fixing bugs — you are likely doing that in VS Code."},
+
+  {slug:"git",term:"Git",category:"dev-tools",isNew:true,
+  tagline:"Version control software — tracks every change to your code so nothing is ever lost",
+  plain:"Git is version control software that lives on your computer. It tracks every change to files in a repository. You can see the entire history, compare versions, undo mistakes, and work on experimental features (branches) without affecting the main code.",
+  how:"Core commands: 'git init' (start tracking), 'git add' (stage changes), 'git commit' (save snapshot), 'git branch' (create parallel version), 'git merge' (combine branches). GitHub hosts Git repos online; Git is the local tool.",
+  connects:["github","repository","terminal","vs-code"],
+  example:"If you break your Telegram bot making changes, 'git checkout .' reverts all unstaged changes to the last commit. This safety net is why experienced developers commit often."},
+
+  {slug:"json",term:"JSON",category:"dev-tools",isNew:true,
+  tagline:"The universal data format APIs use to send information back and forth",
+  plain:"JSON (JavaScript Object Notation) is a text format for structured data. When you call an API, the response comes back as JSON. When you send data to an API, you usually send JSON. It is human-readable and easy to parse in code.",
+  how:"JSON has two structures: objects (key-value pairs in curly braces) and arrays (ordered lists in square brackets). In Python, JSON maps to dictionaries and lists.",
+  connects:["apis","python","scripts","rest-api"],
+  example:"When your bot gets a response from the Anthropic API, it arrives as JSON. Your Python code navigates this: response['content'][0]['text'] to get Claude's actual reply."},
+
+  {slug:"env-variables",term:"Environment Variables (.env)",category:"dev-tools",isNew:true,
+  tagline:"Secure storage for secrets and config outside your code — never put API keys in code files",
+  plain:"Environment variables are values accessible to your program at runtime, stored outside the code itself. They are used for API keys, passwords, and configuration. You never want sensitive info in your code files — especially if that code is on GitHub.",
+  how:"A .env file contains lines like ANTHROPIC_API_KEY=sk-ant-xyz123. Your Python code reads these with os.environ.get('ANTHROPIC_API_KEY'). The .env file is listed in .gitignore so it is never accidentally pushed to GitHub.",
+  connects:["python","apis","github","scripts","api-key"],
+  example:"Your Telegram bot has multiple secrets: the Telegram bot token, the Anthropic API key, Google OAuth credentials. All should be in .env. If you ever accidentally push a .env file with real keys to a public repo, immediately rotate every key."},
+
+  {slug:"pip-npm",term:"pip & npm (Package Managers)",category:"dev-tools",isNew:true,
+  tagline:"Tools that download and manage code libraries so you do not build everything from scratch",
+  plain:"Package managers download and install code libraries that others have written. In Python, 'pip install anthropic' downloads Anthropic's Python SDK. In JavaScript, 'npm install' reads your project's dependencies and downloads them all.",
+  how:"Packages are indexed on PyPI for pip and npmjs.com for npm. 'requirements.txt' (Python) or 'package.json' (Node.js) list all dependencies so anyone can recreate your environment with a single command.",
+  connects:["python","terminal","github","scripts"],
+  example:"Setting up your Telegram bot involved 'pip install python-telegram-bot anthropic google-auth google-api-python-client' — one command downloaded all the libraries your bot needs."},
+
+  {slug:"scripts",term:"Scripts",category:"dev-tools",isNew:false,
+  tagline:"Small programs that automate tasks — the glue connecting all your tools",
+  plain:"A script is a file containing a sequence of code commands. Unlike a GUI application, scripts are run from the terminal and do specific jobs. Your entire Telegram bot is essentially a script.",
+  how:"Python scripts end in .py. Running 'python bot.py' executes every line in sequence. Scripts can import libraries, call APIs, read and write files, and run system commands. They can be scheduled with cron jobs.",
+  connects:["python","terminal","api-key","automation"],
+  example:"Your bot script imports libraries, reads env variables, defines handler functions, sets up the Telegram listener, and starts an infinite loop processing incoming messages."},
+
+  {slug:"langchain",term:"LangChain",category:"dev-tools",isNew:true,
+  tagline:"Python/JS framework for building AI apps — chains, agents, RAG, and memory out of the box",
+  plain:"LangChain is the most widely used framework for building AI-powered applications. It provides ready-made components for common AI patterns: chaining multiple LLM calls, building RAG systems, creating agents with tool use, and managing conversation memory.",
+  how:"LangChain works with all major LLMs through a unified interface. Key abstractions: Chains (sequences of operations), Agents (LLM-driven decision makers), Retrievers (fetch relevant documents for RAG), Memory (persist conversation context).",
+  connects:["python","rag","ai-agent","llm","vector-database","function-calling"],
+  example:"Rebuilding your Telegram bot with LangChain: instead of manually crafting the prompt, calling the API, and parsing the response, you would use a ConversationalRetrievalChain that handles all of it in roughly 10 lines of code."},
+
+  {slug:"opencode",term:"OpenCode",category:"dev-tools",isNew:true,
+  tagline:"Open-source AI coding agent for your terminal — NOT the same as OpenClaw",
+  plain:"OpenCode is an open-source AI coding agent that lives in your terminal or IDE. It supports 75+ AI models (Claude, GPT, Gemini, local models) and does not store your code on any server. It competes with Claude Code and GitHub Copilot but is open-source and model-agnostic.",
+  how:"OpenCode runs as a Go-based CLI with a Terminal User Interface. You open it in your project directory, describe what you want done, and it operates in an agentic loop: reads files, writes code, runs tests, checks errors, and iterates.",
+  connects:["claude-code","github-copilot","cursor","ai-agent","terminal","open-source-ai","mcp"],
+  example:"Where Claude Code is Anthropic's official terminal coding agent (Claude models only), OpenCode is the open-source version working with any model. Both can be pointed at your Telegram bot code and asked to add error handling throughout the project."},
+
+  {slug:"apis",term:"API — Application Programming Interface",category:"apis",isNew:false,
+  tagline:"The defined way software talks to other software — the connective tissue of the modern internet",
+  plain:"An API is a contract that defines how one piece of software can talk to another. When your Telegram bot asks Claude a question, it is using Anthropic's API. When it gets your calendar, it is using Google's API.",
+  how:"Most modern APIs are REST APIs (HTTP-based). You send a request (GET to read, POST to create) to a URL with your API key for authentication and a body (usually JSON) with your data. The server processes it and sends back a JSON response.",
+  connects:["rest-api","api-key","json","webhook","python","scripts"],
+  example:"Your bot calls at least 4 APIs: Telegram Bot API (receive and send messages), Anthropic API (get Claude's response), Google Calendar API (get events), Google Gmail API (get emails). Your Python code orchestrates these like a conductor."},
+
+  {slug:"rest-api",term:"REST API",category:"apis",isNew:true,
+  tagline:"The standard architecture for web APIs — stateless, URL-based, uses HTTP methods",
+  plain:"REST (Representational State Transfer) is a set of conventions for building APIs that most web APIs follow. Resources are identified by URLs. HTTP methods define actions: GET (read), POST (create), PUT (update), DELETE (remove). Responses are typically JSON.",
+  how:"REST is stateless — each request contains all info needed. You authenticate per-request via an API key in headers. Tools like Postman or Insomnia let you test REST APIs interactively before writing code.",
+  connects:["apis","api-key","json","webhook","python"],
+  example:"The Anthropic API is a REST API. POST to https://api.anthropic.com/v1/messages with a JSON body containing your message, model choice, and max_tokens. The response JSON contains Claude's generated text."},
+
+  {slug:"api-key",term:"API Key",category:"apis",isNew:true,
+  tagline:"A secret string that authenticates your code to use a paid or restricted API",
+  plain:"An API key is a long random string that identifies and authenticates you when calling an API. It is like a password for your code. Every request includes this key so the service knows who is calling and can track usage for billing.",
+  how:"You generate API keys in service dashboards (Anthropic Console, OpenAI Platform, Google Cloud Console). They go in your .env file. Never commit API keys to GitHub — bots scan public repos and will abuse them within minutes.",
+  connects:["apis","env-variables","rest-api","google-cloud"],
+  example:"You have at least two API keys for your Telegram bot: an Anthropic API key (for Claude access, billed per token) and a Telegram Bot Token (free, created via BotFather in Telegram)."},
+
+  {slug:"webhook",term:"Webhook",category:"apis",isNew:true,
+  tagline:"A URL your server exposes so other services can push events to you instantly",
+  plain:"A webhook is the reverse of a regular API call. Instead of your code constantly asking 'any new messages?' (polling), you give Telegram a URL and say 'POST here whenever a message arrives.' Telegram proactively notifies you. Instant, not polling.",
+  how:"For a webhook to work, your server needs a publicly accessible URL. This requires either real hosting or a tunnel tool like ngrok for local development. You register the URL with the service, and whenever an event fires, they send you an HTTP POST.",
+  connects:["apis","hosting","ngrok","python","rest-api"],
+  example:"When your bot uses webhooks, you text it in Telegram, Telegram immediately sends an HTTP POST to your server, your Python server receives it, processes the message, calls Claude, and returns the response — all in under a second."},
+
+  {slug:"gmail-api",term:"Gmail API",category:"apis",isNew:false,
+  tagline:"Google's API for reading, sending, and managing emails programmatically",
+  plain:"The Gmail API lets your code access Gmail — reading emails, sending messages, searching, and managing labels. Instead of manually reading email, your code can automatically fetch the emails you need, analyze them, and even reply.",
+  how:"Authentication uses OAuth 2.0. Once authenticated, you call endpoints to list messages, get message details, search with Gmail's query syntax, and send new messages.",
+  connects:["google-cloud","apis","oauth","python","rag"],
+  example:"When your bot answers 'What emails need my attention today?', it calls the Gmail API with a filter for unread emails from the last 24 hours, passes the subjects and senders to Claude, and Claude prioritizes them."},
+
+  {slug:"calendar-api",term:"Google Calendar API",category:"apis",isNew:false,
+  tagline:"Google's API for reading and writing calendar events programmatically",
+  plain:"The Google Calendar API lets your code read and write calendar events. This is what powers the 'What does my day look like?' question in your Telegram bot — it fetches real events from your actual Google Calendar.",
+  how:"Like Gmail, it uses OAuth 2.0. You request events in a time range. Each event object has summary (title), start and end time, location, description, and attendees.",
+  connects:["google-cloud","apis","oauth","gmail-api","python"],
+  example:"Full flow for 'What is my day?': Call Calendar API → receive JSON array of event objects → format into readable list → include in Claude prompt → Claude generates the summary."},
+
+  {slug:"oauth",term:"OAuth 2.0",category:"apis",isNew:true,
+  tagline:"The secure way to let your app access user accounts without storing passwords",
+  plain:"OAuth (Open Authorization) is the protocol used when apps ask for access to your accounts. 'Sign in with Google' is OAuth. 'Allow this app to access your Gmail' is OAuth. It gives apps limited permission tokens instead of your actual password.",
+  how:"OAuth flow: Your app → redirects to Google's authorization page → user approves permissions → Google redirects back with a code → your app exchanges the code for access tokens → tokens used in API calls.",
+  connects:["apis","gmail-api","calendar-api","google-cloud","api-key"],
+  example:"When you first set up your bot to access Gmail, a browser window opened, you logged into Google, saw a permissions screen, and clicked Allow. That generated tokens your bot now uses. That was OAuth."},
+
+  {slug:"n8n",term:"n8n",category:"apis",isNew:true,
+  tagline:"Self-hostable visual automation — like Zapier but open-source and more powerful",
+  plain:"n8n is a workflow automation platform. You create visual workflows connecting services. Open-source, self-hostable, and has native AI and LLM integration built in.",
+  how:"n8n uses a visual node-based editor. Each node is an integration (Gmail, Slack, HTTP call, etc.) or logic operation. You connect nodes to build automated pipelines. It can run on your Mac, a VPS, or n8n's cloud.",
+  connects:["apis","zapier","automation","python","hosting"],
+  example:"Your entire Telegram bot could be rebuilt in n8n without writing Python: Telegram trigger node → Google Calendar node → Claude node → Telegram reply node. Visual, auditable, and easy to modify."},
+
+  {slug:"zapier",term:"Zapier",category:"apis",isNew:true,
+  tagline:"No-code automation connecting 5,000+ apps — automate without writing code",
+  plain:"Zapier is a cloud automation tool. You build Zaps — workflows triggered by events in one app that cause actions in others. No coding required.",
+  how:"Zapier handles authentication, scheduling, and reliability. The AI Actions feature lets you use ChatGPT or Claude as a processing step inside any Zap.",
+  connects:["apis","n8n","automation","zapier-ai"],
+  example:"Simple daily briefing via Zapier (no code): Schedule trigger at 7am → Google Calendar step (get today's events) → Claude step (summarize) → Send Telegram message step. Five-minute setup."},
+
+  {slug:"google-cloud",term:"Google Cloud Platform",category:"platforms",isNew:false,
+  tagline:"Google's cloud platform — where you enable Google APIs and manage credentials",
+  plain:"Google Cloud Platform (GCP) is Google's suite of cloud services. For AI developers building with Google APIs, it is where you enable APIs (Gmail, Calendar), create OAuth credentials, and access Gemini API.",
+  how:"You manage everything through the Google Cloud Console at console.cloud.google.com. Enabling an API is a required step before you can call it — even for Gmail and Calendar.",
+  connects:["gmail-api","calendar-api","oauth","hosting","api-key"],
+  example:"When you set up Google API access for your Telegram bot, you visited console.cloud.google.com, created a project, enabled the Gmail and Calendar APIs, and downloaded OAuth credentials."},
+
+  {slug:"hosting",term:"Hosting / Servers",category:"platforms",isNew:false,
+  tagline:"Running your code 24/7 on a computer in the cloud, not just on your Mac",
+  plain:"Hosting means your code runs on a server — a computer always on and connected to the internet. If your Telegram bot only runs when your Mac is open, it stops when you close the lid. Cloud hosting keeps it running permanently.",
+  how:"Options range from simple managed platforms (Railway, Render — deploy with one command, $5-20 per month) to complex infrastructure (AWS, Google Cloud). For a personal bot, Railway or Render is the easiest path.",
+  connects:["google-cloud","python","github","docker","ngrok"],
+  example:"To make your Telegram bot always-on: push code to GitHub → connect repo to Railway → add your .env values as Railway environment variables → Railway builds and runs your bot."},
+
+  {slug:"ngrok",term:"ngrok",category:"platforms",isNew:true,
+  tagline:"A tunnel that gives your local Mac a public URL — essential for local webhook development",
+  plain:"ngrok creates a temporary encrypted tunnel from a public internet URL to your local computer. If your Telegram bot is running locally but Telegram needs to send webhooks to a public URL, ngrok gives you that URL.",
+  how:"You install ngrok, run 'ngrok http 8000', and it gives you a URL like https://abc123.ngrok.io that forwards to localhost:8000. You register this with Telegram as your webhook URL.",
+  connects:["hosting","webhook","python"],
+  example:"During development of your Telegram bot, ngrok is the bridge between Telegram's servers and your Mac. Once you are ready to go live, replace the ngrok URL with a real hosting URL."},
+
+  {slug:"docker",term:"Docker",category:"platforms",isNew:true,
+  tagline:"Package your code + all its dependencies into a portable container that runs anywhere",
+  plain:"Docker packages your application — code, Python version, all libraries, configuration — into a container that runs identically on any machine. 'It works on my machine' stops being an issue because the container brings its own complete environment.",
+  how:"A Dockerfile describes the container: start from a Python base image, copy your code, install dependencies, specify the startup command. 'docker build' creates an image. 'docker run' starts a container.",
+  connects:["hosting","python","github","scripts"],
+  example:"When you deploy to Railway or Render, they often detect your Python app and automatically create a Docker container for it."},
+
+  {slug:"ollama",term:"Ollama",category:"platforms",isNew:true,
+  tagline:"Run open-source AI models locally on your Mac — no internet, no API costs, fully private",
+  plain:"Ollama lets you download and run open-source LLMs (LLaMA, Mistral, Gemma, DeepSeek, and more) directly on your Mac, completely offline. No API calls, no per-token costs, and your data never leaves your machine.",
+  how:"Install Ollama, run 'ollama pull llama3.1' to download a model, and interact via a local API at localhost:11434 or the command line. Apple Silicon Macs run these models surprisingly well.",
+  connects:["llm","llama","apis","python","hugging-face","local-first-ai","deepseek"],
+  example:"You could point your Telegram bot to Ollama instead of the Anthropic API: change the API URL from api.anthropic.com to localhost:11434. Same Python code structure, local processing, zero API cost."},
+
+  {slug:"claude-code",term:"Claude Code",category:"build-tools",isNew:false,
+  tagline:"Anthropic's coding agent for the terminal — reads your codebase and builds autonomously",
+  plain:"Claude Code is a command-line tool that turns Claude into an AI coding agent on your computer. Instead of just chatting, it reads your code files, writes new code, runs commands, reads error messages, and iterates.",
+  how:"You run 'claude' in your project directory in Terminal. Claude Code has access to your filesystem and can execute shell commands. When given a task, it reads relevant files, writes or modifies code, runs it, reads outputs, and tries again in a loop.",
+  connects:["claude","terminal","ai-agent","vs-code","github","mcp"],
+  example:"You could build your Telegram bot with Claude Code: 'Create a Telegram bot that connects to my Google Calendar and Gmail APIs and gives me a daily briefing.' It would write the Python files, create requirements.txt, and guide you through setup."},
+
+  {slug:"cursor",term:"Cursor",category:"build-tools",isNew:true,
+  tagline:"VS Code rebuilt with AI at the core — AI understanding your entire project",
+  plain:"Cursor is a code editor (forked from VS Code) with AI deeply integrated. Unlike GitHub Copilot (autocomplete add-on), Cursor's AI understands your whole codebase, can edit multiple files simultaneously, and can explain and refactor complex code.",
+  how:"Cursor connects to Claude, GPT-4, and other models with your entire project in context. The Composer feature lets you give multi-step instructions. You can @-mention files, documentation URLs, or specific functions.",
+  connects:["vs-code","github-copilot","ai-agent","python","llm"],
+  example:"Open your Telegram bot project in Cursor, select the main Python file, and ask: 'Add error handling for when the Calendar API is unavailable, and add a 5-minute response cache.' Cursor writes the code, you review and accept."},
+
+  {slug:"github-copilot",term:"GitHub Copilot",category:"build-tools",isNew:true,
+  tagline:"AI code autocomplete built into VS Code — suggests code as you type",
+  plain:"GitHub Copilot is an AI coding assistant that lives inside VS Code. As you write code, it suggests completions — from a single line to entire functions. It understands the context of what you are building.",
+  how:"Powered by OpenAI's Codex model (trained specifically on code). It sends your current file context to the API and returns suggestions. Subscription-based ($10/month or free for students and open source contributors).",
+  connects:["vs-code","openai","github","cursor","llm"],
+  example:"While writing your bot's Python functions, Copilot might auto-complete entire blocks: you write 'def get_calendar_events(' and it suggests the function signature, the API call, and the response parsing."},
+
+  {slug:"lovable",term:"Lovable",category:"build-tools",isNew:false,
+  tagline:"AI no-code app builder — describe what you want to build and get a working web app",
+  plain:"Lovable is an AI-powered platform that turns text descriptions into full web applications. You describe what you want and Lovable generates working React code, sets up a database, and deploys it.",
+  how:"Lovable generates React frontend code and uses Supabase as the backend database. You can see and edit the generated code, add custom API integrations, and deploy to a custom domain.",
+  connects:["apis","hosting","replit"],
+  example:"If you wanted a personal web dashboard showing your email summaries, calendar, and AI-generated insights — you could describe it in Lovable and have a working prototype in under an hour."},
+
+  {slug:"replit",term:"Replit",category:"build-tools",isNew:true,
+  tagline:"Browser-based coding environment — write, run, and host code without installing anything",
+  plain:"Replit is an online IDE that runs in your browser. You write code, run it instantly, collaborate in real-time, and host projects — all without installing anything on your computer.",
+  how:"Replit gives you a virtual machine in the cloud. Create a project, write Python or other code, click Run. Replit's Deployments feature keeps bots running continuously.",
+  connects:["python","hosting","github","scripts"],
+  example:"Quick way to test your Telegram bot on a new machine: paste the code into Replit, add environment variables in Replit's Secrets tab, and click Run. No local setup required."},
+
+  {slug:"mcp",term:"MCP — Model Context Protocol",category:"build-tools",isNew:true,
+  tagline:"Anthropic's open standard for connecting AI to any tool or data source",
+  plain:"MCP (Model Context Protocol) is an open protocol that standardizes how AI systems connect to external tools and data sources. Instead of each app building custom integrations, MCP defines a universal format — like USB for AI tools.",
+  how:"MCP has two sides: MCP clients (like Claude) that want to use tools, and MCP servers that expose tools and data. Any developer can build an MCP server for their service. Claude then automatically discovers available tools.",
+  connects:["claude","ai-agent","function-calling","apis","claude-code","openclaw"],
+  example:"In Claude.ai, you can connect integrations (Google Drive, Slack, GitHub) via MCP. Claude then has context from those services and can reference your files, messages, and code directly."},
+
+  {slug:"automation",term:"Automation",category:"build-tools",isNew:true,
+  tagline:"Making software do repetitive tasks automatically so you do not have to",
+  plain:"Automation means configuring systems to do tasks that would otherwise require manual human action. In the AI context, automation combines traditional triggers (time-based, event-based) with AI processing (summarizing, deciding, drafting) to create workflows that run without human intervention.",
+  how:"Automation can be built at any level: shell scripts (cron jobs), workflow tools (Zapier, n8n), code (Python scripts), or AI agents. The key is identifying what triggers the action, what data is needed, what the AI does with it, and what the output is.",
+  connects:["n8n","zapier","scripts","ai-agent","apis","proactive-ai"],
+  example:"Your Telegram bot is automation: you do not manually check your calendar and email each morning — the bot does it automatically. This concept extends to hundreds of workflows in business and personal life."},
+
+  {slug:"persistent-memory",term:"Persistent Memory",category:"strategy",isNew:true,
+  tagline:"AI that remembers you across sessions — the difference between a tool and a true assistant",
+  plain:"Persistent memory is the ability of an AI system to retain information, preferences, and context across separate conversations. Standard LLM chats are stateless — every new conversation starts from zero. Persistent memory changes this.",
+  how:"Technical approaches: (1) Memory files — a document storing facts about you, injected into every context. (2) Conversation logs — past sessions stored and retrieved. (3) Semantic memory — embeddings of past conversations in a vector database.",
+  connects:["openclaw","context-window","embeddings","vector-database","rag","llm"],
+  example:"Your Telegram bot has no memory — each message is stateless. If you told it Monday you are vegetarian, it would not know Friday. OpenClaw solves this with persistent session files and a SOUL.md that grows over time."},
+
+  {slug:"local-first-ai",term:"Local-First AI",category:"strategy",isNew:true,
+  tagline:"Running AI on your own hardware — private, offline-capable, no API costs",
+  plain:"Local-first AI is a philosophy where AI models and data run on your own devices rather than cloud servers. Your data never leaves your machine. No internet required after setup. No per-token API costs.",
+  how:"Made practical by models like LLaMA, Mistral, and DeepSeek which are open-source and small enough to run on consumer hardware. Tools like Ollama make downloading and running models as simple as 'ollama pull llama3.1'. Apple Silicon Macs are particularly good at local inference.",
+  connects:["ollama","llama","openclaw","self-hosted","privacy-ai","fine-tuning","deepseek"],
+  example:"If you configured OpenClaw with Ollama using LLaMA or DeepSeek, your entire assistant would process everything locally: no API key, no per-message cost, no data sent to any company."},
+
+  {slug:"self-hosted",term:"Self-Hosting",category:"strategy",isNew:true,
+  tagline:"Running software on your own infrastructure instead of using someone else's cloud",
+  plain:"Self-hosting means running software on hardware you control — your Mac, a home server, or a VPS you rent. You control the data, the uptime, the customization, and the cost.",
+  how:"Self-hosting ranges from simple (running a Python script on your Mac) to complex (VPS with Docker, SSL, domain, backups). Docker makes self-hosting dramatically simpler by packaging apps with all their dependencies.",
+  connects:["local-first-ai","docker","hosting","openclaw","n8n","ollama"],
+  example:"OpenClaw on your Mac is self-hosting. Your Telegram bot running on Railway is cloud-hosted but owner-controlled. The difference matters when dealing with sensitive data."},
+
+  {slug:"agentic-workflow",term:"Agentic Workflows",category:"strategy",isNew:true,
+  tagline:"Designing sequences of AI actions that accomplish complex goals autonomously",
+  plain:"An agentic workflow is a multi-step sequence of AI actions designed to accomplish a goal too complex for a single prompt. Instead of asking 'summarize my inbox' (one step), an agentic workflow checks for unread emails, categorizes by priority, cross-references with calendar, drafts replies, and sends a prioritized briefing — all autonomously.",
+  how:"Agentic workflows involve: triggers (what starts the workflow), planning (how the AI decides what steps to take), tool use (calling APIs, running code), error handling, and output. The key design challenge is scoping — giving the agent enough autonomy to be useful.",
+  connects:["ai-agent","function-calling","automation","openclaw","n8n","rag","mcp"],
+  example:"Every weekday at 8am → fetch emails and calendar → identify conflicts or urgent items → draft briefing → check previous preferences (persistent memory) → send personalized summary to Telegram. Six coordinated steps, zero manual effort."},
+
+  {slug:"proactive-ai",term:"Proactive AI",category:"strategy",isNew:true,
+  tagline:"AI that acts without being explicitly prompted — the shift from reactive to autonomous",
+  plain:"Proactive AI describes systems that initiate actions based on schedules, triggers, or context — without waiting for you to ask. A reactive AI answers when you speak. A proactive AI notices it is Monday morning, checks your week, sees you have a big presentation Thursday, and messages you to suggest preparing.",
+  how:"Proactivity is implemented via: (1) Cron jobs — scheduled triggers. (2) Webhooks — event-driven triggers. (3) Heartbeats — OpenClaw's periodic check-ins where the agent wakes up and decides if there is anything worth acting on.",
+  connects:["openclaw","ai-agent","agentic-workflow","automation","webhook"],
+  example:"OpenClaw's heartbeat feature: every 30 minutes, the agent wakes up, reviews recent context, and decides whether to send you a message. Your current Telegram bot is fully reactive. Proactive is the next level."},
+
+  {slug:"open-source-ai",term:"Open Source AI",category:"strategy",isNew:true,
+  tagline:"AI where the code (and sometimes model weights) are publicly available",
+  plain:"Open source AI refers to AI systems where the underlying code, and sometimes the model weights themselves, are publicly available for anyone to use, modify, and redistribute. OpenClaw is open-source (MIT license). LLaMA's weights are open. This contrasts with closed-source models like Claude or GPT-4.",
+  how:"Degrees of openness: Open source code only — the app is open, model still proprietary. Open weights — model parameters released publicly (LLaMA, Mistral, DeepSeek). Fully open — code plus weights plus training data (rare).",
+  connects:["local-first-ai","llama","hugging-face","self-hosted","fine-tuning","openclaw","deepseek"],
+  example:"OpenClaw being MIT-licensed means you can download the source code, modify it however you want, run it commercially, build products on top of it — all for free. This is why 1,200+ community contributors can add features."},
+
+  {slug:"personal-ai-os",term:"Personal AI OS",category:"strategy",isNew:true,
+  tagline:"The emerging vision where one AI agent replaces dozens of apps",
+  plain:"Personal AI OS is a vision (and emerging reality) where a single AI agent becomes your primary interface to your digital life — replacing the app-switching between Gmail, Calendar, Notion, Slack, Spotify, and hundreds of other tools.",
+  how:"The concept converges several trends: AI agents that can use tools, persistent memory building genuine context over time, local-first execution for privacy and speed, and skills ecosystems that extend capabilities indefinitely.",
+  connects:["openclaw","ai-agent","persistent-memory","local-first-ai","mcp","proactive-ai"],
+  example:"Right now you use separate apps for messages, calendar, email, and AI help. The Personal AI OS collapses all of that: one OpenClaw agent on your Mac, reachable via Telegram, that knows your schedule, reads your email, and executes tasks across all services."},
+
+  {slug:"prompt-injection",term:"Prompt Injection",category:"strategy",isNew:true,
+  tagline:"A security attack where malicious instructions hidden in data hijack an AI's behavior",
+  plain:"Prompt injection is a security vulnerability where an attacker embeds instructions inside content the AI will read — a web page, an email, a document — designed to make the AI follow those instructions instead of the user's.",
+  how:"This is one of the most serious unsolved problems in AI security, especially dangerous for agents that browse the web and read emails automatically. Unlike SQL injection (which has well-understood defenses), prompt injection has no reliable defense yet.",
+  connects:["openclaw","ai-agent","self-hosted"],
+  example:"Cisco demonstrated this on OpenClaw: a community skill contained instructions to silently run curl commands sending user data to an external server — without warning the user. Run agents with minimal permissions and only install skills from trusted sources."},
+];
+
+const PATHS=[
+  {key:"foundation",label:"Foundation",emoji:"◆",color:"#FBBF24",subtitle:"8 concepts everyone needs first",
+   steps:["llm","tokens","context-window","prompting","hallucination","system-prompt","privacy-ai","temperature"]},
+  {key:"personal",label:"AI for Life",emoji:"◎",color:"#8B5CF6",subtitle:"Use AI to improve your daily life",
+   steps:["llm","hallucination","prompting","claude","chatgpt","perplexity","voice-ai","automation","proactive-ai","persistent-memory","openclaw"]},
+  {key:"business",label:"AI at Work",emoji:"◈",color:"#06B6D4",subtitle:"Apply AI professionally without coding",
+   steps:["llm","hallucination","prompting","system-prompt","microsoft-copilot","notion-ai","rag","zapier-ai","automation","agentic-workflow"]},
+  {key:"builder",label:"AI to Build",emoji:"◐",color:"#F97316",subtitle:"Create tools and apps, minimal coding",
+   steps:["llm","apis","json","webhook","zapier","n8n","lovable","replit","rag","function-calling","mcp","agentic-workflow"]},
+  {key:"engineer",label:"AI to Engineer",emoji:"◑",color:"#3B82F6",subtitle:"Build and implement at a technical level",
+   steps:["llm","tokens","context-window","embeddings","vector-database","rag","apis","rest-api","python","env-variables","fine-tuning","ai-agent","function-calling","mcp","claude-code","opencode","openclaw","langchain"]},
+];
+const TM={
+  foundation:{label:"Foundation",color:"#FBBF24",bg:"rgba(251,191,36,0.12)"},
+  personal:{label:"AI for Life",color:"#8B5CF6",bg:"rgba(139,92,246,0.12)"},
+  business:{label:"AI at Work",color:"#06B6D4",bg:"rgba(6,182,212,0.12)"},
+  builder:{label:"AI to Build",color:"#F97316",bg:"rgba(249,115,22,0.12)"},
+  engineer:{label:"AI to Engineer",color:"#3B82F6",bg:"rgba(59,130,246,0.12)"},
+};
+const TERM_TRACKS={};
+PATHS.forEach(p=>p.steps.forEach(s=>{if(!TERM_TRACKS[s])TERM_TRACKS[s]=[];TERM_TRACKS[s].push(p.key)}));
+
+const CASES=[
+  {key:"engineer",label:"Engineer",color:"#3B82F6",subtitle:"Your Telegram Bot",
+  html:`<p style="font-size:0.84rem;color:var(--muted);margin-bottom:1rem">When you ask "What does my day look like?" in Telegram &mdash; here is the complete technical journey:</p>
+<div class="flow">
+  <div class="flow-node"><div class="fn-label">You type</div><div class="fn-tech">Telegram App</div></div><span class="flow-arr">&#8594;</span>
+  <div class="flow-node"><div class="fn-label">Message sent</div><div class="fn-tech">Telegram Bot API</div></div><span class="flow-arr">&#8594;</span>
+  <div class="flow-node"><div class="fn-label">Webhook fires</div><div class="fn-tech">HTTP POST</div></div><span class="flow-arr">&#8594;</span>
+  <div class="flow-node"><div class="fn-label">Bot receives</div><div class="fn-tech">Python script</div></div><span class="flow-arr">&#8594;</span>
+  <div class="flow-node"><div class="fn-label">Fetches data</div><div class="fn-tech">Calendar + Gmail API</div></div><span class="flow-arr">&#8594;</span>
+  <div class="flow-node"><div class="fn-label">Builds prompt</div><div class="fn-tech">Prompt engineering</div></div><span class="flow-arr">&#8594;</span>
+  <div class="flow-node"><div class="fn-label">Calls Claude</div><div class="fn-tech">Anthropic API</div></div><span class="flow-arr">&#8594;</span>
+  <div class="flow-node"><div class="fn-label">Parses JSON</div><div class="fn-tech">Python</div></div><span class="flow-arr">&#8594;</span>
+  <div class="flow-node"><div class="fn-label">Sends reply</div><div class="fn-tech">Telegram API</div></div>
+</div>
+<div class="flow-note"><strong style="color:var(--text)">What you actually built:</strong> A lightweight RAG system. Real calendar and email data gets injected into Claude's context so it answers accurately &mdash; no guessing. Every term in this journal touches something in that flow.</div>`},
+
+  {key:"personal",label:"AI for Life",color:"#8B5CF6",subtitle:"Morning Routine",
+  html:`<p style="font-size:0.84rem;color:var(--muted);margin-bottom:1rem">A non-technical person using three AI tools to start their day 30 minutes sharper &mdash; no code, no setup:</p>
+<div class="flow">
+  <div class="flow-node"><div class="fn-label">Wake up</div><div class="fn-tech">7:00am</div></div><span class="flow-arr">&#8594;</span>
+  <div class="flow-node"><div class="fn-label">Perplexity</div><div class="fn-tech">"AI news today?"</div></div><span class="flow-arr">&#8594;</span>
+  <div class="flow-node"><div class="fn-label">Open Claude</div><div class="fn-tech">Paste tasks</div></div><span class="flow-arr">&#8594;</span>
+  <div class="flow-node"><div class="fn-label">Get priorities</div><div class="fn-tech">AI ranks your day</div></div><span class="flow-arr">&#8594;</span>
+  <div class="flow-node"><div class="fn-label">Dictate notes</div><div class="fn-tech">Voice &#8594; text</div></div><span class="flow-arr">&#8594;</span>
+  <div class="flow-node"><div class="fn-label">Claude drafts</div><div class="fn-tech">Follow-up emails</div></div>
+</div>
+<div class="flow-note"><strong style="color:var(--text)">No code. No setup. Zero technical skill required.</strong> Perplexity replaces 20 minutes of news browsing. Claude turns a messy task dump into a prioritized plan. Three tools, one routine, compounding value every morning.</div>`},
+
+  {key:"business",label:"AI at Work",color:"#06B6D4",subtitle:"Meeting Prep",
+  html:`<p style="font-size:0.84rem;color:var(--muted);margin-bottom:1rem">A business professional walking into any meeting fully prepared in under 10 minutes:</p>
+<div class="flow">
+  <div class="flow-node"><div class="fn-label">Meeting in 1hr</div><div class="fn-tech">Calendar alert</div></div><span class="flow-arr">&#8594;</span>
+  <div class="flow-node"><div class="fn-label">Notion AI</div><div class="fn-tech">Summarize notes</div></div><span class="flow-arr">&#8594;</span>
+  <div class="flow-node"><div class="fn-label">M365 Copilot</div><div class="fn-tech">Find related emails</div></div><span class="flow-arr">&#8594;</span>
+  <div class="flow-node"><div class="fn-label">Paste to Claude</div><div class="fn-tech">Combine context</div></div><span class="flow-arr">&#8594;</span>
+  <div class="flow-node"><div class="fn-label">Claude drafts</div><div class="fn-tech">Agenda + questions</div></div><span class="flow-arr">&#8594;</span>
+  <div class="flow-node"><div class="fn-label">Walk in ready</div><div class="fn-tech">10 min total</div></div>
+</div>
+<div class="flow-note"><strong style="color:var(--text)">The insight:</strong> These tools eliminate 45 minutes of digging before every important meeting. You still decide what matters. AI surfaces it faster. No coding required.</div>`},
+
+  {key:"builder",label:"AI to Build",color:"#F97316",subtitle:"No-Code Email Triage",
+  html:`<p style="font-size:0.84rem;color:var(--muted);margin-bottom:1rem">A non-developer building an automated email triage system &mdash; no Python required:</p>
+<div class="flow">
+  <div class="flow-node"><div class="fn-label">Email arrives</div><div class="fn-tech">Gmail trigger</div></div><span class="flow-arr">&#8594;</span>
+  <div class="flow-node"><div class="fn-label">Zapier catches it</div><div class="fn-tech">Automation layer</div></div><span class="flow-arr">&#8594;</span>
+  <div class="flow-node"><div class="fn-label">Sends to Claude</div><div class="fn-tech">API step</div></div><span class="flow-arr">&#8594;</span>
+  <div class="flow-node"><div class="fn-label">Claude decides</div><div class="fn-tech">Priority + category</div></div><span class="flow-arr">&#8594;</span>
+  <div class="flow-node"><div class="fn-label">Zapier routes</div><div class="fn-tech">Label / Slack / ignore</div></div><span class="flow-arr">&#8594;</span>
+  <div class="flow-node"><div class="fn-label">You see only</div><div class="fn-tech">What matters</div></div>
+</div>
+<div class="flow-note"><strong style="color:var(--text)">Same logic as the Telegram bot &mdash; no Python.</strong> Zapier does the connecting, Claude does the thinking. Setup: roughly two hours.</div>`},
+];
+
+// ── STATE ──
+let activeCategory="all",searchText="",activePath=null,expandedSlug=null;
+let learnedSet=new Set(JSON.parse(localStorage.getItem("ai-journal-learned")||"[]"));
+
+document.getElementById("startDate").textContent=localStorage.getItem("ai-journal-start")||(()=>{
+  const d=new Date().toLocaleDateString("en-US",{month:"long",year:"numeric"});
+  localStorage.setItem("ai-journal-start",d);return d;
+})();
+document.getElementById("totalCount").textContent=TERMS.length;
+
+function saveProgress(){localStorage.setItem("ai-journal-learned",JSON.stringify([...learnedSet]))}
+function updateProgress(){
+  const pct=Math.round(learnedSet.size/TERMS.length*100);
+  document.getElementById("progressBar").style.width=pct+"%";
+  document.getElementById("progressLabel").textContent=learnedSet.size+" of "+TERMS.length+" concepts marked as understood";
+  document.getElementById("learnedTerms").textContent=learnedSet.size;
+}
+
+// ── CATEGORY FILTERS ──
+const catWrap=document.getElementById("catFilters");
+CATS.forEach(cat=>{
+  const btn=document.createElement("button");
+  btn.className="cat-pill"+(cat.key==="all"?" active":"");
+  btn.dataset.cat=cat.key;
+  const count=cat.key==="all"?TERMS.length:TERMS.filter(t=>t.category===cat.key).length;
+  btn.innerHTML=`<span class="dot" style="background:${cat.color}"></span>${cat.label} <span style="opacity:0.5;font-size:0.7rem">${count}</span>`;
+  btn.onclick=()=>{
+    if(activePath){exitPath();return;}
+    document.querySelectorAll(".cat-pill").forEach(p=>p.classList.remove("active"));
+    btn.classList.add("active");activeCategory=cat.key;renderGrid();
+  };
+  catWrap.appendChild(btn);
+});
+
+// ── PATHS GRID ──
+const pathsGrid=document.getElementById("pathsGrid");
+PATHS.forEach(path=>{
+  const card=document.createElement("button");
+  card.className="path-card";card.dataset.key=path.key;
+  card.style.borderColor=path.color+"44";
+  card.innerHTML=`<span class="pc-count">${path.steps.length} steps</span><span class="pc-icon">${path.emoji}</span><span class="pc-label" style="color:${path.color}">${path.label}</span><span class="pc-sub">${path.subtitle}</span>`;
+  card.onclick=()=>{
+    if(activePath===path.key){exitPath();return;}
+    activePath=path.key;
+    document.querySelectorAll(".path-card").forEach(c=>{c.classList.remove("active");c.style.borderColor=PATHS.find(p=>p.key===c.dataset.key).color+"44";});
+    card.classList.add("active");card.style.borderColor=path.color;
+    document.getElementById("pathBanner").classList.add("visible");
+    document.getElementById("pathBanner").style.borderBottomColor=path.color;
+    document.getElementById("pbname").textContent=path.emoji+" "+path.label;
+    document.getElementById("pbfill").style.background=path.color;
+    updatePathBanner();renderGrid();
+  };
+  pathsGrid.appendChild(card);
+});
+
+function exitPath(){
+  activePath=null;
+  document.querySelectorAll(".path-card").forEach(c=>{c.classList.remove("active");c.style.borderColor=PATHS.find(p=>p.key===c.dataset.key).color+"44";});
+  document.getElementById("pathBanner").classList.remove("visible");
+  document.querySelectorAll(".cat-pill").forEach(p=>p.classList.remove("active"));
+  document.querySelector("[data-cat='all']").classList.add("active");
+  activeCategory="all";renderGrid();
+}
+function updatePathBanner(){
+  if(!activePath)return;
+  const path=PATHS.find(p=>p.key===activePath);
+  const learned=path.steps.filter(s=>learnedSet.has(s)).length;
+  document.getElementById("pbfill").style.width=Math.round(learned/path.steps.length*100)+"%";
+  document.getElementById("pbstep").textContent=learned+"/"+path.steps.length+" completed";
+}
+function navPath(currentSlug,dir){
+  if(!activePath)return;
+  const path=PATHS.find(p=>p.key===activePath);
+  const nextSlug=path.steps[path.steps.indexOf(currentSlug)+dir];
+  if(!nextSlug)return;
+  expandedSlug=nextSlug;renderGrid();
+  setTimeout(()=>{
+    const el=document.querySelector("[data-slug='"+nextSlug+"']");
+    if(el){el.scrollIntoView({behavior:"smooth",block:"center"});el.classList.add("expanded");}
+  },80);
+}
+
+// ── CASE STUDIES ──
+const tabsEl=document.getElementById("caseTabs"),panelsEl=document.getElementById("casePanels");
+CASES.forEach((cs,i)=>{
+  const tab=document.createElement("button");
+  tab.className="case-tab"+(i===0?" active":"");
+  tab.innerHTML=`<span class="tab-dot" style="background:${cs.color}"></span>${cs.label}: ${cs.subtitle}`;
+  tab.onclick=()=>{
+    document.querySelectorAll(".case-tab").forEach(t=>t.classList.remove("active"));
+    document.querySelectorAll(".case-panel").forEach(p=>p.classList.remove("active"));
+    tab.classList.add("active");
+    document.getElementById("case-panel-"+cs.key).classList.add("active");
+  };
+  tabsEl.appendChild(tab);
+  const panel=document.createElement("div");
+  panel.className="case-panel"+(i===0?" active":"");
+  panel.id="case-panel-"+cs.key;panel.innerHTML=cs.html;
+  panelsEl.appendChild(panel);
+});
+
+// ── SEARCH ──
+document.getElementById("search").addEventListener("input",e=>{
+  searchText=e.target.value.toLowerCase();
+  if(searchText&&activePath)exitPath();
+  renderGrid();
+});
+function clearSearch(){document.getElementById("search").value="";searchText="";renderGrid();}
+function catColor(c){return CATS.find(x=>x.key===c)?.color||"#555"}
+function catLabel(c){return CATS.find(x=>x.key===c)?.label||c}
+
+// ── RENDER ──
+function renderGrid(){
+  const grid=document.getElementById("grid"),noRes=document.getElementById("noResults");
+  let filtered;
+  if(activePath){
+    const path=PATHS.find(p=>p.key===activePath);
+    filtered=path.steps.map(s=>TERMS.find(t=>t.slug===s)).filter(Boolean)
+      .filter(t=>!searchText||t.term.toLowerCase().includes(searchText)||t.tagline.toLowerCase().includes(searchText)||t.plain.toLowerCase().includes(searchText));
+    updatePathBanner();
+  } else {
+    filtered=TERMS.filter(t=>{
+      const cm=activeCategory==="all"||t.category===activeCategory;
+      if(!cm)return false;
+      if(!searchText)return true;
+      return t.term.toLowerCase().includes(searchText)||t.tagline.toLowerCase().includes(searchText)||
+             t.plain.toLowerCase().includes(searchText)||t.how.toLowerCase().includes(searchText)||
+             t.example.toLowerCase().includes(searchText)||t.connects.some(c=>c.includes(searchText));
+    });
+  }
+  document.getElementById("totalTerms").textContent=TERMS.length;
+  document.getElementById("visibleTerms").textContent=filtered.length;
+  updateProgress();
+  if(filtered.length===0){grid.innerHTML="";noRes.style.display="block";return;}
+  noRes.style.display="none";
+  grid.innerHTML=filtered.map((t,i)=>buildCard(t,activePath?i:null)).join("");
+  if(expandedSlug){
+    const el=document.querySelector("[data-slug='"+expandedSlug+"']");
+    if(el)el.classList.add("expanded");
+  }
+  document.querySelectorAll(".card").forEach(card=>{
+    card.addEventListener("click",e=>{
+      if(e.target.closest(".mark-btn")||e.target.closest(".connect-tag")||e.target.closest(".pnb"))return;
+      const slug=card.dataset.slug;
+      if(card.classList.contains("expanded")){card.classList.remove("expanded");if(expandedSlug===slug)expandedSlug=null;}
+      else{document.querySelectorAll(".card.expanded").forEach(c=>{if(c.dataset.slug!==slug)c.classList.remove("expanded");});card.classList.add("expanded");expandedSlug=slug;}
+    });
+  });
+  document.querySelectorAll(".mark-btn").forEach(btn=>{
+    btn.addEventListener("click",e=>{
+      e.stopPropagation();const slug=btn.dataset.slug;
+      if(learnedSet.has(slug)){learnedSet.delete(slug);btn.textContent="Mark as Understood";btn.closest(".card").classList.remove("learned");}
+      else{learnedSet.add(slug);btn.textContent="\u2713 Understood";btn.closest(".card").classList.add("learned");}
+      saveProgress();updateProgress();if(activePath)updatePathBanner();
+    });
+    if(learnedSet.has(btn.dataset.slug)){btn.textContent="\u2713 Understood";btn.closest(".card").classList.add("learned");}
+  });
+  document.querySelectorAll(".connect-tag").forEach(tag=>{
+    tag.addEventListener("click",e=>{
+      e.stopPropagation();const slug=tag.dataset.slug;
+      if(activePath)exitPath();
+      document.getElementById("search").value="";searchText="";activeCategory="all";
+      document.querySelectorAll(".cat-pill").forEach(p=>p.classList.remove("active"));
+      document.querySelector("[data-cat='all']").classList.add("active");
+      expandedSlug=slug;renderGrid();
+      setTimeout(()=>{
+        const el=document.querySelector("[data-slug='"+slug+"']");
+        if(el){el.scrollIntoView({behavior:"smooth",block:"center"});el.classList.add("expanded");}
+      },100);
+    });
+  });
+  document.querySelectorAll(".pnb").forEach(btn=>{
+    btn.addEventListener("click",e=>{
+      e.stopPropagation();
+      navPath(btn.closest(".card").dataset.slug,parseInt(btn.dataset.dir));
+    });
+  });
+}
+
+function buildCard(t,pathIndex){
+  const color=catColor(t.category);
+  const connects=t.connects.map(c=>{
+    const found=TERMS.find(x=>x.slug===c);
+    return found?`<span class="connect-tag" data-slug="${c}">${found.term}</span>`:"";
+  }).filter(Boolean).join("");
+  const tracks=TERM_TRACKS[t.slug]||[];
+  const trackBadges=tracks.map(k=>{const m=TM[k];return m?`<span class="track-badge" style="background:${m.bg};color:${m.color}">${m.label}</span>`:""}).join("");
+  const stepTag=pathIndex!==null?`<span style="font-size:0.59rem;background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:0.1rem 0.4rem;font-family:'JetBrains Mono',monospace;color:var(--muted)">step ${pathIndex+1}</span>`:"";
+  let pathNav="";
+  if(activePath&&pathIndex!==null){
+    const path=PATHS.find(p=>p.key===activePath);
+    pathNav=`<div class="path-nav">
+      <button class="pnb" data-dir="-1" ${pathIndex===0?"disabled":""}>&#8592; Back</button>
+      <button class="pnb fwd" data-dir="1" ${pathIndex===path.steps.length-1?"disabled":""}>${pathIndex===path.steps.length-1?"Done &#x2713;":"Next &#8594;"}</button>
+    </div>`;
+  }
+  return `<div class="card${learnedSet.has(t.slug)?" learned":""}" data-slug="${t.slug}">
+  <div class="card-header">
+    <div class="cat-bar" style="background:${color}"></div>
+    <div class="card-meta">
+      <div class="card-term">${t.term}${t.isNew?'<span class="new-tag">+ added</span>':""}${stepTag}</div>
+      <div class="card-tagline">${t.tagline}</div>
+      ${trackBadges?`<div class="track-badges">${trackBadges}</div>`:""}
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="section-label">Plain English</div>
+    <p class="plain">${t.plain}</p>
+    <div class="section-label">How it actually works</div>
+    <div class="how-box">${t.how}</div>
+    <div class="section-label">Real-world example</div>
+    <div class="example-box">${t.example}</div>
+    ${connects?`<div class="section-label">Connected concepts</div><div class="connects">${connects}</div>`:""}
+    <div class="card-footer">
+      <span class="cat-label" style="color:${color}">${catLabel(t.category)}</span>
+      <button class="mark-btn" data-slug="${t.slug}">Mark as Understood</button>
+    </div>
+    ${pathNav}
+  </div>
+</div>`;
+}
+
+renderGrid();
+document.getElementById("totalTerms").textContent=TERMS.length;
+document.getElementById("visibleTerms").textContent=TERMS.length;
+
+</script>
+</body>
+</html>
