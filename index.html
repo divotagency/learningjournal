@@ -377,6 +377,16 @@ a{color:var(--accent2);text-decoration:none}
 .no-results{text-align:center;padding:4rem 2rem;color:var(--muted);font-size:0.9rem}
 .no-results strong{display:block;font-size:1.5rem;margin-bottom:0.5rem;color:var(--dim)}
 
+/* ── DEPTH FILTER ROW ── */
+.depth-filters{display:flex;gap:0.4rem;flex-wrap:wrap;padding:0.65rem 2rem;max-width:1200px;margin:0 auto;border-bottom:1px solid var(--border);align-items:center;background:rgba(255,255,255,0.015)}
+.depth-pill{display:flex;align-items:center;gap:0.38rem;padding:0.32rem 0.85rem;border-radius:100px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:0.75rem;font-weight:500;cursor:pointer;transition:all 0.18s;white-space:nowrap;font-family:inherit}
+.depth-pill:hover{background:var(--surface2);color:var(--text)}
+.depth-pill.active{background:var(--surface2);color:var(--text);border-color:var(--accent2)}
+.depth-pill .dp-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.depth-pill.foundational.active{border-color:var(--accent);color:var(--accent)}
+.depth-filter-label{font-size:0.6rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--dim);font-family:'JetBrains Mono',monospace;font-weight:700;padding:0 0.35rem;display:flex;align-items:center;white-space:nowrap}
+.depth-filter-label::before{content:'';display:block;width:1px;height:14px;background:var(--border);margin-right:0.5rem}
+
 /* ── FOOTER ── */
 .footer{text-align:center;padding:3rem 2rem;color:var(--dim);font-size:0.78rem;max-width:1200px;margin:0 auto;border-top:1px solid var(--border);font-family:'JetBrains Mono',monospace}
 @media(max-width:640px){
@@ -1272,6 +1282,7 @@ a{color:var(--accent2);text-decoration:none}
   </div>
 
   <div class="cats" id="catFilters"></div>
+  <div class="depth-filters" id="depthFilters"></div>
 
 </div>
 
@@ -2849,6 +2860,7 @@ PATHS.forEach(p=>p.steps.forEach(s=>{if(!TERM_TRACKS[s])TERM_TRACKS[s]=[];TERM_T
 
 // ── STATE ──
 let activeCategory="all",searchText="",activePath=null,expandedSlug=null;
+let activeDepth="all",activeFoundational=false;
 let learnedSet=new Set(JSON.parse(localStorage.getItem("ai-journal-learned")||"[]"));
 
 // startDate element removed
@@ -2929,6 +2941,51 @@ catWrap.appendChild(makeCatBtn(CATS.find(c => c.key === "all")));
   catWrap.appendChild(makeGroupLabel({ technical: "Technical", creative: "Creative", functional: "Functional" }[parent]));
   groupCats.forEach(cat => catWrap.appendChild(makeCatBtn(cat)));
 })
+
+// ── DEPTH FILTERS ──
+const depthWrap = document.getElementById("depthFilters");
+
+const DEPTH_OPTS = [
+  {key:"all",   label:"All Levels", dot:null},
+  {key:"beginner",    label:"Beginner",     dot:"#22C55E"},
+  {key:"intermediate",label:"Intermediate", dot:"#3B82F6"},
+  {key:"advanced",    label:"Advanced",     dot:"#6B7280"},
+  {key:"expert",      label:"Expert",       dot:"#6B7280"},
+];
+
+function makeDepthPill(opt){
+  const btn = document.createElement("button");
+  btn.className = "depth-pill" + (opt.key==="all" ? " active" : "");
+  btn.dataset.depth = opt.key;
+  const dotHtml = opt.dot ? `<span class="dp-dot" style="background:${opt.dot}"></span>` : "";
+  btn.innerHTML = dotHtml + opt.label;
+  btn.onclick = () => {
+    activeDepth = opt.key;
+    document.querySelectorAll(".depth-pill:not(.foundational)").forEach(p=>p.classList.remove("active"));
+    btn.classList.add("active");
+    renderGrid();
+  };
+  return btn;
+}
+
+DEPTH_OPTS.forEach(opt => depthWrap.appendChild(makeDepthPill(opt)));
+
+// Separator then Foundational pill
+const depthSep = document.createElement("span");
+depthSep.className = "depth-filter-label";
+depthSep.textContent = "Skills";
+depthWrap.appendChild(depthSep);
+
+const foundPill = document.createElement("button");
+foundPill.className = "depth-pill foundational";
+foundPill.id = "foundationalPill";
+foundPill.innerHTML = "&#9733; Foundational";
+foundPill.onclick = () => {
+  activeFoundational = !activeFoundational;
+  foundPill.classList.toggle("active", activeFoundational);
+  renderGrid();
+};
+depthWrap.appendChild(foundPill);
 
 // ── PATHS GRID ──
 PATHS.forEach(path=>{
@@ -3177,6 +3234,16 @@ function renderGrid(){
   } else {
     // all terms
     filtered=TERMS.slice();
+  }
+
+  // apply depth filter
+  if(activeDepth!=="all"){
+    filtered=filtered.filter(t=>(t.depth||"beginner")===activeDepth);
+  }
+
+  // apply foundational filter (fp contentDepth = star = foundational)
+  if(activeFoundational){
+    filtered=filtered.filter(t=>t.contentDepth==="fp");
   }
 
   // apply search on top of whatever filter is active
