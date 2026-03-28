@@ -45,6 +45,13 @@ a{color:var(--accent2);text-decoration:none}
 .cat-pill.active{border-color:var(--accent2)}
 .cat-pill .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 
+/* ── SECONDARY NAV ── */
+.sec-nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;gap:0;max-width:100%}
+.sec-nav-item{padding:0.7rem 1.1rem;font-size:0.8rem;font-weight:500;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.18s;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none;font-family:inherit}
+.sec-nav-item:hover{color:var(--text)}
+.sec-nav-item.active{color:var(--text);border-bottom-color:var(--accent)}
+.sec-nav-label{font-size:0.68rem;color:var(--dim);font-family:'JetBrains Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;padding:0 0.5rem;user-select:none}
+
 /* ── CASE STUDY BANNER ── */
 .case-study{background:var(--surface);border:1px solid var(--border);border-radius:16px;margin:1.5rem 2rem;max-width:1200px;margin-left:auto;margin-right:auto;overflow:hidden}
 .case-study-header{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
@@ -66,6 +73,15 @@ a{color:var(--accent2);text-decoration:none}
 .paths-section{padding:1.25rem 2rem 0;max-width:1200px;margin:0 auto}
 .paths-section-title{font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;margin-bottom:0.75rem;display:flex;align-items:center;gap:0.6rem}
 .paths-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:0.55rem;margin-bottom:1rem}
+.track-tabs{display:flex;gap:0;margin-bottom:0;border-bottom:1px solid var(--border);padding-bottom:0}
+.track-tab{padding:0.55rem 1.1rem;font-size:0.8rem;font-weight:500;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.18s;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none;font-family:inherit}
+.track-tab:hover{color:var(--text)}
+.track-tab.active{color:var(--text);border-bottom-color:var(--accent2)}
+.track-panel{display:none;padding-top:0.85rem}
+.track-panel.active{display:block}
+.cs-terms-section{padding:1.25rem 1.5rem;border-top:1px solid var(--border);background:var(--surface2)}
+.cs-terms-label{font-size:0.65rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--dim);font-weight:600;font-family:'JetBrains Mono',monospace;margin-bottom:0.75rem}
+.cs-terms-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:0.75rem}
 .path-card{background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:0.85rem 1rem 0.8rem;cursor:pointer;transition:all 0.18s;position:relative;text-align:left;font-family:inherit;width:100%}
 .path-card:hover{transform:translateY(-1px)}
 .path-card.active{border-width:2px}
@@ -174,27 +190,49 @@ a{color:var(--accent2);text-decoration:none}
   </div>
 </div>
 
-<div class="cats" id="catFilters"></div>
-
-
-<!-- LEARNING PATHS -->
-<div class="paths-section" id="pathsSection">
-  <div class="paths-section-title"><span class="badge" style="background:var(--accent2);color:#fff">Learning Paths</span> Choose your track &mdash; terms appear in guided sequence</div>
-  <div class="paths-grid" id="pathsGrid"></div>
+<div class="sec-nav">
+  <span class="sec-nav-label">View:</span>
+  <button class="sec-nav-item active" id="navTerms" onclick="showSection('terms')">Terms &amp; Paths</button>
+  <button class="sec-nav-item" id="navCases" onclick="showSection('cases')">Case Studies</button>
 </div>
 
-<!-- CASE STUDIES -->
-<div style="padding:1rem 2rem 0;max-width:1200px;margin:0 auto">
-<div class="case-study">
-  <div class="case-study-header">
-    <div class="case-study-title">
-      <span class="badge">Case Studies</span>
-      Real scenarios &mdash; every concept in action
+<div id="sectionTerms">
+  <div class="cats" id="catFilters"></div>
+
+  <!-- LEARNING PATHS -->
+  <div class="paths-section" id="pathsSection">
+    <div class="paths-section-title"><span class="badge" style="background:var(--accent2);color:#fff">Learning Paths</span> Choose your track &mdash; combine with a category to intersect both</div>
+    <div class="track-tabs">
+      <button class="track-tab active" data-track="technical" onclick="showTrack('technical')">&#9881; Technical</button>
+      <button class="track-tab" data-track="creative" onclick="showTrack('creative')">&#10022; Creative</button>
+      <button class="track-tab" data-track="functional" onclick="showTrack('functional')">&#9670; Functional</button>
+    </div>
+    <div id="track-technical" class="track-panel active">
+      <div class="paths-grid" id="pathsGrid-technical"></div>
+    </div>
+    <div id="track-creative" class="track-panel">
+      <div class="paths-grid" id="pathsGrid-creative"></div>
+    </div>
+    <div id="track-functional" class="track-panel">
+      <div class="paths-grid" id="pathsGrid-functional"></div>
     </div>
   </div>
-  <div class="case-tabs" id="caseTabs"></div>
-  <div id="casePanels"></div>
 </div>
+
+<!-- CASE STUDIES (hidden by default) -->
+<div id="sectionCases" style="display:none">
+  <div style="padding:1rem 2rem 0;max-width:1200px;margin:0 auto">
+  <div class="case-study">
+    <div class="case-study-header">
+      <div class="case-study-title">
+        <span class="badge">Case Studies</span>
+        Real scenarios &mdash; every concept in action
+      </div>
+    </div>
+    <div class="case-tabs" id="caseTabs"></div>
+    <div id="casePanels"></div>
+  </div>
+  </div>
 </div>
 
 <div class="stats">
@@ -760,32 +798,213 @@ const TERMS=[
   how:"This is one of the most serious unsolved problems in AI security, especially dangerous for agents that browse the web and read emails automatically. Unlike SQL injection (which has well-understood defenses), prompt injection has no reliable defense yet.",
   connects:["openclaw","ai-agent","self-hosted"],
   example:"Cisco demonstrated this on OpenClaw: a community skill contained instructions to silently run curl commands sending user data to an external server — without warning the user. Run agents with minimal permissions and only install skills from trusted sources."},
+
+  // ── IMAGE & DESIGN AI ──
+  {slug:"midjourney",term:"Midjourney",category:"image-tools",isNew:true,
+  tagline:"Text-to-image AI that generates stunning visuals from written prompts",
+  plain:"Midjourney is an AI image generator you access through Discord. You type a description and within seconds it generates four image variations. It has become the go-to tool for designers, marketers, and creatives who need high-quality visuals without photography or illustration skills.",
+  how:"Midjourney uses a diffusion model — it starts with random noise and iteratively refines it toward an image that matches your text description. Key parameters: --ar sets aspect ratio (16:9 for widescreen, 1:1 for square), --v sets the model version, --style controls aesthetic direction, and --no lets you exclude elements.",
+  connects:["image-prompting","dall-e","stable-diffusion","ai-upscaling","multi-modal","prompting"],
+  example:"A solopreneur building a brand: type '/imagine brand hero image for a calm productivity app, soft blues and greens, minimal, professional photography style --ar 16:9 --v 6' — Midjourney generates four options in about 30 seconds. Iterate on the best one, upscale it, and you have a website hero image."},
+
+  {slug:"dall-e",term:"DALL-E",category:"image-tools",isNew:true,
+  tagline:"OpenAI's image generator — built into ChatGPT and available via API",
+  plain:"DALL-E is OpenAI's text-to-image model. Unlike Midjourney (Discord-only), DALL-E is built directly into ChatGPT and available via the OpenAI API for developers to integrate into apps. You can generate images in conversation, edit existing images by describing changes, and create variations.",
+  how:"DALL-E 3 is tightly integrated with GPT-4 — meaning ChatGPT can help you write a better image prompt before sending it to DALL-E. Via the API, you send a text prompt and receive a URL to the generated image. This makes it easy to add AI image generation to any application.",
+  connects:["midjourney","image-prompting","openai","multi-modal","apis"],
+  example:"The API integration makes DALL-E particularly useful for builders: your web app can call the DALL-E API to automatically generate a unique header image for every blog post, product listing thumbnail, or social media card — personalized at scale without a human designer."},
+
+  {slug:"stable-diffusion",term:"Stable Diffusion",category:"image-tools",isNew:true,
+  tagline:"Open-source image generation — run locally on your Mac, free, fully private",
+  plain:"Stable Diffusion is an open-source text-to-image model released by Stability AI. Unlike Midjourney or DALL-E (which run on external servers), Stable Diffusion can run entirely on your own computer. No subscription, no per-image cost, no data sent to any company.",
+  how:"Stable Diffusion runs via interfaces like ComfyUI or Automatic1111. On Apple Silicon Macs it runs well using the Metal GPU backend. Thousands of fine-tuned model variants exist on Hugging Face — specialized for realistic photos, anime, architectural visualization, and product shots.",
+  connects:["comfyui","midjourney","hugging-face","local-first-ai","image-prompting"],
+  example:"A product designer who needs to prototype 50 packaging variations: rather than paying per image via Midjourney, they run Stable Diffusion locally, generate unlimited variants at no cost, and iterate in minutes. For sensitive projects, keeping generation local means designs never leave your machine."},
+
+  {slug:"image-prompting",term:"Image Prompting",category:"image-tools",isNew:true,
+  tagline:"Writing descriptions that reliably produce the images you actually want",
+  plain:"Image prompting is the skill of writing text descriptions that reliably produce the visual output you intend. It is different from text prompting — image models respond to style references, lighting descriptions, artist names, and camera terms in ways that text LLMs do not.",
+  how:"Effective image prompts typically include: subject (what), style (photorealistic vs oil painting vs vector), mood or lighting (golden hour, studio lighting), composition (close-up, wide angle), and quality modifiers. Negative prompts exclude unwanted elements. Seed values lock randomness so you can reproduce a result.",
+  connects:["midjourney","dall-e","stable-diffusion","prompting"],
+  example:"Prompt comparison: 'a dog' generates something random. 'Golden retriever puppy in autumn leaves, shallow depth of field, warm afternoon light, DSLR photo, 85mm lens' generates close to what you actually visualized. That specificity is image prompting in action."},
+
+  {slug:"comfyui",term:"ComfyUI",category:"image-tools",isNew:true,
+  tagline:"Node-based local image generation — the most powerful way to run Stable Diffusion",
+  plain:"ComfyUI is a graphical interface for running Stable Diffusion and other open-source image models locally. Instead of a simple text box, it uses a node-based workflow where you visually connect components: text prompt feeds into a sampler, which feeds into a decoder, which outputs an image.",
+  how:"Each node in ComfyUI represents one step in the image generation pipeline. You can blend multiple style references, run image-to-image transformations, upscale outputs, apply ControlNet (pose matching), and build complex workflows that would require code in other tools. Community-shared workflows can be imported as JSON.",
+  connects:["stable-diffusion","ai-upscaling","local-first-ai","image-prompting"],
+  example:"A workflow for consistent product shots: load your product photo → ControlNet locks the pose and composition → a style prompt adds your desired aesthetic → the sampler generates a new image matching your product position but transforming the environment. Consistent angle, different setting, every time."},
+
+  {slug:"ai-upscaling",term:"AI Upscaling",category:"image-tools",isNew:true,
+  tagline:"Enlarging images with AI — adding real detail instead of just stretching pixels",
+  plain:"AI upscaling uses neural networks to increase image resolution while adding plausible detail rather than just stretching existing pixels. A 512x512 image that would look blurry at poster size can be upscaled to 4K with an AI model that intelligently fills in texture, sharpness, and fine detail.",
+  how:"Built into Midjourney as the Upscale button. Also available as standalone tools like Topaz Photo AI, Real-ESRGAN (free, open source), and Adobe Firefly's upscaler. For generated images, upscaling is typically the last step before using an image professionally.",
+  connects:["midjourney","stable-diffusion","comfyui","image-prompting"],
+  example:"You generate an image in Midjourney at its native 1024px resolution. Before using it as a website hero or print material, hit Upscale 2x or 4x — the AI adds detail rather than blurring. What was adequate for a thumbnail becomes usable at billboard scale."},
+
+  // ── VIDEO & MEDIA AI ──
+  {slug:"runway-ml",term:"Runway ML",category:"video-tools",isNew:true,
+  tagline:"AI video generation and editing — generate video from text or transform existing footage",
+  plain:"Runway is one of the leading AI video tools. Its Gen-3 Alpha model generates short video clips from text descriptions or still images. Beyond generation, Runway offers AI video editing tools: remove backgrounds, add motion blur, change the style of existing footage, extend clips, and generate custom visual effects.",
+  how:"Text-to-video works like image generation but adds motion: you describe what you want to see happening and the model generates a few seconds of video. Image-to-video takes a still image and animates it according to a text prompt. Generation quality is best for 3 to 10 second clips.",
+  connects:["sora-video","heygen","descript","multi-modal","image-prompting"],
+  example:"A marketer creating a product launch video: generate a dramatic 5-second product reveal clip from a still product photo using Runway image-to-video, combine it with HeyGen for a spokesperson introduction, edit everything together in Descript. A polished video in a few hours with no film crew."},
+
+  {slug:"sora-video",term:"Sora (OpenAI)",category:"video-tools",isNew:true,
+  tagline:"OpenAI's text-to-video model — generate realistic video clips from descriptions",
+  plain:"Sora is OpenAI's text-to-video generation model, released in 2024. You describe a scene and Sora generates a realistic video clip up to a minute long. It understands physics, camera movement, lighting, and can maintain visual consistency across a clip in ways earlier video models could not.",
+  how:"Sora uses a diffusion transformer architecture similar to DALL-E but extended to the temporal dimension — it learns patterns not just in space but over time. Access is through ChatGPT Plus and Pro plans. Like DALL-E, the API allows developers to add AI video generation to their applications.",
+  connects:["runway-ml","dall-e","openai","multi-modal","image-prompting"],
+  example:"A content creator explaining a technical concept: instead of finding stock footage of 'AI neural network visualization', describe exactly what you want — 'glowing nodes connecting in a dark space, like a digital brain forming, slow motion, blue tones' — and generate custom footage that perfectly matches the narration."},
+
+  {slug:"heygen",term:"HeyGen",category:"video-tools",isNew:true,
+  tagline:"AI avatar videos — create professional presenter videos without a camera or studio",
+  plain:"HeyGen lets you create videos where a realistic AI avatar presents your script. You type or paste text, choose an avatar (or create one from your own video), and HeyGen generates a video of that presenter speaking your words with natural lip sync and body language. Used heavily for product demos, online courses, explainer videos, and multilingual content.",
+  how:"HeyGen's avatar system uses a video of a real person and applies speech synthesis plus lip sync to match any text input. A key feature: the same video can be automatically translated and re-lip-synced into 40 or more languages without re-filming.",
+  connects:["elevenlabs","descript","voice-ai","runway-ml","multi-modal"],
+  example:"A company that creates onboarding videos: instead of booking studio time every time the product changes, they use a HeyGen avatar of their presenter. Update the script, regenerate in 10 minutes. The same video gets auto-translated into Spanish, French, German, and Japanese without additional filming."},
+
+  {slug:"descript",term:"Descript",category:"video-tools",isNew:true,
+  tagline:"Edit video and podcasts by editing the transcript — the word processor of video editing",
+  plain:"Descript automatically transcribes video and audio files, then lets you edit the media by editing the text transcript. Delete a sentence from the transcript and the corresponding audio and video is removed. Cut, rearrange, and edit your video as if it were a Google Doc. It also removes filler words automatically and offers an Overdub feature to clone your voice for corrections.",
+  how:"Descript workflow: upload video or audio → it transcribes in minutes → edit the transcript to edit the media → export. The AI transcript is highly accurate for clear speech. Overdub trains a voice model on your voice samples so you can type corrections that sound like you said them.",
+  connects:["heygen","captions-ai","elevenlabs","voice-ai"],
+  example:"A podcaster records a 60-minute interview with 15 minutes of tangents and filler words. In Descript: delete the tangent paragraphs from the transcript, click Remove filler words, and the audio is already edited. What used to take 3 hours of timeline scrubbing takes 20 minutes of reading and deleting."},
+
+  {slug:"captions-ai",term:"Captions AI",category:"video-tools",isNew:true,
+  tagline:"Automatic captions, subtitles, and AI video editing for social media content",
+  plain:"Captions AI automatically generates styled captions for videos, edits talking-head videos with AI, and optimizes content for social platforms. It removes silences, adds dynamic captions in your brand style, suggests clips to cut for short-form content, and exports platform-optimized versions.",
+  how:"Upload a video and Captions AI transcribes it, generates styled captions (customizable font, animation, placement), removes dead air, and exports versions ready for each platform. The AI Clips feature identifies the most engaging 60-second segments from long videos for TikTok, Reels, and YouTube Shorts.",
+  connects:["descript","heygen","voice-ai","runway-ml"],
+  example:"A YouTuber filming a 30-minute tutorial: upload to Captions AI, which automatically generates captions, identifies the 5 best 60-second highlights for Shorts, removes dead air, and exports everything ready to post. What used to require a video editor is done in 20 minutes."},
+
+  // ── CONTENT & WRITING AI ──
+  {slug:"jasper-ai",term:"Jasper AI",category:"content-tools",isNew:true,
+  tagline:"AI writing platform for marketing teams — blog posts, ads, emails, social content at scale",
+  plain:"Jasper is an AI writing platform designed specifically for marketing content. While Claude or ChatGPT can write anything, Jasper is optimized for marketing use cases: blog posts, ad copy, email campaigns, social media, product descriptions, and landing pages. It has built-in templates for 50 or more content formats and a Brand Voice feature that learns and maintains your company's specific tone.",
+  how:"Jasper connects to GPT-4 and Claude under the hood but wraps them in a marketing-specific interface. Brand Voice analyzes your existing content and distills your style into rules applied to everything you generate. The Campaigns feature lets you create a brief once and Jasper generates the blog post, social variants, email, and ad copy in one workflow.",
+  connects:["llm","copy-ai","grammarly-ai","prompting"],
+  example:"A content team that publishes 20 blog posts a month: instead of writers starting from scratch, they brief Jasper with the topic, target audience, and key points. Jasper generates a draft in Brand Voice. The writer edits for accuracy and adds personal insight. Production time drops from 4 hours per post to 90 minutes."},
+
+  {slug:"notebooklm",term:"NotebookLM",category:"content-tools",isNew:true,
+  tagline:"Google's AI research notebook — upload your sources and have a conversation with them",
+  plain:"NotebookLM is Google's AI-powered research tool. You upload documents — PDFs, Google Docs, YouTube links, websites, audio files — and NotebookLM creates an AI that is grounded exclusively in those sources. Ask it questions, find contradictions across sources, generate a study guide, or create an Audio Overview (a realistic two-host podcast-style discussion of your materials).",
+  how:"NotebookLM is RAG as a consumer product. Your uploaded sources become the context window — the AI only answers from what you gave it, which dramatically reduces hallucination. It cites the exact source and location for every claim. Free to use via Google account.",
+  connects:["rag","llm","google-cloud","perplexity","context-window"],
+  example:"Researching a market before launching a product: upload 10 competitor websites, 3 industry reports, and 5 customer interview transcripts. Ask NotebookLM 'What pricing patterns exist across competitors?' — it answers from your specific sources with citations, not from generic training data."},
+
+  {slug:"copy-ai",term:"Copy.ai",category:"content-tools",isNew:true,
+  tagline:"AI copywriting for marketing — ads, emails, product descriptions, social posts",
+  plain:"Copy.ai is an AI copywriting tool focused on short-form marketing content: ad headlines, email subject lines, product descriptions, social media captions, and sales copy. Its Workflows feature strings together multiple AI steps to automate content production pipelines end-to-end.",
+  how:"Copy.ai templates are trained on high-performing marketing copy. You input your product name, description, and target audience — it generates multiple variations. The Workflows feature builds a multi-step automation where product info flows in one end and a full content set (blog, email sequence, social captions) flows out.",
+  connects:["jasper-ai","grammarly-ai","llm","prompting"],
+  example:"An e-commerce store adding 100 new products: a Copy.ai workflow takes product name and features and generates a 150-word product description, a one-line tagline, 5 benefit bullets, and 3 social captions. All 100 products processed in under an hour."},
+
+  {slug:"gamma-ai",term:"Gamma",category:"content-tools",isNew:true,
+  tagline:"AI presentation and document creator — describe what you want and get a polished deck",
+  plain:"Gamma is an AI tool that generates complete, visually polished presentations and documents from a text description or outline. Where traditional tools like PowerPoint require you to design each slide, Gamma handles layout, formatting, and visual design automatically. Output is a web-based presentation that works as a shareable link.",
+  how:"Describe your topic or paste an outline, choose a style, and Gamma generates a full presentation in about 30 seconds. Each slide is a fully designed card with appropriate visuals, typography, and layout. You can then edit text inline, swap images, rearrange slides, and customize the theme.",
+  connects:["jasper-ai","notebooklm","llm","prompting"],
+  example:"A consultant who needs to pitch three different clients with customized decks: instead of spending 4 hours per deck in PowerPoint, they paste their proposal outline into Gamma, adjust the style to match each client's industry aesthetic, make final edits. Three polished decks in two hours total."},
+
+  // ── FUNCTIONAL BUSINESS TOOLS ──
+  {slug:"make-integromat",term:"Make (formerly Integromat)",category:"apis",isNew:true,
+  tagline:"Visual automation more powerful than Zapier — complex logic, loops, and data transformation",
+  plain:"Make (previously called Integromat) is a visual automation platform similar to Zapier but significantly more powerful for complex workflows. Where Zapier handles simple if-this-then-that automations, Make handles multi-step workflows with loops, conditional branches, data transformation, error handling, and large data volumes at substantially lower cost.",
+  how:"Make uses a visual scenario builder where modules connect to each other. You can process arrays of data (loop over every email in a folder), add filters and routers (if value equals X do this, otherwise do that), transform data formats, handle errors gracefully, and chain hundreds of operations. Has native Claude and ChatGPT integration.",
+  connects:["zapier","n8n","automation","apis","function-calling","agentic-workflow"],
+  example:"Processing monthly invoices: Make pulls all invoices from Gmail, extracts line items using a Claude AI step, checks amounts against a Google Sheet of budgets, generates a summary report, emails it to finance, and logs everything to Airtable — with error handling if any step fails."},
+
+  {slug:"otter-ai",term:"Otter.ai",category:"business-tools",isNew:true,
+  tagline:"AI meeting transcription — automatic notes, summaries, and action items from every call",
+  plain:"Otter.ai joins your Zoom, Google Meet, or Teams calls and automatically transcribes everything in real time. After the meeting, it generates a summary, identifies action items, answers questions about the meeting content, and lets you search across all past meetings.",
+  how:"Otter integrates with your calendar and automatically joins scheduled video calls. The transcription is speaker-identified, searchable, and editable. The AI Summary identifies key decisions and next steps. Ask Otter lets you query past meetings — 'what did we decide about the Q4 launch date?' — and it searches across all transcripts.",
+  connects:["fireflies-ai","microsoft-copilot","notion-ai","automation","voice-ai"],
+  example:"A sales team that runs 15 calls per day: instead of reps spending 20 minutes writing call notes, Otter auto-transcribes each call, extracts action items, and syncs notes to the CRM. Reps spend those 20 minutes on the next call instead."},
+
+  {slug:"fireflies-ai",term:"Fireflies.ai",category:"business-tools",isNew:true,
+  tagline:"Meeting AI with deep CRM integration — notes, coaching, and automatic deal updates",
+  plain:"Fireflies.ai is an AI meeting assistant similar to Otter but with stronger emphasis on sales workflows and CRM integration. It records and transcribes meetings, extracts action items, scores calls against your sales methodology, provides coaching feedback, and automatically updates Salesforce, HubSpot, or other CRMs.",
+  how:"Fireflies joins meetings via a bot invite. After the call it generates a structured summary with sections: overview, action items, questions asked, key metrics mentioned. The CRM sync pushes fields like deal stage, objections, competitor mentions, and next steps directly into your CRM records.",
+  connects:["otter-ai","microsoft-copilot","automation","hubspot-ai"],
+  example:"A sales manager who coaches 8 reps: instead of sitting in on calls, they use Fireflies to score every call against their sales playbook. Weekly they review the bottom 10 percent of scored calls and coach on specific moments. Rep improvement is measurable and coaching is targeted."},
+
+  {slug:"airtable-ai",term:"Airtable AI",category:"business-tools",isNew:true,
+  tagline:"Spreadsheet-database hybrid with AI fields — classify, summarize, and generate data automatically",
+  plain:"Airtable sits between a spreadsheet and a database — rows and columns but with rich field types. The AI features add fields that automatically generate or transform data: summarize a long description into a one-liner, classify a feedback entry as positive or negative, extract key entities from free text — all running automatically on every record.",
+  how:"AI fields in Airtable call Claude or GPT-4 on every record automatically. You configure the prompt and the AI field populates for every row, including every new row added. This turns unstructured text into structured, filterable data without any code.",
+  connects:["make-integromat","zapier","automation","llm","function-calling"],
+  example:"A customer success team that gets 500 support tickets per week: an Airtable AI field classifies each ticket by type and urgency the moment it is added. Another AI field generates a one-sentence summary. A third extracts the product feature mentioned. 500 unstructured emails become a filterable dataset that reveals patterns in 5 minutes."},
+
+  {slug:"hubspot-ai",term:"HubSpot AI",category:"business-tools",isNew:true,
+  tagline:"CRM with AI throughout — write emails, score leads, forecast deals, and draft content",
+  plain:"HubSpot is one of the most popular CRM platforms, and AI is now woven throughout it. AI writes sales emails and follow-ups in your brand voice, scores leads by likelihood to convert, generates blog and social content, transcribes and summarizes calls, forecasts revenue, and suggests the next best action for each deal.",
+  how:"HubSpot's AI features (called Breeze AI) are embedded inside the CRM rather than separate tools. The AI has context from all your CRM data — company history, past emails, deals won and lost, contact behavior — which makes its suggestions significantly more relevant than generic AI writing tools.",
+  connects:["fireflies-ai","zapier","microsoft-copilot","automation","llm","salesforce-einstein"],
+  example:"A sales rep starting their day: HubSpot AI surfaces the 5 highest-priority leads to contact today based on recent website activity and deal score, suggests a personalized email for each based on their industry and past interactions, and updates the CRM automatically after each call."},
+
+  {slug:"salesforce-einstein",term:"Salesforce Einstein",category:"business-tools",isNew:true,
+  tagline:"AI built into Salesforce — predictions, automation, and insights across the entire CRM",
+  plain:"Einstein is Salesforce's AI layer, embedded throughout the Salesforce CRM platform. It predicts which deals are most likely to close and why, identifies which customers are at risk of churning, generates sales emails and summaries, automates data entry, and creates custom AI models trained on your own CRM data.",
+  how:"Einstein AI runs on Salesforce's own model platform plus integration with OpenAI models. Because Einstein lives inside Salesforce, it has access to years of your deal history, customer interactions, support cases, and revenue data. Predictions improve over time as more of your data is ingested.",
+  connects:["hubspot-ai","fireflies-ai","llm","automation","rag"],
+  example:"A VP of Sales reviewing the Q4 pipeline: Einstein flags 3 deals marked 'Likely to Close' that it predicts will actually slip based on patterns — no exec contact, emails not being opened, competitor mentioned twice. The VP focuses attention on those deals early. One closes because of intervention Einstein made possible."},
+
 ];
 
 const PATHS=[
-  {key:"foundation",label:"Foundation",emoji:"◆",color:"#FBBF24",subtitle:"8 concepts everyone needs first",
+  // ── TECHNICAL TRACKS ──
+  {key:"foundation",track:"technical",label:"Foundation",emoji:"◆",color:"#FBBF24",subtitle:"8 concepts everyone needs first",
    steps:["llm","tokens","context-window","prompting","hallucination","system-prompt","privacy-ai","temperature"]},
-  {key:"personal",label:"AI for Life",emoji:"◎",color:"#8B5CF6",subtitle:"Use AI to improve your daily life",
+  {key:"personal",track:"technical",label:"AI for Life",emoji:"◎",color:"#8B5CF6",subtitle:"Use AI to improve your daily life",
    steps:["llm","hallucination","prompting","claude","chatgpt","perplexity","voice-ai","automation","proactive-ai","persistent-memory","openclaw"]},
-  {key:"business",label:"AI at Work",emoji:"◈",color:"#06B6D4",subtitle:"Apply AI professionally without coding",
+  {key:"business",track:"technical",label:"AI at Work",emoji:"◈",color:"#06B6D4",subtitle:"Apply AI professionally without coding",
    steps:["llm","hallucination","prompting","system-prompt","microsoft-copilot","notion-ai","rag","zapier-ai","automation","agentic-workflow"]},
-  {key:"builder",label:"AI to Build",emoji:"◐",color:"#F97316",subtitle:"Create tools and apps, minimal coding",
-   steps:["llm","apis","json","webhook","zapier","n8n","lovable","replit","rag","function-calling","mcp","agentic-workflow"]},
-  {key:"engineer",label:"AI to Engineer",emoji:"◑",color:"#3B82F6",subtitle:"Build and implement at a technical level",
+  {key:"builder",track:"technical",label:"AI to Build",emoji:"◐",color:"#F97316",subtitle:"Create tools and apps, minimal coding",
+   steps:["llm","apis","json","webhook","zapier","make-integromat","n8n","lovable","replit","rag","function-calling","mcp","agentic-workflow","zapier-ai","airtable-ai"]},
+  {key:"engineer",track:"technical",label:"AI to Engineer",emoji:"◑",color:"#3B82F6",subtitle:"Build and implement at a technical level",
    steps:["llm","tokens","context-window","embeddings","vector-database","rag","apis","rest-api","python","env-variables","fine-tuning","ai-agent","function-calling","mcp","claude-code","opencode","openclaw","langchain"]},
+
+  // ── CREATIVE TRACKS ──
+  {key:"image-creation",track:"creative",label:"Image Creation",emoji:"◇",color:"#F472B6",subtitle:"Generate and work with AI visuals",
+   steps:["llm","prompting","image-prompting","midjourney","dall-e","stable-diffusion","comfyui","ai-upscaling","multi-modal"]},
+  {key:"content-creation",track:"creative",label:"Content Creation",emoji:"◈",color:"#84CC16",subtitle:"Write, publish, and scale content with AI",
+   steps:["llm","prompting","hallucination","notebooklm","jasper-ai","copy-ai","grammarly-ai","notion-ai","gamma-ai","rag"]},
+  {key:"video-creation",track:"creative",label:"Video Creation",emoji:"▶",color:"#EF4444",subtitle:"Produce videos with AI tools",
+   steps:["llm","prompting","multi-modal","sora-video","runway-ml","heygen","elevenlabs","descript","captions-ai","voice-ai"]},
+
+  // ── FUNCTIONAL TRACKS ──
+  {key:"marketing",track:"functional",label:"Marketing & Content",emoji:"◉",color:"#F59E0B",subtitle:"AI-powered marketing workflows",
+   steps:["llm","prompting","jasper-ai","copy-ai","grammarly-ai","gamma-ai","midjourney","dall-e","notebooklm","hubspot-ai","zapier","automation"]},
+  {key:"sales",track:"functional",label:"Sales & CRM",emoji:"◎",color:"#10B981",subtitle:"Close more with AI assistance",
+   steps:["llm","prompting","salesforce-einstein","hubspot-ai","fireflies-ai","otter-ai","microsoft-copilot","automation","zapier","rag"]},
+  {key:"operations",track:"functional",label:"Operations & Admin",emoji:"⊙",color:"#8B5CF6",subtitle:"Automate repetitive operational work",
+   steps:["llm","prompting","automation","zapier","make-integromat","n8n","airtable-ai","microsoft-copilot","notion-ai","otter-ai","fireflies-ai","agentic-workflow"]},
+  {key:"research",track:"functional",label:"Research & Learning",emoji:"◎",color:"#14B8A6",subtitle:"Learn and synthesize information faster",
+   steps:["llm","hallucination","rag","perplexity","notebooklm","chatgpt","claude","embeddings","training-data","context-window"]},
+  {key:"communication",track:"functional",label:"Communication",emoji:"◷",color:"#EC4899",subtitle:"Write, speak, and present with AI",
+   steps:["llm","prompting","grammarly-ai","otter-ai","fireflies-ai","gamma-ai","microsoft-copilot","notion-ai","elevenlabs","voice-ai"]},
 ];
+
 const TM={
   foundation:{label:"Foundation",color:"#FBBF24",bg:"rgba(251,191,36,0.12)"},
   personal:{label:"AI for Life",color:"#8B5CF6",bg:"rgba(139,92,246,0.12)"},
   business:{label:"AI at Work",color:"#06B6D4",bg:"rgba(6,182,212,0.12)"},
   builder:{label:"AI to Build",color:"#F97316",bg:"rgba(249,115,22,0.12)"},
   engineer:{label:"AI to Engineer",color:"#3B82F6",bg:"rgba(59,130,246,0.12)"},
+  "image-creation":{label:"Image Creation",color:"#F472B6",bg:"rgba(244,114,182,0.12)"},
+  "content-creation":{label:"Content Creation",color:"#84CC16",bg:"rgba(132,204,22,0.12)"},
+  "video-creation":{label:"Video Creation",color:"#EF4444",bg:"rgba(239,68,68,0.12)"},
+  marketing:{label:"Marketing",color:"#F59E0B",bg:"rgba(245,158,11,0.12)"},
+  sales:{label:"Sales & CRM",color:"#10B981",bg:"rgba(16,185,129,0.12)"},
+  operations:{label:"Operations",color:"#8B5CF6",bg:"rgba(139,92,246,0.12)"},
+  research:{label:"Research",color:"#14B8A6",bg:"rgba(20,184,166,0.12)"},
+  communication:{label:"Communication",color:"#EC4899",bg:"rgba(236,72,153,0.12)"},
 };
-const TERM_TRACKS={};
-PATHS.forEach(p=>p.steps.forEach(s=>{if(!TERM_TRACKS[s])TERM_TRACKS[s]=[];TERM_TRACKS[s].push(p.key)}));
 
 const CASES=[
   {key:"engineer",label:"Engineer",color:"#3B82F6",subtitle:"Your Telegram Bot",
+  termSlugs:["webhook","python","env-variables","oauth","calendar-api","gmail-api","prompting","system-prompt","rag","llm","tokens","hosting"],
   html:`<p style="font-size:0.84rem;color:var(--muted);margin-bottom:1rem">When you ask "What does my day look like?" in Telegram &mdash; here is the complete technical journey:</p>
 <div class="flow">
   <div class="flow-node"><div class="fn-label">You type</div><div class="fn-tech">Telegram App</div></div><span class="flow-arr">&#8594;</span>
@@ -798,9 +1017,10 @@ const CASES=[
   <div class="flow-node"><div class="fn-label">Parses JSON</div><div class="fn-tech">Python</div></div><span class="flow-arr">&#8594;</span>
   <div class="flow-node"><div class="fn-label">Sends reply</div><div class="fn-tech">Telegram API</div></div>
 </div>
-<div class="flow-note"><strong style="color:var(--text)">What you actually built:</strong> A lightweight RAG system. Real calendar and email data gets injected into Claude's context so it answers accurately &mdash; no guessing. Every term in this journal touches something in that flow.</div>`},
+<div class="flow-note"><strong style="color:var(--text)">What you actually built:</strong> A lightweight RAG system. Real calendar and email data gets injected into Claude's context so it answers accurately &mdash; no guessing. Every term below touches something in that flow.</div>`},
 
   {key:"personal",label:"AI for Life",color:"#8B5CF6",subtitle:"Morning Routine",
+  termSlugs:["llm","hallucination","prompting","perplexity","claude","voice-ai","automation"],
   html:`<p style="font-size:0.84rem;color:var(--muted);margin-bottom:1rem">A non-technical person using three AI tools to start their day 30 minutes sharper &mdash; no code, no setup:</p>
 <div class="flow">
   <div class="flow-node"><div class="fn-label">Wake up</div><div class="fn-tech">7:00am</div></div><span class="flow-arr">&#8594;</span>
@@ -813,6 +1033,7 @@ const CASES=[
 <div class="flow-note"><strong style="color:var(--text)">No code. No setup. Zero technical skill required.</strong> Perplexity replaces 20 minutes of news browsing. Claude turns a messy task dump into a prioritized plan. Three tools, one routine, compounding value every morning.</div>`},
 
   {key:"business",label:"AI at Work",color:"#06B6D4",subtitle:"Meeting Prep",
+  termSlugs:["llm","rag","notion-ai","microsoft-copilot","prompting","system-prompt","context-window"],
   html:`<p style="font-size:0.84rem;color:var(--muted);margin-bottom:1rem">A business professional walking into any meeting fully prepared in under 10 minutes:</p>
 <div class="flow">
   <div class="flow-node"><div class="fn-label">Meeting in 1hr</div><div class="fn-tech">Calendar alert</div></div><span class="flow-arr">&#8594;</span>
@@ -825,6 +1046,7 @@ const CASES=[
 <div class="flow-note"><strong style="color:var(--text)">The insight:</strong> These tools eliminate 45 minutes of digging before every important meeting. You still decide what matters. AI surfaces it faster. No coding required.</div>`},
 
   {key:"builder",label:"AI to Build",color:"#F97316",subtitle:"No-Code Email Triage",
+  termSlugs:["llm","prompting","gmail-api","zapier","automation","function-calling","api-key","zapier-ai"],
   html:`<p style="font-size:0.84rem;color:var(--muted);margin-bottom:1rem">A non-developer building an automated email triage system &mdash; no Python required:</p>
 <div class="flow">
   <div class="flow-node"><div class="fn-label">Email arrives</div><div class="fn-tech">Gmail trigger</div></div><span class="flow-arr">&#8594;</span>
@@ -835,7 +1057,51 @@ const CASES=[
   <div class="flow-node"><div class="fn-label">You see only</div><div class="fn-tech">What matters</div></div>
 </div>
 <div class="flow-note"><strong style="color:var(--text)">Same logic as the Telegram bot &mdash; no Python.</strong> Zapier does the connecting, Claude does the thinking. Setup: roughly two hours.</div>`},
+
+  {key:"image-creation",label:"Image Creation",color:"#F472B6",subtitle:"Building a Visual Brand",
+  termSlugs:["llm","prompting","image-prompting","midjourney","dall-e","ai-upscaling","multi-modal"],
+  html:`<p style="font-size:0.84rem;color:var(--muted);margin-bottom:1rem">A solopreneur building consistent brand visuals with no design experience or photography budget:</p>
+<div class="flow">
+  <div class="flow-node"><div class="fn-label">Brand brief</div><div class="fn-tech">Write in Claude</div></div><span class="flow-arr">&#8594;</span>
+  <div class="flow-node"><div class="fn-label">Style prompt</div><div class="fn-tech">Claude writes it</div></div><span class="flow-arr">&#8594;</span>
+  <div class="flow-node"><div class="fn-label">Generate 4 variants</div><div class="fn-tech">Midjourney</div></div><span class="flow-arr">&#8594;</span>
+  <div class="flow-node"><div class="fn-label">Iterate prompt</div><div class="fn-tech">Refine style/mood</div></div><span class="flow-arr">&#8594;</span>
+  <div class="flow-node"><div class="fn-label">Select best</div><div class="fn-tech">Human judgment</div></div><span class="flow-arr">&#8594;</span>
+  <div class="flow-node"><div class="fn-label">Upscale to 4K</div><div class="fn-tech">AI Upscaling</div></div><span class="flow-arr">&#8594;</span>
+  <div class="flow-node"><div class="fn-label">Apply everywhere</div><div class="fn-tech">Website, social, decks</div></div>
+</div>
+<div class="flow-note"><strong style="color:var(--text)">The key insight:</strong> Claude writes the image prompt so you don't have to learn Midjourney's syntax from scratch. You describe the feeling of your brand in plain language &mdash; Claude translates it into a technically precise image prompt. The result is consistent visuals in 30 minutes that would have cost $2,000 from a designer.</div>`},
+
+  {key:"content-creation",label:"Content Creation",color:"#84CC16",subtitle:"Blog Post End-to-End",
+  termSlugs:["llm","prompting","hallucination","rag","notebooklm","grammarly-ai","gamma-ai","context-window"],
+  html:`<p style="font-size:0.84rem;color:var(--muted);margin-bottom:1rem">Publishing an authoritative, well-researched blog post in 2 hours instead of 2 days:</p>
+<div class="flow">
+  <div class="flow-node"><div class="fn-label">Choose topic</div><div class="fn-tech">You decide the angle</div></div><span class="flow-arr">&#8594;</span>
+  <div class="flow-node"><div class="fn-label">Upload sources</div><div class="fn-tech">NotebookLM</div></div><span class="flow-arr">&#8594;</span>
+  <div class="flow-node"><div class="fn-label">Ask questions</div><div class="fn-tech">AI answers from sources</div></div><span class="flow-arr">&#8594;</span>
+  <div class="flow-node"><div class="fn-label">Claude outlines</div><div class="fn-tech">From research notes</div></div><span class="flow-arr">&#8594;</span>
+  <div class="flow-node"><div class="fn-label">Claude drafts</div><div class="fn-tech">Section by section</div></div><span class="flow-arr">&#8594;</span>
+  <div class="flow-node"><div class="fn-label">Grammarly polishes</div><div class="fn-tech">Tone and clarity</div></div><span class="flow-arr">&#8594;</span>
+  <div class="flow-node"><div class="fn-label">Gamma creates deck</div><div class="fn-tech">Same content, slides format</div></div>
+</div>
+<div class="flow-note"><strong style="color:var(--text)">Why NotebookLM first matters:</strong> It prevents hallucination. You research real sources, NotebookLM extracts the facts with citations, then Claude writes from your verified notes &mdash; not from its training data. One research session produces a blog post, a slide deck, and a social thread from the same material.</div>`},
+
+  {key:"video-creation",label:"Video Creation",color:"#EF4444",subtitle:"AI Explainer Video",
+  termSlugs:["llm","prompting","multi-modal","heygen","elevenlabs","descript","captions-ai","voice-ai"],
+  html:`<p style="font-size:0.84rem;color:var(--muted);margin-bottom:1rem">Creating a professional product explainer video with zero video production experience or equipment:</p>
+<div class="flow">
+  <div class="flow-node"><div class="fn-label">Write script</div><div class="fn-tech">Claude</div></div><span class="flow-arr">&#8594;</span>
+  <div class="flow-node"><div class="fn-label">Generate voiceover</div><div class="fn-tech">ElevenLabs</div></div><span class="flow-arr">&#8594;</span>
+  <div class="flow-node"><div class="fn-label">Create presenter video</div><div class="fn-tech">HeyGen AI avatar</div></div><span class="flow-arr">&#8594;</span>
+  <div class="flow-node"><div class="fn-label">Edit transcript</div><div class="fn-tech">Descript</div></div><span class="flow-arr">&#8594;</span>
+  <div class="flow-node"><div class="fn-label">Add captions</div><div class="fn-tech">Captions AI</div></div><span class="flow-arr">&#8594;</span>
+  <div class="flow-node"><div class="fn-label">Export + publish</div><div class="fn-tech">YouTube / LinkedIn</div></div>
+</div>
+<div class="flow-note"><strong style="color:var(--text)">The full stack costs about $60/month total.</strong> Claude writes a better script than most humans do in a first draft. ElevenLabs voices it in your own cloned voice. HeyGen makes an avatar present it on camera. Descript removes every mistake without touching a timeline. Captions AI makes it watchable on silent mobile. No camera. No studio. No editor.</div>`},
 ];
+
+const TERM_TRACKS={};
+PATHS.forEach(p=>p.steps.forEach(s=>{if(!TERM_TRACKS[s])TERM_TRACKS[s]=[];TERM_TRACKS[s].push(p.key)}));
 
 // ── STATE ──
 let activeCategory="all",searchText="",activePath=null,expandedSlug=null;
@@ -855,6 +1121,29 @@ function updateProgress(){
   document.getElementById("learnedTerms").textContent=learnedSet.size;
 }
 
+// ── SECTION TOGGLE ──
+function showSection(key){
+  document.getElementById("sectionTerms").style.display=key==="terms"?"":"none";
+  document.getElementById("sectionCases").style.display=key==="cases"?"":"none";
+  document.getElementById("navTerms").classList.toggle("active",key==="terms");
+  document.getElementById("navCases").classList.toggle("active",key==="cases");
+  // re-render case terms when switching to cases
+  if(key==="cases"){
+    const activeCase=document.querySelector(".case-tab.active");
+    if(activeCase){
+      const caseKey=activeCase.dataset.caseKey;
+      if(caseKey)renderCaseTerms(caseKey);
+    }
+  }
+}
+
+function showTrack(track){
+  // Only changes which path card panel is visible — does NOT affect term grid
+  document.querySelectorAll(".track-tab").forEach(t=>t.classList.toggle("active",t.dataset.track===track));
+  document.querySelectorAll(".track-panel").forEach(p=>p.classList.remove("active"));
+  document.getElementById("track-"+track).classList.add("active");
+}
+
 // ── CATEGORY FILTERS ──
 const catWrap=document.getElementById("catFilters");
 CATS.forEach(cat=>{
@@ -864,22 +1153,39 @@ CATS.forEach(cat=>{
   const count=cat.key==="all"?TERMS.length:TERMS.filter(t=>t.category===cat.key).length;
   btn.innerHTML=`<span class="dot" style="background:${cat.color}"></span>${cat.label} <span style="opacity:0.5;font-size:0.7rem">${count}</span>`;
   btn.onclick=()=>{
-    if(activePath){exitPath();return;}
+    // "All Terms" resets both category and path
+    if(cat.key==="all"){
+      if(activePath){
+        document.querySelectorAll(".path-card").forEach(c=>{c.classList.remove("active");c.style.borderColor=PATHS.find(p=>p.key===c.dataset.key).color+"44";});
+        document.getElementById("pathBanner").classList.remove("visible");
+        activePath=null;
+      }
+    }
     document.querySelectorAll(".cat-pill").forEach(p=>p.classList.remove("active"));
-    btn.classList.add("active");activeCategory=cat.key;renderGrid();
+    btn.classList.add("active");
+    activeCategory=cat.key;
+    renderGrid();
   };
   catWrap.appendChild(btn);
 });
 
 // ── PATHS GRID ──
-const pathsGrid=document.getElementById("pathsGrid");
 PATHS.forEach(path=>{
+  const grid=document.getElementById("pathsGrid-"+path.track);
+  if(!grid)return;
   const card=document.createElement("button");
   card.className="path-card";card.dataset.key=path.key;
   card.style.borderColor=path.color+"44";
   card.innerHTML=`<span class="pc-count">${path.steps.length} steps</span><span class="pc-icon">${path.emoji}</span><span class="pc-label" style="color:${path.color}">${path.label}</span><span class="pc-sub">${path.subtitle}</span>`;
+  grid.appendChild(card);
   card.onclick=()=>{
-    if(activePath===path.key){exitPath();return;}
+    if(activePath===path.key){
+      // deselect path only, keep category
+      activePath=null;
+      document.querySelectorAll(".path-card").forEach(c=>{c.classList.remove("active");c.style.borderColor=PATHS.find(p=>p.key===c.dataset.key).color+"44";});
+      document.getElementById("pathBanner").classList.remove("visible");
+      renderGrid();return;
+    }
     activePath=path.key;
     document.querySelectorAll(".path-card").forEach(c=>{c.classList.remove("active");c.style.borderColor=PATHS.find(p=>p.key===c.dataset.key).color+"44";});
     card.classList.add("active");card.style.borderColor=path.color;
@@ -889,16 +1195,15 @@ PATHS.forEach(path=>{
     document.getElementById("pbfill").style.background=path.color;
     updatePathBanner();renderGrid();
   };
-  pathsGrid.appendChild(card);
+  // card already appended above
 });
 
 function exitPath(){
   activePath=null;
   document.querySelectorAll(".path-card").forEach(c=>{c.classList.remove("active");c.style.borderColor=PATHS.find(p=>p.key===c.dataset.key).color+"44";});
   document.getElementById("pathBanner").classList.remove("visible");
-  document.querySelectorAll(".cat-pill").forEach(p=>p.classList.remove("active"));
-  document.querySelector("[data-cat='all']").classList.add("active");
-  activeCategory="all";renderGrid();
+  // keep whatever category is active — don't reset it
+  renderGrid();
 }
 function updatePathBanner(){
   if(!activePath)return;
@@ -924,24 +1229,43 @@ const tabsEl=document.getElementById("caseTabs"),panelsEl=document.getElementByI
 CASES.forEach((cs,i)=>{
   const tab=document.createElement("button");
   tab.className="case-tab"+(i===0?" active":"");
+  tab.dataset.caseKey=cs.key;
   tab.innerHTML=`<span class="tab-dot" style="background:${cs.color}"></span>${cs.label}: ${cs.subtitle}`;
   tab.onclick=()=>{
     document.querySelectorAll(".case-tab").forEach(t=>t.classList.remove("active"));
     document.querySelectorAll(".case-panel").forEach(p=>p.classList.remove("active"));
     tab.classList.add("active");
     document.getElementById("case-panel-"+cs.key).classList.add("active");
+    renderCaseTerms(cs.key);
   };
   tabsEl.appendChild(tab);
   const panel=document.createElement("div");
   panel.className="case-panel"+(i===0?" active":"");
-  panel.id="case-panel-"+cs.key;panel.innerHTML=cs.html;
+  panel.id="case-panel-"+cs.key;
+  panel.innerHTML=cs.html+`<div class="cs-terms-section" id="cs-terms-${cs.key}"></div>`;
   panelsEl.appendChild(panel);
 });
+
+// render terms for the first case on load
+setTimeout(()=>renderCaseTerms(CASES[0].key),50);
+
+function renderCaseTerms(caseKey){
+  const cs=CASES.find(c=>c.key===caseKey);
+  if(!cs||!cs.termSlugs)return;
+  const container=document.getElementById("cs-terms-"+caseKey);
+  if(!container)return;
+  const terms=cs.termSlugs.map(s=>TERMS.find(t=>t.slug===s)).filter(Boolean);
+  if(!terms.length){container.style.display="none";return;}
+  container.style.display="";
+  container.innerHTML=`<div class="cs-terms-label">&#9670; Terms in this scenario &mdash; in the order you encounter them</div><div class="cs-terms-grid" id="cs-grid-${caseKey}"></div>`;
+  const grid=document.getElementById("cs-grid-"+caseKey);
+  grid.innerHTML=terms.map(t=>buildCard(t,null)).join("");
+  attachCardEvents(grid);
+}
 
 // ── SEARCH ──
 document.getElementById("search").addEventListener("input",e=>{
   searchText=e.target.value.toLowerCase();
-  if(searchText&&activePath)exitPath();
   renderGrid();
 });
 function clearSearch(){document.getElementById("search").value="";searchText="";renderGrid();}
@@ -952,20 +1276,37 @@ function catLabel(c){return CATS.find(x=>x.key===c)?.label||c}
 function renderGrid(){
   const grid=document.getElementById("grid"),noRes=document.getElementById("noResults");
   let filtered;
-  if(activePath){
+
+  const hasPath=!!activePath;
+  const hasCat=activeCategory!=="all";
+
+  if(hasPath && hasCat){
+    // AND: only terms that are in the path AND match the category
     const path=PATHS.find(p=>p.key===activePath);
-    filtered=path.steps.map(s=>TERMS.find(t=>t.slug===s)).filter(Boolean)
-      .filter(t=>!searchText||t.term.toLowerCase().includes(searchText)||t.tagline.toLowerCase().includes(searchText)||t.plain.toLowerCase().includes(searchText));
+    const pathSlugs=new Set(path.steps);
+    filtered=TERMS.filter(t=>pathSlugs.has(t.slug)&&t.category===activeCategory);
+    // preserve path order
+    filtered.sort((a,b)=>path.steps.indexOf(a.slug)-path.steps.indexOf(b.slug));
     updatePathBanner();
+  } else if(hasPath){
+    // path only — show in path sequence
+    const path=PATHS.find(p=>p.key===activePath);
+    filtered=path.steps.map(s=>TERMS.find(t=>t.slug===s)).filter(Boolean);
+    updatePathBanner();
+  } else if(hasCat){
+    // category only
+    filtered=TERMS.filter(t=>t.category===activeCategory);
   } else {
-    filtered=TERMS.filter(t=>{
-      const cm=activeCategory==="all"||t.category===activeCategory;
-      if(!cm)return false;
-      if(!searchText)return true;
-      return t.term.toLowerCase().includes(searchText)||t.tagline.toLowerCase().includes(searchText)||
-             t.plain.toLowerCase().includes(searchText)||t.how.toLowerCase().includes(searchText)||
-             t.example.toLowerCase().includes(searchText)||t.connects.some(c=>c.includes(searchText));
-    });
+    // all terms
+    filtered=TERMS.slice();
+  }
+
+  // apply search on top of whatever filter is active
+  if(searchText){
+    filtered=filtered.filter(t=>
+      t.term.toLowerCase().includes(searchText)||t.tagline.toLowerCase().includes(searchText)||
+      t.plain.toLowerCase().includes(searchText)||t.how.toLowerCase().includes(searchText)||
+      t.example.toLowerCase().includes(searchText)||t.connects.some(c=>c.includes(searchText)));
   }
   document.getElementById("totalTerms").textContent=TERMS.length;
   document.getElementById("visibleTerms").textContent=filtered.length;
@@ -977,15 +1318,21 @@ function renderGrid(){
     const el=document.querySelector("[data-slug='"+expandedSlug+"']");
     if(el)el.classList.add("expanded");
   }
-  document.querySelectorAll(".card").forEach(card=>{
+  attachCardEvents(grid);
+}
+
+function attachCardEvents(container){
+  container.querySelectorAll(".card").forEach(card=>{
     card.addEventListener("click",e=>{
       if(e.target.closest(".mark-btn")||e.target.closest(".connect-tag")||e.target.closest(".pnb"))return;
       const slug=card.dataset.slug;
+      // collapse all other expanded cards globally
+      document.querySelectorAll(".card.expanded").forEach(c=>{if(c.dataset.slug!==slug)c.classList.remove("expanded");});
       if(card.classList.contains("expanded")){card.classList.remove("expanded");if(expandedSlug===slug)expandedSlug=null;}
-      else{document.querySelectorAll(".card.expanded").forEach(c=>{if(c.dataset.slug!==slug)c.classList.remove("expanded");});card.classList.add("expanded");expandedSlug=slug;}
+      else{card.classList.add("expanded");expandedSlug=slug;}
     });
   });
-  document.querySelectorAll(".mark-btn").forEach(btn=>{
+  container.querySelectorAll(".mark-btn").forEach(btn=>{
     btn.addEventListener("click",e=>{
       e.stopPropagation();const slug=btn.dataset.slug;
       if(learnedSet.has(slug)){learnedSet.delete(slug);btn.textContent="Mark as Understood";btn.closest(".card").classList.remove("learned");}
@@ -994,9 +1341,13 @@ function renderGrid(){
     });
     if(learnedSet.has(btn.dataset.slug)){btn.textContent="\u2713 Understood";btn.closest(".card").classList.add("learned");}
   });
-  document.querySelectorAll(".connect-tag").forEach(tag=>{
+  container.querySelectorAll(".connect-tag").forEach(tag=>{
     tag.addEventListener("click",e=>{
       e.stopPropagation();const slug=tag.dataset.slug;
+      // jump to term in main journal
+      showSection("terms");
+      document.getElementById("navTerms").classList.add("active");
+      document.getElementById("navCases").classList.remove("active");
       if(activePath)exitPath();
       document.getElementById("search").value="";searchText="";activeCategory="all";
       document.querySelectorAll(".cat-pill").forEach(p=>p.classList.remove("active"));
@@ -1008,7 +1359,7 @@ function renderGrid(){
       },100);
     });
   });
-  document.querySelectorAll(".pnb").forEach(btn=>{
+  container.querySelectorAll(".pnb").forEach(btn=>{
     btn.addEventListener("click",e=>{
       e.stopPropagation();
       navPath(btn.closest(".card").dataset.slug,parseInt(btn.dataset.dir));
