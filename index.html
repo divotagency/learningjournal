@@ -20,17 +20,29 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 a{color:var(--accent2);text-decoration:none}
 
 /* ── SUBSCRIBE ── */
-.sub-box{text-align:right;flex-shrink:0}
-.sub-label{font-size:0.68rem;color:var(--muted);font-family:'JetBrains Mono',monospace;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.45rem;line-height:1.4;max-width:200px;margin-left:auto}
-.sub-label strong{color:var(--text);display:block;font-size:0.72rem;margin-bottom:0.1rem}
+.sub-box{text-align:right;flex-shrink:0;min-width:220px;max-width:240px}
+.sub-label{font-size:0.68rem;color:var(--muted);font-family:'JetBrains Mono',monospace;letter-spacing:0.04em;margin-bottom:0.45rem;line-height:1.5;max-width:230px;margin-left:auto}
+.sub-label strong{color:var(--text);display:block;font-size:0.75rem;font-family:'Syne',sans-serif;font-weight:700;margin-bottom:0.12rem;letter-spacing:-0.01em}
 .sub-row{display:flex;gap:0.4rem;align-items:center}
-#subEmail{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:0.52rem 0.75rem;color:var(--text);font-family:inherit;font-size:0.8rem;outline:none;transition:border-color 0.2s;width:175px}
-#subEmail:focus{border-color:var(--accent2)}
-#subEmail::placeholder{color:var(--dim)}
+.sub-input{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:0.52rem 0.75rem;color:var(--text);font-family:inherit;font-size:0.8rem;outline:none;transition:border-color 0.2s;width:100%;min-width:0;flex:1}
+.sub-input:focus{border-color:var(--accent2)}
+.sub-input::placeholder{color:var(--dim)}
 .sub-btn{background:var(--accent);color:#000;border:none;border-radius:8px;padding:0.52rem 0.9rem;font-family:'Syne',sans-serif;font-size:0.78rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:opacity 0.18s;flex-shrink:0}
 .sub-btn:hover{opacity:0.85}
 .sub-confirm{font-size:0.72rem;color:#22C55E;font-family:'JetBrains Mono',monospace;margin-top:0.35rem;display:none;text-align:right}
-@media(max-width:640px){.sub-box{display:none}}
+/* Footer subscribe */
+.footer-sub{border-top:1px solid var(--border);padding-top:1.5rem;margin-top:1.5rem}
+.footer-sub-inner{display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;max-width:600px;margin:0 auto;text-align:left}
+.footer-sub-text strong{display:block;color:var(--text);font-family:'Syne',sans-serif;font-size:0.85rem;font-weight:700;margin-bottom:0.2rem}
+.footer-sub-text span{font-size:0.75rem;color:var(--muted)}
+.footer-sub-form{display:flex;gap:0.4rem;flex-shrink:0}
+.footer-sub-form .sub-input{width:190px}
+.footer-sub-confirm{font-size:0.72rem;color:#22C55E;font-family:'JetBrains Mono',monospace;margin-top:0.4rem;display:none;text-align:center}
+@media(max-width:760px){
+  .sub-box{display:none}
+  .footer-sub-inner{flex-direction:column;align-items:center;text-align:center}
+  .footer-sub-form .sub-input{width:160px}
+}
 
 /* ── HEADER ── */
 .header{padding:3rem 2rem 2rem;max-width:1200px;margin:0 auto;border-bottom:1px solid var(--border)}
@@ -69,7 +81,86 @@ a{color:var(--accent2);text-decoration:none}
 #navStart:hover{color:var(--accent);opacity:0.85}
 #navStart.active{border-bottom-color:var(--accent)}
 
-/* ── CASE STUDY BANNER ── */
+/* ── CASE STUDY CARDS ── */
+.cs-page{max-width:1200px;margin:0 auto;padding:1.5rem 2rem 3rem}
+.cs-header{margin-bottom:1.5rem}
+.cs-header-title{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:0.3rem}
+.cs-header-sub{font-size:0.82rem;color:var(--muted)}
+
+/* Filter bar */
+.cs-filter-bar{display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;margin-bottom:1.5rem;border-bottom:1px solid var(--border);padding-bottom:1rem}
+.cs-filter-btn{padding:0.38rem 0.9rem;border-radius:100px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:0.78rem;font-weight:500;cursor:pointer;transition:all 0.18s;font-family:inherit;white-space:nowrap}
+.cs-filter-btn:hover{color:var(--text);border-color:var(--dim)}
+.cs-filter-btn.active{background:var(--surface2);color:var(--text);border-color:var(--accent2)}
+.cs-filter-count{font-size:0.65rem;background:var(--surface3);color:var(--muted);border-radius:100px;padding:0.1rem 0.45rem;margin-left:0.3rem;font-family:'JetBrains Mono',monospace}
+
+/* Card grid */
+.cs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1rem}
+
+/* Individual card */
+.cs-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;cursor:pointer;transition:transform 0.18s,border-color 0.18s,box-shadow 0.18s;position:relative;display:flex;flex-direction:column}
+.cs-card:hover{transform:translateY(-3px);border-color:var(--surface3);box-shadow:0 8px 32px rgba(0,0,0,0.35)}
+.cs-card-accent{height:3px;width:100%;flex-shrink:0}
+.cs-card-body{padding:1.25rem;flex:1;display:flex;flex-direction:column;gap:0.75rem}
+.cs-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:0.75rem}
+.cs-card-icon{font-size:1.4rem;line-height:1;flex-shrink:0;margin-top:0.05rem}
+.cs-card-track-badge{font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;padding:0.18rem 0.55rem;border-radius:100px;font-family:'JetBrains Mono',monospace;border:1px solid;flex-shrink:0}
+.cs-card-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;line-height:1.25;margin-bottom:0.15rem}
+.cs-card-subtitle{font-size:0.75rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
+.cs-card-summary{font-size:0.82rem;color:var(--muted);line-height:1.65;flex:1}
+.cs-card-tags{display:flex;flex-wrap:wrap;gap:0.35rem}
+.cs-card-tag{font-size:0.65rem;background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:0.2rem 0.55rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
+.cs-card-footer{display:flex;align-items:center;justify-content:space-between;padding-top:0.75rem;border-top:1px solid var(--border);margin-top:auto}
+.cs-card-meta{font-size:0.68rem;color:var(--dim);font-family:'JetBrains Mono',monospace}
+.cs-card-cta{font-size:0.72rem;color:var(--accent2);font-weight:600;display:flex;align-items:center;gap:0.3rem;transition:gap 0.18s}
+.cs-card:hover .cs-card-cta{gap:0.55rem}
+
+/* ── MODAL ── */
+.cs-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(4px);z-index:1000;display:flex;align-items:flex-start;justify-content:center;padding:2rem 1rem;overflow-y:auto;opacity:0;pointer-events:none;transition:opacity 0.25s}
+.cs-modal-overlay.open{opacity:1;pointer-events:all}
+.cs-modal{background:var(--surface);border:1px solid var(--border);border-radius:20px;width:100%;max-width:860px;margin:auto;overflow:hidden;transform:translateY(20px);transition:transform 0.28s ease;position:relative}
+.cs-modal-overlay.open .cs-modal{transform:translateY(0)}
+.cs-modal-top-bar{height:4px;width:100%}
+.cs-modal-header{padding:1.75rem 2rem 1.25rem;display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;border-bottom:1px solid var(--border)}
+.cs-modal-header-left{flex:1;min-width:0}
+.cs-modal-eyebrow{font-size:0.65rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--dim);font-family:'JetBrains Mono',monospace;margin-bottom:0.4rem;display:flex;align-items:center;gap:0.5rem}
+.cs-modal-title{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;letter-spacing:-0.02em;line-height:1.15;margin-bottom:0.4rem}
+.cs-modal-subtitle{font-size:0.85rem;color:var(--muted)}
+.cs-modal-close{width:34px;height:34px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;transition:all 0.15s;margin-top:0.25rem}
+.cs-modal-close:hover{color:var(--text);background:var(--surface3)}
+.cs-modal-body{padding:1.75rem 2rem;display:flex;flex-direction:column;gap:1.75rem;max-height:80vh;overflow-y:auto}
+.cs-modal-section{}
+.cs-modal-section-label{font-size:0.62rem;text-transform:uppercase;letter-spacing:0.14em;color:var(--dim);font-family:'JetBrains Mono',monospace;font-weight:600;margin-bottom:0.65rem;display:flex;align-items:center;gap:0.5rem}
+.cs-modal-section-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* Outcome strip */
+.cs-outcome{background:var(--surface2);border-radius:10px;padding:0.85rem 1.1rem;display:flex;align-items:center;gap:0.75rem;font-size:0.82rem}
+.cs-outcome-icon{font-size:1.1rem;flex-shrink:0}
+.cs-outcome-text{color:var(--muted);line-height:1.55}
+.cs-outcome-text strong{color:var(--text)}
+
+/* Problem/Approach boxes */
+.cs-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.85rem}
+.cs-detail-box{background:var(--surface2);border-radius:10px;padding:0.9rem 1rem;border-left:3px solid var(--dim)}
+.cs-detail-box.problem{border-left-color:#EF4444}
+.cs-detail-box.approach{border-left-color:var(--accent2)}
+.cs-detail-box-label{font-size:0.62rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);font-family:'JetBrains Mono',monospace;font-weight:600;margin-bottom:0.45rem}
+.cs-detail-box-text{font-size:0.82rem;color:var(--muted);line-height:1.65}
+
+/* Tools used row */
+.cs-tools-row{display:flex;flex-wrap:wrap;gap:0.45rem}
+.cs-tool-chip{display:flex;align-items:center;gap:0.35rem;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:0.35rem 0.75rem;font-size:0.75rem}
+.cs-tool-chip-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.cs-tool-chip-name{font-weight:500}
+
+/* Flow diagram inside modal */
+.cs-flow-wrap{background:var(--surface2);border-radius:12px;padding:1.1rem 1.25rem;overflow-x:auto}
+.cs-flow-wrap .flow{flex-wrap:nowrap}
+
+/* Term cards in modal */
+.cs-term-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:0.65rem}
+
+/* Keep old .case-study for any legacy refs */
 .case-study{background:var(--surface);border:1px solid var(--border);border-radius:16px;margin:1.5rem 2rem;max-width:1200px;margin-left:auto;margin-right:auto;overflow:hidden}
 .case-study-header{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
 .case-study-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;display:flex;align-items:center;gap:0.6rem}
@@ -173,6 +264,11 @@ a{color:var(--accent2);text-decoration:none}
   .stats{flex-wrap:wrap;gap:1rem}
   .flow{flex-direction:column;align-items:flex-start}
   .flow-arr{transform:rotate(90deg)}
+  .cs-grid{grid-template-columns:1fr}
+  .cs-detail-grid{grid-template-columns:1fr}
+  .cs-modal{margin:0.5rem}
+  .cs-modal-header{padding:1.25rem}
+  .cs-modal-body{padding:1.25rem;max-height:75vh}
 }
 </style>
 </head>
@@ -198,8 +294,8 @@ a{color:var(--accent2);text-decoration:none}
     <div class="sub-box">
       <div class="sub-label"><strong>Stay in the loop</strong>Get notified when new terms, paths and case studies are added</div>
       <div class="sub-row">
-        <input type="email" id="subEmail" placeholder="your@email.com" autocomplete="email">
-        <button class="sub-btn" onclick="handleSubscribe()">Subscribe</button>
+        <input type="email" id="subEmail" class="sub-input" placeholder="your@email.com" autocomplete="email">
+        <button class="sub-btn" onclick="handleSubscribe('subEmail','subConfirm')">Subscribe</button>
       </div>
       <div class="sub-confirm" id="subConfirm">&#10003; Opening your email app&hellip;</div>
     </div>
@@ -478,17 +574,29 @@ a{color:var(--accent2);text-decoration:none}
 
 <!-- CASE STUDIES (hidden by default) -->
 <div id="sectionCases" style="display:none">
-  <div style="padding:1rem 2rem 0;max-width:1200px;margin:0 auto">
-  <div class="case-study">
-    <div class="case-study-header">
-      <div class="case-study-title">
-        <span class="badge">Case Studies</span>
-        Real scenarios &mdash; every concept in action
-      </div>
+  <div class="cs-page">
+    <div class="cs-header">
+      <div class="cs-header-title">Case Studies</div>
+      <div class="cs-header-sub">Real scenarios showing how AI concepts connect — click any card to explore the full workflow and the terms behind it</div>
     </div>
-    <div class="case-tabs" id="caseTabs"></div>
-    <div id="casePanels"></div>
+    <div class="cs-filter-bar" id="csFilterBar"></div>
+    <div class="cs-grid" id="csGrid"></div>
   </div>
+</div>
+
+<!-- CASE STUDY MODAL -->
+<div class="cs-modal-overlay" id="csModalOverlay" onclick="closeCsModal(event)">
+  <div class="cs-modal" id="csModal">
+    <div class="cs-modal-top-bar" id="csModalBar"></div>
+    <div class="cs-modal-header">
+      <div class="cs-modal-header-left">
+        <div class="cs-modal-eyebrow" id="csModalEyebrow"></div>
+        <div class="cs-modal-title" id="csModalTitle"></div>
+        <div class="cs-modal-subtitle" id="csModalSubtitle"></div>
+      </div>
+      <button class="cs-modal-close" onclick="closeCsModal()">&#x2715;</button>
+    </div>
+    <div class="cs-modal-body" id="csModalBody"></div>
   </div>
 </div>
 
@@ -505,7 +613,22 @@ a{color:var(--accent2);text-decoration:none}
 <div class="no-results" id="noResults" style="display:none"><strong>¯\_(ツ)_/¯</strong>No terms match your search</div>
 
 <div class="footer">
-  ai-learning-journal · built with Claude · add to it as you learn · you own this file
+  <div>ai-learning-journal &middot; built with Claude &middot; add to it as you learn &middot; you own this file</div>
+  <div class="footer-sub">
+    <div class="footer-sub-inner">
+      <div class="footer-sub-text">
+        <strong>Stay in the loop</strong>
+        <span>Get notified when new terms, paths and case studies are added</span>
+      </div>
+      <div>
+        <div class="footer-sub-form">
+          <input type="email" id="subEmailFooter" class="sub-input" placeholder="your@email.com" autocomplete="email">
+          <button class="sub-btn" onclick="handleSubscribe('subEmailFooter','subConfirmFooter')">Subscribe</button>
+        </div>
+        <div class="footer-sub-confirm" id="subConfirmFooter">&#10003; Opening your email app&hellip;</div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -1276,6 +1399,73 @@ const TM={
   communication:{label:"Communication",color:"#EC4899",bg:"rgba(236,72,153,0.12)"},
 };
 
+// ── CASE STUDY METADATA (enriched for card display) ──
+const CASE_META={
+  "engineer":{
+    track:"technical",icon:"⚙",trackLabel:"Technical",
+    summary:"Build a personal AI assistant that reads your calendar and email, then delivers a natural language morning briefing — entirely automated.",
+    problem:"Understanding what is actually happening inside an AI-powered bot you followed instructions to build.",
+    approach:"Wire together the Telegram Bot API, Google Calendar, Gmail, and Claude via Python. Each API call is a discrete step you can understand individually.",
+    outcome:"A working RAG system that fetches real data, injects it into Claude's context, and returns accurate answers — no hallucination.",
+    tools:["Python","Telegram API","Google Calendar API","Gmail API","Anthropic API","Webhook","OAuth","RAG"],
+    difficulty:"Advanced",diffColor:"#EF4444"
+  },
+  "personal":{
+    track:"technical",icon:"☀",trackLabel:"Technical",
+    summary:"Use three free AI tools to start every morning 30 minutes sharper — no code, no setup, no technical background required.",
+    problem:"AI feels overwhelming or only for developers. Most people do not know where to start using it in daily life.",
+    approach:"Perplexity for live news, Claude for task prioritization, Voice AI for hands-free note capture. All consumer tools, nothing to install.",
+    outcome:"A repeatable morning routine that replaces 20 minutes of news browsing and turns a messy task list into a prioritized plan in seconds.",
+    tools:["Perplexity AI","Claude","Voice AI","Automation"],
+    difficulty:"Beginner",diffColor:"#22C55E"
+  },
+  "business":{
+    track:"functional",icon:"◈",trackLabel:"Functional",
+    summary:"Walk into any meeting fully prepared in under 10 minutes using AI to surface notes, emails, and talking points automatically.",
+    problem:"Professionals spend 30–45 minutes before important meetings digging through notes, emails, and calendars just to feel prepared.",
+    approach:"Notion AI summarizes past meeting notes. Microsoft Copilot surfaces relevant emails. Claude combines both into a structured agenda.",
+    outcome:"Meeting prep that used to take an hour now takes under 10 minutes. AI surfaces context — the human still decides what matters.",
+    tools:["Notion AI","Microsoft Copilot","Claude","Prompting","RAG","Context Window"],
+    difficulty:"Beginner",diffColor:"#22C55E"
+  },
+  "builder":{
+    track:"technical",icon:"◐",trackLabel:"Technical",
+    summary:"Build an automated email triage system that classifies, prioritizes, and routes your inbox — with no Python or code required.",
+    problem:"A crowded inbox wastes hours per week. Most people know automation could help but assume coding is required.",
+    approach:"Zapier catches incoming emails, routes them to Claude via API for classification, then Zapier acts on Claude's decision — label, notify, or archive.",
+    outcome:"An inbox that surfaces only what matters. Built in two hours. Zero code written. The same logic as a custom bot but assembled visually.",
+    tools:["Zapier","Claude API","Gmail API","Zapier AI","Automation","Function Calling"],
+    difficulty:"Intermediate",diffColor:"#F59E0B"
+  },
+  "image-creation":{
+    track:"creative",icon:"◇",trackLabel:"Creative",
+    summary:"Generate a consistent visual brand identity using AI image tools — no design skills, no photography budget, no creative agency needed.",
+    problem:"Solopreneurs and small teams need professional visuals but cannot afford designers or stock photography at scale.",
+    approach:"Claude writes the Midjourney prompt from a plain-language brand brief. Midjourney generates variants. AI Upscaling delivers production-ready resolution.",
+    outcome:"A consistent visual brand in 30 minutes that would cost $2,000 from a designer. Claude handles the technical image prompting so you do not have to learn Midjourney syntax.",
+    tools:["Claude","Midjourney","DALL-E","Image Prompting","AI Upscaling","Multi-modal"],
+    difficulty:"Beginner",diffColor:"#22C55E"
+  },
+  "content-creation":{
+    track:"creative",icon:"◈",trackLabel:"Creative",
+    summary:"Write and publish an authoritative, well-researched blog post in 2 hours instead of 2 days — using AI to research, draft, and repurpose.",
+    problem:"Quality content takes days of research, writing, editing, and formatting. AI alone can hallucinate facts, making it risky without a research step.",
+    approach:"NotebookLM grounds the research in real sources. Claude outlines and drafts from verified notes. Grammarly polishes. Gamma converts it to a slide deck automatically.",
+    outcome:"One research session produces a blog post, a slide deck, and social content from the same verified material — with citations, not hallucinations.",
+    tools:["NotebookLM","Claude","Grammarly AI","Gamma","RAG","Prompting"],
+    difficulty:"Beginner",diffColor:"#22C55E"
+  },
+  "video-creation":{
+    track:"creative",icon:"▶",trackLabel:"Creative",
+    summary:"Produce a professional explainer video with AI voice, AI presenter, and automatic captions — no camera, no studio, no video editor.",
+    problem:"Professional video production requires equipment, skills, and budget that most individuals and small teams do not have.",
+    approach:"Claude writes the script. ElevenLabs generates a cloned voice. HeyGen creates an AI avatar presenter. Descript edits by transcript. Captions AI finalizes for mobile.",
+    outcome:"A polished video for approximately $60/month in tool costs. No filming. No editing timeline. No studio. Publishable on YouTube or LinkedIn within hours.",
+    tools:["Claude","ElevenLabs","HeyGen","Descript","Captions AI","Voice AI"],
+    difficulty:"Intermediate",diffColor:"#F59E0B"
+  },
+};
+
 const CASES=[
   {key:"engineer",label:"Engineer",color:"#3B82F6",subtitle:"Your Telegram Bot",
   termSlugs:["webhook","python","env-variables","oauth","calendar-api","gmail-api","prompting","system-prompt","rag","agent-scaffolding","llm","tokens","kimi-k2","hosting"],
@@ -1393,6 +1583,7 @@ function updateProgress(){
 }
 
 // ── SECTION TOGGLE ──
+let _csInited=false;
 function showSection(key){
   document.getElementById("sectionStart").style.display=key==="start"?"":"none";
   document.getElementById("sectionTerms").style.display=key==="terms"?"":"none";
@@ -1400,14 +1591,8 @@ function showSection(key){
   document.getElementById("navStart").classList.toggle("active",key==="start");
   document.getElementById("navTerms").classList.toggle("active",key==="terms");
   document.getElementById("navCases").classList.toggle("active",key==="cases");
-  // re-render case terms when switching to cases
-  if(key==="cases"){
-    const activeCase=document.querySelector(".case-tab.active");
-    if(activeCase){
-      const caseKey=activeCase.dataset.caseKey;
-      if(caseKey)renderCaseTerms(caseKey);
-    }
-  }
+  if(key==="cases"&&!_csInited){initCaseStudies();_csInited=true;}
+
 }
 
 function showTrack(track){
@@ -1498,43 +1683,160 @@ function navPath(currentSlug,dir){
 }
 
 // ── CASE STUDIES ──
-const tabsEl=document.getElementById("caseTabs"),panelsEl=document.getElementById("casePanels");
-CASES.forEach((cs,i)=>{
-  const tab=document.createElement("button");
-  tab.className="case-tab"+(i===0?" active":"");
-  tab.dataset.caseKey=cs.key;
-  tab.innerHTML=`<span class="tab-dot" style="background:${cs.color}"></span>${cs.label}: ${cs.subtitle}`;
-  tab.onclick=()=>{
-    document.querySelectorAll(".case-tab").forEach(t=>t.classList.remove("active"));
-    document.querySelectorAll(".case-panel").forEach(p=>p.classList.remove("active"));
-    tab.classList.add("active");
-    document.getElementById("case-panel-"+cs.key).classList.add("active");
-    renderCaseTerms(cs.key);
-  };
-  tabsEl.appendChild(tab);
-  const panel=document.createElement("div");
-  panel.className="case-panel"+(i===0?" active":"");
-  panel.id="case-panel-"+cs.key;
-  panel.innerHTML=cs.html+`<div class="cs-terms-section" id="cs-terms-${cs.key}"></div>`;
-  panelsEl.appendChild(panel);
-});
+const CS_TRACKS=[
+  {key:"all",label:"All Case Studies"},
+  {key:"technical",label:"Technical"},
+  {key:"creative",label:"Creative"},
+  {key:"functional",label:"Functional"},
+];
+let activeCsTrack="all";
 
-// render terms for the first case on load
-setTimeout(()=>renderCaseTerms(CASES[0].key),50);
-
-function renderCaseTerms(caseKey){
-  const cs=CASES.find(c=>c.key===caseKey);
-  if(!cs||!cs.termSlugs)return;
-  const container=document.getElementById("cs-terms-"+caseKey);
-  if(!container)return;
-  const terms=cs.termSlugs.map(s=>TERMS.find(t=>t.slug===s)).filter(Boolean);
-  if(!terms.length){container.style.display="none";return;}
-  container.style.display="";
-  container.innerHTML=`<div class="cs-terms-label">&#9670; Terms in this scenario &mdash; in the order you encounter them</div><div class="cs-terms-grid" id="cs-grid-${caseKey}"></div>`;
-  const grid=document.getElementById("cs-grid-"+caseKey);
-  grid.innerHTML=terms.map(t=>buildCard(t,null)).join("");
-  attachCardEvents(grid);
+function initCaseStudies(){
+  // Build filter bar
+  const bar=document.getElementById("csFilterBar");
+  if(!bar)return;
+  CS_TRACKS.forEach(t=>{
+    const btn=document.createElement("button");
+    btn.className="cs-filter-btn"+(t.key==="all"?" active":"");
+    btn.dataset.track=t.key;
+    const count=t.key==="all"?CASES.length:CASES.filter(c=>CASE_META[c.key]?.track===t.key).length;
+    btn.innerHTML=`${t.label}<span class="cs-filter-count">${count}</span>`;
+    btn.onclick=()=>{
+      activeCsTrack=t.key;
+      document.querySelectorAll(".cs-filter-btn").forEach(b=>b.classList.remove("active"));
+      btn.classList.add("active");
+      renderCsCards();
+    };
+    bar.appendChild(btn);
+  });
+  renderCsCards();
 }
+
+function renderCsCards(){
+  const grid=document.getElementById("csGrid");
+  if(!grid)return;
+  const filtered=CASES.filter(cs=>{
+    if(activeCsTrack==="all")return true;
+    return CASE_META[cs.key]?.track===activeCsTrack;
+  });
+  grid.innerHTML=filtered.map(cs=>{
+    const meta=CASE_META[cs.key]||{};
+    const color=cs.color||"#7C7A95";
+    const trackColors={technical:"rgba(59,130,246,0.15)",creative:"rgba(244,114,182,0.15)",functional:"rgba(6,182,212,0.15)"};
+    const trackTextColors={technical:"#3B82F6",creative:"#F472B6",functional:"#06B6D4"};
+    const tc=meta.track||"technical";
+    const tags=(meta.tools||[]).slice(0,4);
+    return `<div class="cs-card" onclick="openCsModal('${cs.key}')" data-track="${tc}">
+  <div class="cs-card-accent" style="background:${color}"></div>
+  <div class="cs-card-body">
+    <div class="cs-card-top">
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem">
+          <span class="cs-card-icon">${meta.icon||"◆"}</span>
+          <span class="cs-card-track-badge" style="background:${trackColors[tc]||"rgba(124,122,149,0.15)"};color:${trackTextColors[tc]||"#7C7A95"};border-color:${trackTextColors[tc]||"#7C7A95"}33">${meta.trackLabel||tc}</span>
+        </div>
+        <div class="cs-card-title" style="color:${color}">${cs.label}: ${cs.subtitle}</div>
+        <div class="cs-card-subtitle">${meta.difficulty||""} &nbsp;·&nbsp; ${(meta.tools||[]).length} tools</div>
+      </div>
+      <div style="width:7px;height:7px;border-radius:50%;background:${meta.diffColor||"#7C7A95"};flex-shrink:0;margin-top:0.2rem" title="${meta.difficulty||""}"></div>
+    </div>
+    <div class="cs-card-summary">${meta.summary||""}</div>
+    <div class="cs-card-tags">${tags.map(t=>`<span class="cs-card-tag">${t}</span>`).join("")}${(meta.tools||[]).length>4?`<span class="cs-card-tag">+${(meta.tools||[]).length-4} more</span>`:""}</div>
+    <div class="cs-card-footer">
+      <div class="cs-card-meta">${cs.termSlugs?.length||0} terms covered</div>
+      <div class="cs-card-cta" style="color:${color}">Explore <span>&#8594;</span></div>
+    </div>
+  </div>
+</div>`;
+  }).join("");
+}
+
+function openCsModal(key){
+  const cs=CASES.find(c=>c.key===key);
+  const meta=CASE_META[key]||{};
+  if(!cs)return;
+  const color=cs.color||"#7C7A95";
+  const trackLabels={technical:"Technical Track",creative:"Creative Track",functional:"Functional Track"};
+
+  // Set modal header
+  document.getElementById("csModalBar").style.background=color;
+  document.getElementById("csModalEyebrow").innerHTML=`<span style="color:${color}">${meta.icon||"◆"}</span>${trackLabels[meta.track]||"Case Study"}&nbsp;&nbsp;·&nbsp;&nbsp;<span style="background:${meta.diffColor||"#888"}22;color:${meta.diffColor||"#888"};border-radius:4px;padding:0.1rem 0.5rem">${meta.difficulty||""}</span>`;
+  document.getElementById("csModalTitle").textContent=`${cs.label}: ${cs.subtitle}`;
+  document.getElementById("csModalSubtitle").textContent=meta.summary||"";
+
+  // Build modal body
+  const body=document.getElementById("csModalBody");
+  body.innerHTML="";
+  body.scrollTop=0;
+
+  // Outcome
+  body.innerHTML+=`
+<div class="cs-modal-section">
+  <div class="cs-modal-section-label">&#9670; Outcome</div>
+  <div class="cs-outcome">
+    <div class="cs-outcome-icon">&#10003;</div>
+    <div class="cs-outcome-text"><strong>${meta.outcome||""}</strong></div>
+  </div>
+</div>`;
+
+  // Problem + Approach
+  body.innerHTML+=`
+<div class="cs-modal-section">
+  <div class="cs-modal-section-label">&#9670; Context</div>
+  <div class="cs-detail-grid">
+    <div class="cs-detail-box problem">
+      <div class="cs-detail-box-label">The Problem</div>
+      <div class="cs-detail-box-text">${meta.problem||""}</div>
+    </div>
+    <div class="cs-detail-box approach">
+      <div class="cs-detail-box-label">The Approach</div>
+      <div class="cs-detail-box-text">${meta.approach||""}</div>
+    </div>
+  </div>
+</div>`;
+
+  // Tools used
+  const toolColors={"Python":"#3B82F6","Claude":"#A78BFA","Claude API":"#A78BFA","Anthropic API":"#A78BFA","Zapier":"#F97316","Zapier AI":"#F97316","Gmail API":"#EF4444","Google Calendar API":"#22C55E","Webhook":"#F59E0B","OAuth":"#06B6D4","RAG":"#14B8A6","Prompting":"#8B5CF6","Notion AI":"#06B6D4","Microsoft Copilot":"#3B82F6","Midjourney":"#F472B6","DALL-E":"#10B981","Image Prompting":"#F472B6","AI Upscaling":"#EC4899","Multi-modal":"#8B5CF6","NotebookLM":"#84CC16","Grammarly AI":"#22C55E","Gamma":"#14B8A6","Context Window":"#F59E0B","ElevenLabs":"#FBBF24","HeyGen":"#EF4444","Descript":"#8B5CF6","Captions AI":"#06B6D4","Voice AI":"#A78BFA","Automation":"#F97316","Function Calling":"#14B8A6","Perplexity AI":"#3B82F6"};
+  const toolsHtml=(meta.tools||[]).map(t=>`<div class="cs-tool-chip"><div class="cs-tool-chip-dot" style="background:${toolColors[t]||"#7C7A95"}"></div><span class="cs-tool-chip-name">${t}</span></div>`).join("");
+  body.innerHTML+=`
+<div class="cs-modal-section">
+  <div class="cs-modal-section-label">&#9670; Tools &amp; Technology</div>
+  <div class="cs-tools-row">${toolsHtml}</div>
+</div>`;
+
+  // Flow diagram
+  body.innerHTML+=`
+<div class="cs-modal-section">
+  <div class="cs-modal-section-label">&#9670; Workflow</div>
+  <div class="cs-flow-wrap">${cs.html||""}</div>
+</div>`;
+
+  // Term cards
+  const termSlugs=cs.termSlugs||[];
+  const terms=termSlugs.map(s=>TERMS.find(t=>t.slug===s)).filter(Boolean);
+  if(terms.length){
+    const termCardsHtml=terms.map(t=>buildCard(t,null)).join("");
+    const termSection=document.createElement("div");
+    termSection.className="cs-modal-section";
+    termSection.innerHTML=`<div class="cs-modal-section-label">&#9670; Terms in this scenario &mdash; in order</div><div class="cs-term-grid" id="cs-modal-terms-${key}"></div>`;
+    body.appendChild(termSection);
+    document.getElementById(`cs-modal-terms-${key}`).innerHTML=termCardsHtml;
+    attachCardEvents(document.getElementById(`cs-modal-terms-${key}`));
+  }
+
+  document.getElementById("csModalOverlay").classList.add("open");
+  document.body.style.overflow="hidden";
+}
+
+function closeCsModal(e){
+  if(e&&e.target!==document.getElementById("csModalOverlay")&&e.type==="click")return;
+  document.getElementById("csModalOverlay").classList.remove("open");
+  document.body.style.overflow="";
+}
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeCsModal();});
+
+// render on load — called after showSection('cases')
+function renderCaseTerms(key){}  // legacy stub kept for compatibility
 
 // ── SEARCH ──
 document.getElementById("search").addEventListener("input",e=>{
@@ -1683,12 +1985,16 @@ function buildCard(t,pathIndex){
 </div>`;
 }
 
-function handleSubscribe(){
-  const email = document.getElementById("subEmail").value.trim();
+function handleSubscribe(inputId, confirmId){
+  inputId = inputId || "subEmail";
+  confirmId = confirmId || "subConfirm";
+  const inputEl = document.getElementById(inputId);
+  const confirmEl = document.getElementById(confirmId);
+  const email = inputEl.value.trim();
   if(!email || !email.includes("@")){
-    document.getElementById("subEmail").focus();
-    document.getElementById("subEmail").style.borderColor="var(--accent)";
-    setTimeout(()=>document.getElementById("subEmail").style.borderColor="",1800);
+    inputEl.focus();
+    inputEl.style.borderColor="var(--accent)";
+    setTimeout(()=>inputEl.style.borderColor="",1800);
     return;
   }
   const subject = encodeURIComponent("Learning Journal Subscription");
@@ -1699,17 +2005,16 @@ function handleSubscribe(){
   );
   const mailto = "mailto:divotagency@gmail.com?subject=" + subject + "&body=" + body;
   window.location.href = mailto;
-  const confirm = document.getElementById("subConfirm");
-  confirm.style.display = "block";
-  setTimeout(()=>{
-    confirm.style.display="none";
-    document.getElementById("subEmail").value="";
-  }, 4000);
+  confirmEl.style.display = "block";
+  setTimeout(()=>{ confirmEl.style.display="none"; inputEl.value=""; }, 4000);
 }
 
-// Allow Enter key to subscribe
-document.getElementById("subEmail").addEventListener("keydown", function(e){
-  if(e.key === "Enter") handleSubscribe();
+// Allow Enter key on both subscribe inputs
+document.getElementById("subEmail").addEventListener("keydown",function(e){
+  if(e.key==="Enter") handleSubscribe("subEmail","subConfirm");
+});
+document.getElementById("subEmailFooter").addEventListener("keydown",function(e){
+  if(e.key==="Enter") handleSubscribe("subEmailFooter","subConfirmFooter");
 });
 
 renderGrid();
