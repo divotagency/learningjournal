@@ -46,11 +46,15 @@ a{color:var(--accent2);text-decoration:none}
 .cat-pill .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 
 /* ── SECONDARY NAV ── */
-.sec-nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;gap:0;max-width:100%}
+.sec-nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0;display:flex;align-items:center;gap:0;max-width:100%}
+.sec-nav-inner{max-width:1200px;margin:0 auto;padding:0 2rem;display:flex;align-items:center;gap:0;width:100%}
 .sec-nav-item{padding:0.7rem 1.1rem;font-size:0.8rem;font-weight:500;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.18s;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none;font-family:inherit}
 .sec-nav-item:hover{color:var(--text)}
 .sec-nav-item.active{color:var(--text);border-bottom-color:var(--accent)}
 .sec-nav-label{font-size:0.68rem;color:var(--dim);font-family:'JetBrains Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;padding:0 0.5rem;user-select:none}
+#navStart{color:var(--accent);font-weight:600}
+#navStart:hover{color:var(--accent);opacity:0.85}
+#navStart.active{border-bottom-color:var(--accent)}
 
 /* ── CASE STUDY BANNER ── */
 .case-study{background:var(--surface);border:1px solid var(--border);border-radius:16px;margin:1.5rem 2rem;max-width:1200px;margin-left:auto;margin-right:auto;overflow:hidden}
@@ -176,10 +180,7 @@ a{color:var(--accent2);text-decoration:none}
       <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
       <div class="progress-label" id="progressLabel">0 of <span id="totalCount">0</span> concepts marked as understood</div>
     </div>
-    <div style="text-align:right">
-      <div style="font-size:0.75rem;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:0.5rem">STARTED</div>
-      <div style="font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700" id="startDate"></div>
-    </div>
+
   </div>
   <div class="search-row">
     <div class="search-wrap">
@@ -191,9 +192,244 @@ a{color:var(--accent2);text-decoration:none}
 </div>
 
 <div class="sec-nav">
-  <span class="sec-nav-label">View:</span>
-  <button class="sec-nav-item active" id="navTerms" onclick="showSection('terms')">Terms &amp; Paths</button>
-  <button class="sec-nav-item" id="navCases" onclick="showSection('cases')">Case Studies</button>
+  <div class="sec-nav-inner">
+    <span class="sec-nav-label">View:</span>
+    <button class="sec-nav-item" id="navStart" onclick="showSection('start')">&#9733; Start Here</button>
+    <button class="sec-nav-item active" id="navTerms" onclick="showSection('terms')">Terms &amp; Paths</button>
+    <button class="sec-nav-item" id="navCases" onclick="showSection('cases')">Case Studies</button>
+  </div>
+</div>
+
+<!-- START HERE SECTION -->
+<div id="sectionStart" style="display:none">
+  <div style="max-width:1200px;margin:0 auto;padding:2rem 2rem 3rem">
+
+    <div style="margin-bottom:2.5rem">
+      <div style="font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:0.4rem">Welcome to the <span style="color:var(--accent)">AI Learning Journal</span></div>
+      <p style="font-size:0.95rem;color:var(--muted);max-width:680px;line-height:1.75">This is your personal reference for understanding AI — not just what things are, but how they work together. This guide shows you how to get the most out of it in under 3 minutes.</p>
+    </div>
+
+    <!-- STEP 1 -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-bottom:2.5rem;align-items:center">
+      <div>
+        <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--accent);font-weight:700;font-family:'JetBrains Mono',monospace;margin-bottom:0.6rem">Step 1</div>
+        <div style="font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:700;margin-bottom:0.75rem">Search or browse the Term Library</div>
+        <p style="font-size:0.87rem;color:var(--muted);line-height:1.75;margin-bottom:0.75rem">Every AI concept, tool, and technology has a card with three sections: <strong style="color:var(--text)">Plain English</strong> (what it is in simple terms), <strong style="color:var(--text)">How it actually works</strong> (the real mechanism), and a <strong style="color:var(--text)">Real-world example</strong> grounded in things you have already built.</p>
+        <p style="font-size:0.87rem;color:var(--muted);line-height:1.75">Use the <strong style="color:var(--text)">search bar</strong> to find any term instantly, or filter by category using the colored pills — AI Assistants, Core AI Concepts, Developer Tools, and more.</p>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden">
+        <div style="padding:0.75rem 1rem;background:var(--surface2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:0.5rem">
+          <div style="width:8px;height:8px;border-radius:50%;background:#FF5F57"></div>
+          <div style="width:8px;height:8px;border-radius:50%;background:#FFBD2E"></div>
+          <div style="width:8px;height:8px;border-radius:50%;background:#28CA41"></div>
+          <div style="flex:1;background:var(--surface3);border-radius:6px;height:22px;margin-left:0.5rem;display:flex;align-items:center;padding:0 0.6rem">
+            <span style="font-size:0.7rem;color:var(--muted);font-family:'JetBrains Mono',monospace">&#128269; Search terms, definitions, examples...</span>
+          </div>
+        </div>
+        <div style="padding:1rem;display:flex;gap:0.4rem;flex-wrap:wrap;border-bottom:1px solid var(--border)">
+          <span style="background:var(--surface2);border:1px solid var(--accent2);border-radius:100px;padding:0.28rem 0.75rem;font-size:0.72rem;color:var(--text)">● All Terms 97</span>
+          <span style="background:transparent;border:1px solid var(--border);border-radius:100px;padding:0.28rem 0.75rem;font-size:0.72rem;color:var(--muted)">● AI Assistants 9</span>
+          <span style="background:transparent;border:1px solid var(--border);border-radius:100px;padding:0.28rem 0.75rem;font-size:0.72rem;color:var(--muted)">● Core AI Concepts 16</span>
+          <span style="background:transparent;border:1px solid var(--border);border-radius:100px;padding:0.28rem 0.75rem;font-size:0.72rem;color:var(--muted)">● Developer Tools</span>
+        </div>
+        <div style="padding:0.85rem 1rem;display:grid;grid-template-columns:1fr 1fr;gap:0.6rem">
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:0.7rem 0.85rem">
+            <div style="display:flex;gap:0.5rem;align-items:flex-start">
+              <div style="width:3px;background:#14B8A6;border-radius:3px;align-self:stretch;min-height:30px;flex-shrink:0"></div>
+              <div>
+                <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.82rem;margin-bottom:0.15rem">LLM</div>
+                <div style="font-size:0.7rem;color:var(--muted)">The tech powering Claude, ChatGPT...</div>
+              </div>
+            </div>
+          </div>
+          <div style="background:var(--surface2);border:1px solid var(--accent2);border-radius:10px;padding:0.7rem 0.85rem">
+            <div style="display:flex;gap:0.5rem;align-items:flex-start">
+              <div style="width:3px;background:#14B8A6;border-radius:3px;align-self:stretch;min-height:30px;flex-shrink:0"></div>
+              <div>
+                <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.82rem;margin-bottom:0.15rem">RAG ↗ expanded</div>
+                <div style="font-size:0.7rem;color:var(--muted)">Retrieval-Augmented Generation...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="padding:0 1rem 0.85rem 1rem">
+          <div style="background:var(--surface);border-radius:8px;border:1px solid var(--border);padding:0.7rem 0.85rem;font-size:0.75rem;color:var(--muted);border-left:3px solid var(--dim)">How it actually works: RAG fetches real data and injects it into the AI's context window before generating a response...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-bottom:2.5rem;align-items:center">
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;order:1">
+        <div style="padding:1rem 1.25rem;border-bottom:1px solid var(--border)">
+          <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--dim);font-family:'JetBrains Mono',monospace;margin-bottom:0.6rem">LEARNING PATHS</div>
+          <div style="display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:0.85rem">
+            <div style="padding:0.45rem 0.85rem;font-size:0.75rem;color:var(--text);border-bottom:2px solid var(--accent2);margin-bottom:-1px">Technical</div>
+            <div style="padding:0.45rem 0.85rem;font-size:0.75rem;color:var(--muted)">Creative</div>
+            <div style="padding:0.45rem 0.85rem;font-size:0.75rem;color:var(--muted)">Functional</div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.45rem">
+            <div style="background:var(--surface2);border:2px solid #FBBF24;border-radius:10px;padding:0.6rem 0.7rem">
+              <div style="font-size:0.65rem;color:#FBBF24;font-family:'Syne',sans-serif;font-weight:700">Foundation</div>
+              <div style="font-size:0.6rem;color:var(--muted);margin-top:0.15rem">8 concepts everyone needs</div>
+            </div>
+            <div style="background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;padding:0.6rem 0.7rem;opacity:0.7">
+              <div style="font-size:0.65rem;color:#8B5CF6;font-family:'Syne',sans-serif;font-weight:700">AI for Life</div>
+              <div style="font-size:0.6rem;color:var(--muted);margin-top:0.15rem">Improve daily life</div>
+            </div>
+            <div style="background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;padding:0.6rem 0.7rem;opacity:0.7">
+              <div style="font-size:0.65rem;color:#06B6D4;font-family:'Syne',sans-serif;font-weight:700">AI at Work</div>
+              <div style="font-size:0.6rem;color:var(--muted);margin-top:0.15rem">Professional, no coding</div>
+            </div>
+          </div>
+        </div>
+        <div style="padding:0.75rem 1.25rem;font-size:0.75rem;color:var(--muted);display:flex;align-items:center;gap:0.5rem">
+          <span style="background:rgba(251,191,36,0.15);color:#FBBF24;border-radius:4px;padding:0.12rem 0.4rem;font-size:0.6rem;font-weight:600">Foundation</span>
+          <span style="font-size:0.7rem">active — showing 8 terms in sequence with Back / Next navigation</span>
+        </div>
+      </div>
+      <div style="order:2">
+        <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--accent);font-weight:700;font-family:'JetBrains Mono',monospace;margin-bottom:0.6rem">Step 2</div>
+        <div style="font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:700;margin-bottom:0.75rem">Follow a Learning Path for your goal</div>
+        <p style="font-size:0.87rem;color:var(--muted);line-height:1.75;margin-bottom:0.75rem">Learning Paths are curated sequences of terms organized around a goal. <strong style="color:var(--text)">Technical</strong> tracks cover how AI works and how to build with it. <strong style="color:var(--text)">Creative</strong> tracks cover image, content, and video creation. <strong style="color:var(--text)">Functional</strong> tracks cover specific business roles like Marketing, Sales, and Operations.</p>
+        <p style="font-size:0.87rem;color:var(--muted);line-height:1.75">Click a path card to activate it — the term grid below reorganizes to show only that path's terms in the recommended learning sequence, with Previous and Next buttons so you move through them one at a time.</p>
+        <div style="margin-top:1rem;padding:0.75rem 1rem;background:rgba(167,139,250,0.08);border-left:3px solid var(--accent2);border-radius:0 8px 8px 0;font-size:0.82rem;color:var(--muted)"><strong style="color:var(--text)">Pro tip:</strong> Combine a path with a category filter. Select "AI to Build" path and then click "Business & Work Tools" to see only the business tools relevant to builders.</div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-bottom:2.5rem;align-items:center">
+      <div>
+        <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--accent);font-weight:700;font-family:'JetBrains Mono',monospace;margin-bottom:0.6rem">Step 3</div>
+        <div style="font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:700;margin-bottom:0.75rem">Study Case Studies to see it all in action</div>
+        <p style="font-size:0.87rem;color:var(--muted);line-height:1.75;margin-bottom:0.75rem">Case Studies show real scenarios — the Telegram bot you already built, a morning AI routine, an email triage system, a video production workflow. Each one shows the complete flow diagram of what is happening technically, then lists every term involved <strong style="color:var(--text)">in the order you encounter them while building it.</strong></p>
+        <p style="font-size:0.87rem;color:var(--muted);line-height:1.75">Click any term card inside a case study to expand it and read the full definition without leaving the page.</p>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden">
+        <div style="padding:0.75rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:0.5rem">
+          <span style="background:var(--accent);color:#000;font-size:0.6rem;font-weight:700;padding:0.15rem 0.45rem;border-radius:4px">CASE STUDY</span>
+          <span style="font-size:0.8rem;font-weight:600;font-family:'Syne',sans-serif">Your Telegram Bot</span>
+        </div>
+        <div style="padding:0.85rem 1.25rem;border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:0;align-items:center">
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:0.4rem 0.6rem;font-size:0.65rem;text-align:center">
+            <div style="font-weight:600;color:var(--text)">You type</div>
+            <div style="color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:0.58rem">Telegram</div>
+          </div>
+          <span style="color:var(--dim);padding:0 0.2rem;font-size:0.8rem">→</span>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:0.4rem 0.6rem;font-size:0.65rem;text-align:center">
+            <div style="font-weight:600;color:var(--text)">Webhook</div>
+            <div style="color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:0.58rem">HTTP POST</div>
+          </div>
+          <span style="color:var(--dim);padding:0 0.2rem;font-size:0.8rem">→</span>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:0.4rem 0.6rem;font-size:0.65rem;text-align:center">
+            <div style="font-weight:600;color:var(--text)">Claude</div>
+            <div style="color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:0.58rem">Anthropic API</div>
+          </div>
+          <span style="color:var(--dim);padding:0 0.2rem;font-size:0.8rem">→</span>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:0.4rem 0.6rem;font-size:0.65rem;text-align:center">
+            <div style="font-weight:600;color:var(--text)">Reply</div>
+            <div style="color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:0.58rem">Telegram API</div>
+          </div>
+        </div>
+        <div style="padding:0.75rem 1.25rem">
+          <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--dim);font-family:'JetBrains Mono',monospace;margin-bottom:0.55rem">◆ Terms in this scenario</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.45rem">
+            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:0.5rem 0.7rem;font-size:0.72rem">
+              <div style="font-weight:600;margin-bottom:0.1rem">Webhook</div>
+              <div style="color:var(--muted);font-size:0.65rem">A URL your server exposes...</div>
+            </div>
+            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:0.5rem 0.7rem;font-size:0.72rem">
+              <div style="font-weight:600;margin-bottom:0.1rem">RAG</div>
+              <div style="color:var(--muted);font-size:0.65rem">Giving AI access to your data...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-bottom:2.5rem;align-items:center">
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;order:1">
+        <div style="padding:0.85rem 1.25rem">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem">
+            <div style="font-size:0.78rem;font-weight:600;font-family:'JetBrains Mono',monospace;color:var(--muted)">1 of 97 concepts marked as understood</div>
+          </div>
+          <div style="background:var(--surface2);border-radius:100px;height:6px;overflow:hidden;margin-bottom:1rem">
+            <div style="width:38%;height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:100px"></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem">
+            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:0.65rem 0.85rem">
+              <div style="display:flex;gap:0.5rem;align-items:flex-start">
+                <div style="width:3px;background:#14B8A6;border-radius:3px;align-self:stretch;min-height:28px;flex-shrink:0"></div>
+                <div>
+                  <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.78rem">Tokens</div>
+                  <div style="font-size:0.65rem;color:var(--muted);margin-top:0.1rem">Basic unit of text an LLM reads</div>
+                  <div style="margin-top:0.5rem">
+                    <button style="font-size:0.65rem;background:#22C55E;color:#fff;border:none;border-radius:5px;padding:0.22rem 0.55rem;cursor:pointer">✓ Understood</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:0.65rem 0.85rem;opacity:0.7">
+              <div style="display:flex;gap:0.5rem;align-items:flex-start">
+                <div style="width:3px;background:#14B8A6;border-radius:3px;align-self:stretch;min-height:28px;flex-shrink:0"></div>
+                <div>
+                  <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.78rem">Context Window</div>
+                  <div style="font-size:0.65rem;color:var(--muted);margin-top:0.1rem">How much AI can see at once</div>
+                  <div style="margin-top:0.5rem">
+                    <button style="font-size:0.65rem;background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:5px;padding:0.22rem 0.55rem;cursor:pointer">Mark as Understood</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="order:2">
+        <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--accent);font-weight:700;font-family:'JetBrains Mono',monospace;margin-bottom:0.6rem">Step 4</div>
+        <div style="font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:700;margin-bottom:0.75rem">Track your progress as you learn</div>
+        <p style="font-size:0.87rem;color:var(--muted);line-height:1.75;margin-bottom:0.75rem">Every term card has a <strong style="color:var(--text)">Mark as Understood</strong> button. When you click it, the button turns green and a small green dot appears on the card. Your progress is saved automatically in your browser — it persists across sessions.</p>
+        <p style="font-size:0.87rem;color:var(--muted);line-height:1.75">The progress bar at the top of the page tracks how many of the 97 concepts you have marked. When following a Learning Path, the path banner also shows your completion progress for that specific track.</p>
+        <div style="margin-top:1rem;padding:0.75rem 1rem;background:rgba(251,191,36,0.07);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;font-size:0.82rem;color:#C4B080"><strong style="color:var(--text)">Note:</strong> Progress is stored in your browser's local storage. It stays even when you close the tab, but will reset if you clear your browser data.</div>
+      </div>
+    </div>
+
+    <!-- QUICK REF -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem 2rem">
+      <div style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem"><span style="color:var(--accent)">◆</span> Quick Reference</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem">
+        <div style="padding:0.75rem 1rem;background:var(--surface2);border-radius:10px;border-left:3px solid var(--accent2)">
+          <div style="font-size:0.75rem;font-weight:600;margin-bottom:0.3rem;color:var(--text)">Click any card</div>
+          <div style="font-size:0.75rem;color:var(--muted)">Expands it to show full definition, how it works, and real-world example</div>
+        </div>
+        <div style="padding:0.75rem 1rem;background:var(--surface2);border-radius:10px;border-left:3px solid #14B8A6">
+          <div style="font-size:0.75rem;font-weight:600;margin-bottom:0.3rem;color:var(--text)">Click a connection tag</div>
+          <div style="font-size:0.75rem;color:var(--muted)">Jumps directly to the related term and expands it</div>
+        </div>
+        <div style="padding:0.75rem 1rem;background:var(--surface2);border-radius:10px;border-left:3px solid var(--accent)">
+          <div style="font-size:0.75rem;font-weight:600;margin-bottom:0.3rem;color:var(--text)">Category + Path together</div>
+          <div style="font-size:0.75rem;color:var(--muted)">Shows only terms that belong to both — the intersection of two filters</div>
+        </div>
+        <div style="padding:0.75rem 1rem;background:var(--surface2);border-radius:10px;border-left:3px solid #22C55E">
+          <div style="font-size:0.75rem;font-weight:600;margin-bottom:0.3rem;color:var(--text)">Mark as Understood</div>
+          <div style="font-size:0.75rem;color:var(--muted)">Saves your progress automatically — green dot marks mastered terms</div>
+        </div>
+        <div style="padding:0.75rem 1rem;background:var(--surface2);border-radius:10px;border-left:3px solid #F97316">
+          <div style="font-size:0.75rem;font-weight:600;margin-bottom:0.3rem;color:var(--text)">97 terms across 13 categories</div>
+          <div style="font-size:0.75rem;color:var(--muted)">Updated as AI evolves — new terms marked with a purple + added badge</div>
+        </div>
+        <div style="padding:0.75rem 1rem;background:var(--surface2);border-radius:10px;border-left:3px solid #8B5CF6">
+          <div style="font-size:0.75rem;font-weight:600;margin-bottom:0.3rem;color:var(--text)">13 Learning Paths</div>
+          <div style="font-size:0.75rem;color:var(--muted)">Technical, Creative, and Functional tracks — each one a curated sequence</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:2rem">
+      <button onclick="showSection('terms')" style="background:var(--accent2);color:#fff;border:none;border-radius:10px;padding:0.85rem 2rem;font-family:'Syne',sans-serif;font-size:0.95rem;font-weight:700;cursor:pointer;letter-spacing:-0.01em">Start Exploring Terms &#8594;</button>
+    </div>
+
+  </div>
 </div>
 
 <div id="sectionTerms">
@@ -1107,10 +1343,7 @@ PATHS.forEach(p=>p.steps.forEach(s=>{if(!TERM_TRACKS[s])TERM_TRACKS[s]=[];TERM_T
 let activeCategory="all",searchText="",activePath=null,expandedSlug=null;
 let learnedSet=new Set(JSON.parse(localStorage.getItem("ai-journal-learned")||"[]"));
 
-document.getElementById("startDate").textContent=localStorage.getItem("ai-journal-start")||(()=>{
-  const d=new Date().toLocaleDateString("en-US",{month:"long",year:"numeric"});
-  localStorage.setItem("ai-journal-start",d);return d;
-})();
+// startDate element removed
 document.getElementById("totalCount").textContent=TERMS.length;
 
 function saveProgress(){localStorage.setItem("ai-journal-learned",JSON.stringify([...learnedSet]))}
@@ -1123,8 +1356,10 @@ function updateProgress(){
 
 // ── SECTION TOGGLE ──
 function showSection(key){
+  document.getElementById("sectionStart").style.display=key==="start"?"":"none";
   document.getElementById("sectionTerms").style.display=key==="terms"?"":"none";
   document.getElementById("sectionCases").style.display=key==="cases"?"":"none";
+  document.getElementById("navStart").classList.toggle("active",key==="start");
   document.getElementById("navTerms").classList.toggle("active",key==="terms");
   document.getElementById("navCases").classList.toggle("active",key==="cases");
   // re-render case terms when switching to cases
