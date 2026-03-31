@@ -86,6 +86,32 @@ a{color:var(--accent2);text-decoration:none}
 #navTldr:hover{color:var(--accent2);opacity:0.85}
 #navTldr.active{border-bottom-color:var(--accent2)}
 
+/* ── BASICS DROPDOWN ── */
+.sec-nav-dropdown{position:relative;display:inline-flex;align-items:stretch}
+.basics-chevron{font-size:0.7rem;margin-left:0.25rem;display:inline-block;transition:transform 0.2s;vertical-align:middle}
+.sec-nav-dropdown.open .basics-chevron{transform:rotate(180deg)}
+.basics-dropdown-menu{
+  position:absolute;top:calc(100% + 4px);left:0;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;min-width:140px;
+  box-shadow:0 8px 24px rgba(0,0,0,0.45);
+  z-index:200;overflow:hidden;
+  opacity:0;pointer-events:none;
+  transform:translateY(-6px);
+  transition:opacity 0.18s ease,transform 0.18s ease;
+}
+.sec-nav-dropdown.open .basics-dropdown-menu{
+  opacity:1;pointer-events:all;transform:translateY(0);
+}
+.basics-dropdown-item{
+  display:block;width:100%;text-align:left;
+  padding:0.62rem 1rem;background:none;border:none;
+  color:var(--muted);font-family:inherit;font-size:0.8rem;font-weight:500;
+  cursor:pointer;transition:background 0.15s,color 0.15s;white-space:nowrap;
+}
+.basics-dropdown-item:hover{background:var(--surface2);color:var(--text)}
+.basics-dropdown-item.active{color:var(--accent2);background:var(--surface2)}
+
 /* ── CASE STUDY CARDS ── */
 .cs-page{max-width:1200px;margin:0 auto;padding:1.5rem 2rem 3rem}
 .cs-header{margin-bottom:1.5rem}
@@ -447,7 +473,13 @@ a{color:var(--accent2);text-decoration:none}
     <button class="sec-nav-item" id="navStart" onclick="showSection('start')">&#9733; Start Here</button>
     <button class="sec-nav-item active" id="navTerms" onclick="showSection('terms')">Terms &amp; Paths</button>
     <button class="sec-nav-item" id="navCases" onclick="showSection('cases')">Case Studies</button>
-    <button class="sec-nav-item" id="navTldr" onclick="showSection('tldr')">&#9654; Basics</button>
+    <div class="sec-nav-dropdown" id="basicsDropdownWrap">
+      <button class="sec-nav-item" id="navTldr" onclick="toggleBasicsDropdown(event)">&#9654; Basics <span class="basics-chevron">▾</span></button>
+      <div class="basics-dropdown-menu" id="basicsDropdownMenu">
+        <button class="basics-dropdown-item" onclick="showSection('tldr','prompting')">Prompting</button>
+        <button class="basics-dropdown-item" onclick="showSection('skills')">Skills</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1284,6 +1316,443 @@ a{color:var(--accent2);text-decoration:none}
   <div class="cats" id="catFilters"></div>
   <div class="depth-filters" id="depthFilters"></div>
 
+</div>
+
+<!-- SKILLS SECTION -->
+<div id="sectionSkills" style="display:none">
+<div class="tldr-page">
+
+  <div class="deck-nav">
+    <button class="deck-btn" id="skillsPrev" onclick="skillsNav(-1)" disabled>&#8592; Back</button>
+    <div class="deck-progress-wrap"><div class="deck-progress-fill" id="skillsFill" style="width:9.09%"></div></div>
+    <span class="deck-counter" id="skillsCounter">1 / 11</span>
+    <button class="deck-btn primary" id="skillsNext" onclick="skillsNav(1)">Next &#8594;</button>
+  </div>
+
+  <!-- SLIDE 1: Title -->
+  <div class="slide active" id="skills-slide-0">
+    <div class="slide-card">
+      <div class="slide-band" style="background:linear-gradient(90deg,#A78BFA,#22C55E)"></div>
+      <div class="slide-header">
+        <div class="slide-eyebrow"><span>&#9654;</span> Skills &nbsp;&middot;&nbsp; Slide 1 of 11</div>
+        <div class="slide-title">Introduction to <span style="color:#22C55E">Agent Skills</span></div>
+        <div class="slide-subtitle">Learn how to build, configure, and share Skills in Claude Code — reusable markdown instructions that Claude applies automatically to the right tasks at the right time.</div>
+      </div>
+      <div class="slide-body">
+        <div class="s-four-col" style="margin-bottom:1.5rem">
+          <div class="s-icon-card"><div class="s-icon">&#129504;</div><div class="s-icon-label">What Are Skills?</div><div class="s-icon-sub">Slides 2–3</div></div>
+          <div class="s-icon-card"><div class="s-icon">&#128196;</div><div class="s-icon-label">Build a Skill</div><div class="s-icon-sub">Slides 4–6</div></div>
+          <div class="s-icon-card"><div class="s-icon">&#128257;</div><div class="s-icon-label">Share &amp; Scale</div><div class="s-icon-sub">Slides 7–9</div></div>
+          <div class="s-icon-card"><div class="s-icon">&#128295;</div><div class="s-icon-label">Troubleshoot</div><div class="s-icon-sub">Slides 10–11</div></div>
+        </div>
+        <div class="s-callout" style="border-left-color:#22C55E">
+          <div class="s-callout-label">&#9670; The core idea</div>
+          <div class="s-callout-text"><strong>Stop repeating yourself — teach Claude once.</strong> A Skill packages your workflow, standards, or expertise into a reusable instruction set that Claude loads automatically whenever it's relevant. Build it once, use it everywhere.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: What Are Skills? -->
+  <div class="slide" id="skills-slide-1">
+    <div class="slide-card">
+      <div class="slide-band" style="background:#A78BFA"></div>
+      <div class="slide-header">
+        <div class="slide-eyebrow"><span style="color:#A78BFA">&#9670;</span> Concepts &nbsp;&middot;&nbsp; Slide 2 of 11</div>
+        <div class="slide-title">What Are <span style="color:#A78BFA">Agent Skills?</span></div>
+        <div class="slide-subtitle">Skills are organized folders of instructions, scripts, and resources that Claude discovers and loads dynamically — turning a general-purpose agent into a specialist.</div>
+      </div>
+      <div class="slide-body">
+        <div class="s-three-col" style="margin-bottom:1.25rem">
+          <div class="s-icon-card" style="border-top:3px solid #A78BFA">
+            <div class="s-icon">&#128196;</div>
+            <div class="s-icon-label" style="color:#A78BFA">SKILL.md</div>
+            <div class="s-icon-sub">Every skill lives in its own folder and is defined by a single SKILL.md file — YAML frontmatter on top, markdown instructions below.</div>
+          </div>
+          <div class="s-icon-card" style="border-top:3px solid #22C55E">
+            <div class="s-icon">&#9889;</div>
+            <div class="s-icon-label" style="color:#22C55E">Auto-Loading</div>
+            <div class="s-icon-sub">Claude scans skill descriptions at startup. When your request matches a description, the skill loads automatically — no slash command needed.</div>
+          </div>
+          <div class="s-icon-card" style="border-top:3px solid #FBBF24">
+            <div class="s-icon">&#128260;</div>
+            <div class="s-icon-label" style="color:#FBBF24">Composable</div>
+            <div class="s-icon-sub">Skills are modular and reusable. Anyone on your team can install, share, or extend them — from a single developer to an entire enterprise.</div>
+          </div>
+        </div>
+        <div class="s-callout amber">
+          <div class="s-callout-label">&#9670; The onboarding guide analogy</div>
+          <div class="s-callout-text">Building a skill for Claude is like writing an onboarding guide for a new hire. You capture your procedure once, and every agent that reads it performs the task the same way — consistently and correctly.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: Why Skills? -->
+  <div class="slide" id="skills-slide-2">
+    <div class="slide-card">
+      <div class="slide-band" style="background:#14B8A6"></div>
+      <div class="slide-header">
+        <div class="slide-eyebrow"><span style="color:#14B8A6">&#9670;</span> Concepts &nbsp;&middot;&nbsp; Slide 3 of 11</div>
+        <div class="slide-title">Why Use <span style="color:#14B8A6">Skills?</span></div>
+        <div class="slide-subtitle">Skills solve a specific problem: the more you rely on AI, the more you find yourself re-explaining the same context over and over. Skills fix that.</div>
+      </div>
+      <div class="slide-body">
+        <div class="s-compare" style="margin-bottom:1.25rem">
+          <div class="s-compare-col">
+            <div class="s-compare-label"><span style="font-size:1.1rem">&#128533;</span> Without Skills</div>
+            <div class="s-compare-item">Paste your style guide into every session</div>
+            <div class="s-compare-item">Re-explain your team's workflow each time</div>
+            <div class="s-compare-item">Inconsistent output across agents and sessions</div>
+            <div class="s-compare-item">Context window fills up with repeated instructions</div>
+            <div class="s-compare-item" style="margin-top:0.5rem;color:var(--muted);font-size:0.75rem">&#8594; Fragile, manual, repetitive</div>
+          </div>
+          <div class="s-compare-col highlight">
+            <div class="s-compare-label"><span style="font-size:1.1rem">&#9989;</span> <span style="color:#14B8A6">With Skills</span></div>
+            <div class="s-compare-item">Write instructions once in SKILL.md</div>
+            <div class="s-compare-item">Claude loads them automatically when relevant</div>
+            <div class="s-compare-item">Consistent behavior every time, every session</div>
+            <div class="s-compare-item">Only relevant skills consume context</div>
+            <div class="s-compare-item" style="margin-top:0.5rem;color:#14B8A6;font-size:0.75rem">&#8594; Scalable, automatic, reusable</div>
+          </div>
+        </div>
+        <div class="s-callout teal">
+          <div class="s-callout-label">&#9670; Where skills live</div>
+          <div class="s-callout-text">Skills work across <strong>Claude Code</strong>, <strong>Claude.ai</strong>, the <strong>Claude API</strong>, and the <strong>Claude Agent SDK</strong> — and follow the open Agent Skills standard, so the same SKILL.md works across AI tools.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: Anatomy of a Skill -->
+  <div class="slide" id="skills-slide-3">
+    <div class="slide-card">
+      <div class="slide-band" style="background:#3B82F6"></div>
+      <div class="slide-header">
+        <div class="slide-eyebrow"><span style="color:#3B82F6">&#9670;</span> Building &nbsp;&middot;&nbsp; Slide 4 of 11</div>
+        <div class="slide-title">Anatomy of a <span style="color:#3B82F6">SKILL.md</span></div>
+        <div class="slide-subtitle">Every skill has exactly two parts: a YAML frontmatter block that tells Claude when to use the skill, and a markdown body that tells Claude how.</div>
+      </div>
+      <div class="slide-body">
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.25rem;font-family:'JetBrains Mono',monospace;font-size:0.78rem;line-height:1.75;margin-bottom:1.25rem;overflow-x:auto">
+          <div style="color:#A78BFA">---</div>
+          <div><span style="color:#22C55E">name</span><span style="color:var(--muted)">: </span><span style="color:#FBBF24">explain-code</span></div>
+          <div><span style="color:#22C55E">description</span><span style="color:var(--muted)">: </span><span style="color:var(--text)">Explains code with diagrams and analogies. Use when</span></div>
+          <div style="padding-left:1.5rem;color:var(--text)">explaining how code works or the user asks "how does this work?"</div>
+          <div style="color:#A78BFA">---</div>
+          <div style="margin-top:0.5rem;color:var(--muted)"># explain-code</div>
+          <div style="color:var(--text)">When explaining code, always:</div>
+          <div><span style="color:#FBBF24">1.</span> Start with a real-world analogy</div>
+          <div><span style="color:#FBBF24">2.</span> Draw an ASCII diagram of the flow</div>
+          <div><span style="color:#FBBF24">3.</span> Walk through it step by step</div>
+          <div><span style="color:#FBBF24">4.</span> Highlight one common gotcha</div>
+        </div>
+        <div class="s-two-col">
+          <div class="s-callout" style="border-left-color:#A78BFA">
+            <div class="s-callout-label">&#9670; Frontmatter (metadata)</div>
+            <div class="s-callout-text"><strong>name</strong> becomes the /slash-command. <strong>description</strong> is what Claude reads to decide whether to load this skill at all. This is the most important field you'll write.</div>
+          </div>
+          <div class="s-callout" style="border-left-color:#3B82F6">
+            <div class="s-callout-label">&#9670; Body (instructions)</div>
+            <div class="s-callout-text">Plain markdown. Write it like you'd explain the task to a competent colleague — clear steps, constraints, examples. Claude follows this exactly when the skill loads.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: The Description Field -->
+  <div class="slide" id="skills-slide-4">
+    <div class="slide-card">
+      <div class="slide-band" style="background:#FBBF24"></div>
+      <div class="slide-header">
+        <div class="slide-eyebrow"><span style="color:#FBBF24">&#9670;</span> Building &nbsp;&middot;&nbsp; Slide 5 of 11</div>
+        <div class="slide-title">The <span style="color:#FBBF24">Description Field</span> — Most Important Line You'll Write</div>
+        <div class="slide-subtitle">Claude decides whether to load your skill based entirely on the description. If it's vague, the skill won't fire when you need it. If it's too narrow, it misses variations.</div>
+      </div>
+      <div class="slide-body">
+        <div class="s-steps" style="margin-bottom:1.25rem">
+          <div class="s-step">
+            <div class="s-step-num" style="background:#EF4444">✗</div>
+            <div class="s-step-body">
+              <div class="s-step-label" style="color:#EF4444">Too vague — won't trigger reliably</div>
+              <div class="s-step-text" style="font-family:'JetBrains Mono',monospace;font-size:0.76rem;color:var(--muted)">description: Helps with code</div>
+            </div>
+          </div>
+          <div class="s-step">
+            <div class="s-step-num" style="background:#FBBF24;color:#000">~</div>
+            <div class="s-step-body">
+              <div class="s-step-label" style="color:#FBBF24">Too narrow — misses natural variations</div>
+              <div class="s-step-text" style="font-family:'JetBrains Mono',monospace;font-size:0.76rem;color:var(--muted)">description: Use when user says "explain this code"</div>
+            </div>
+          </div>
+          <div class="s-step">
+            <div class="s-step-num" style="background:#22C55E">✓</div>
+            <div class="s-step-body">
+              <div class="s-step-label" style="color:#22C55E">Well-crafted — specific, covers variations</div>
+              <div class="s-step-text" style="font-family:'JetBrains Mono',monospace;font-size:0.76rem;color:var(--muted)">description: Explains code with diagrams and analogies. Use when explaining how code works, teaching about a codebase, or when the user asks "how does this work?" or "walk me through this."</div>
+            </div>
+          </div>
+        </div>
+        <div class="s-callout amber">
+          <div class="s-callout-label">&#9670; Pro tip</div>
+          <div class="s-callout-text">Be a little "pushy" in descriptions — Claude tends to under-trigger. Include explicit trigger phrases: <strong>"Use when..."</strong>, <strong>"Triggers on..."</strong>, and list 3–5 natural ways a user might phrase the request.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: Creating Your First Skill -->
+  <div class="slide" id="skills-slide-5">
+    <div class="slide-card">
+      <div class="slide-band" style="background:#22C55E"></div>
+      <div class="slide-header">
+        <div class="slide-eyebrow"><span style="color:#22C55E">&#9670;</span> Building &nbsp;&middot;&nbsp; Slide 6 of 11</div>
+        <div class="slide-title">Creating Your <span style="color:#22C55E">First Skill</span></div>
+        <div class="slide-subtitle">Three steps. Five minutes. A reusable workflow that follows you across every project.</div>
+      </div>
+      <div class="slide-body">
+        <div class="s-steps" style="margin-bottom:1.25rem">
+          <div class="s-step">
+            <div class="s-step-num" style="background:#22C55E;color:#000">1</div>
+            <div class="s-step-body">
+              <div class="s-step-label">Create the skill directory</div>
+              <div class="s-step-text">Personal skills (available in all projects): <span style="font-family:'JetBrains Mono',monospace;color:#22C55E">~/.claude/skills/your-skill-name/</span> &nbsp;·&nbsp; Project-only skills: <span style="font-family:'JetBrains Mono',monospace;color:#22C55E">.claude/skills/your-skill-name/</span></div>
+            </div>
+          </div>
+          <div class="s-step">
+            <div class="s-step-num" style="background:#3B82F6">2</div>
+            <div class="s-step-body">
+              <div class="s-step-label">Write the SKILL.md</div>
+              <div class="s-step-text">Add YAML frontmatter with <strong>name</strong> and <strong>description</strong>, then write your instructions in markdown below the closing <span style="font-family:'JetBrains Mono',monospace;color:#A78BFA">---</span>. That's the whole format.</div>
+            </div>
+          </div>
+          <div class="s-step">
+            <div class="s-step-num" style="background:#FBBF24;color:#000">3</div>
+            <div class="s-step-body">
+              <div class="s-step-label">Test both ways</div>
+              <div class="s-step-text">Auto-trigger: ask Claude something that matches your description and watch it load. Manual trigger: type <span style="font-family:'JetBrains Mono',monospace;color:#FBBF24">/your-skill-name</span> directly in chat.</div>
+            </div>
+          </div>
+        </div>
+        <div class="s-callout green">
+          <div class="s-callout-label">&#9670; Shortcut</div>
+          <div class="s-callout-text">In Claude Code, type <strong>/create-skill</strong> and describe what you want. Claude will ask clarifying questions and generate the SKILL.md for you — including frontmatter and a full instruction body.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 7: Directory Structure -->
+  <div class="slide" id="skills-slide-6">
+    <div class="slide-card">
+      <div class="slide-band" style="background:#8B5CF6"></div>
+      <div class="slide-header">
+        <div class="slide-eyebrow"><span style="color:#8B5CF6">&#9670;</span> Configuration &nbsp;&middot;&nbsp; Slide 7 of 11</div>
+        <div class="slide-title">Multi-File Skills &amp; <span style="color:#8B5CF6">Progressive Disclosure</span></div>
+        <div class="slide-subtitle">Once a skill grows beyond a single file, you can split it across folders. Claude loads only what it needs — keeping context windows lean.</div>
+      </div>
+      <div class="slide-body">
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.25rem;font-family:'JetBrains Mono',monospace;font-size:0.78rem;line-height:1.85;margin-bottom:1.25rem">
+          <div style="color:#8B5CF6">your-skill/</div>
+          <div style="padding-left:1.25rem"><span style="color:#22C55E">├── SKILL.md</span> <span style="color:var(--dim)">&nbsp;&nbsp;&nbsp;← required: frontmatter + core instructions</span></div>
+          <div style="padding-left:1.25rem"><span style="color:#3B82F6">├── scripts/</span> <span style="color:var(--dim)">&nbsp;&nbsp;&nbsp;← executable code; runs without consuming context</span></div>
+          <div style="padding-left:1.25rem"><span style="color:#FBBF24">├── references/</span> <span style="color:var(--dim)">&nbsp;← docs loaded into context only when referenced</span></div>
+          <div style="padding-left:1.25rem"><span style="color:#F97316">└── assets/</span> <span style="color:var(--dim)">&nbsp;&nbsp;&nbsp;&nbsp;← templates, icons, fonts used in output</span></div>
+        </div>
+        <div class="s-two-col">
+          <div class="s-callout" style="border-left-color:#3B82F6">
+            <div class="s-callout-label">&#9670; Scripts — deterministic tasks</div>
+            <div class="s-callout-text">Large language models are inefficient for sorting, calculations, or file parsing. Put that logic in a script. Claude runs it without loading it into context — faster, cheaper, and reliable.</div>
+          </div>
+          <div class="s-callout" style="border-left-color:#8B5CF6">
+            <div class="s-callout-label">&#9670; allowed-tools</div>
+            <div class="s-callout-text">Restrict which tools a skill can use with the <strong>allowed-tools</strong> frontmatter field. Lock a skill to read-only file access, or prevent it from running bash commands — fine-grained control per skill.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 8: Skills vs. Other Features -->
+  <div class="slide" id="skills-slide-7">
+    <div class="slide-card">
+      <div class="slide-band" style="background:#F97316"></div>
+      <div class="slide-header">
+        <div class="slide-eyebrow"><span style="color:#F97316">&#9670;</span> Configuration &nbsp;&middot;&nbsp; Slide 8 of 11</div>
+        <div class="slide-title">Skills vs. <span style="color:#F97316">Other Claude Code Features</span></div>
+        <div class="slide-subtitle">Claude Code has several customization options. Skills are the right tool for reusable, task-specific workflows — not everything needs to be a skill.</div>
+      </div>
+      <div class="slide-body">
+        <div style="display:flex;flex-direction:column;gap:0.65rem;margin-bottom:1.25rem">
+          <div style="background:var(--surface2);border-radius:10px;padding:0.8rem 1rem;display:grid;grid-template-columns:130px 1fr 1fr;gap:1rem;font-size:0.78rem;border-top:2px solid #22C55E">
+            <div style="font-family:'JetBrains Mono',monospace;color:#22C55E;font-weight:600">Skills</div>
+            <div style="color:var(--muted)">Reusable task-specific workflows loaded automatically</div>
+            <div style="color:var(--text)">Write a commit msg, explain code, generate a report</div>
+          </div>
+          <div style="background:var(--surface2);border-radius:10px;padding:0.8rem 1rem;display:grid;grid-template-columns:130px 1fr 1fr;gap:1rem;font-size:0.78rem;border-top:2px solid #3B82F6">
+            <div style="font-family:'JetBrains Mono',monospace;color:#3B82F6;font-weight:600">CLAUDE.md</div>
+            <div style="color:var(--muted)">Always-on project context and preferences</div>
+            <div style="color:var(--text)">Coding style, repo structure, team conventions</div>
+          </div>
+          <div style="background:var(--surface2);border-radius:10px;padding:0.8rem 1rem;display:grid;grid-template-columns:130px 1fr 1fr;gap:1rem;font-size:0.78rem;border-top:2px solid #A78BFA">
+            <div style="font-family:'JetBrains Mono',monospace;color:#A78BFA;font-weight:600">Hooks</div>
+            <div style="color:var(--muted)">Code that fires on specific Claude Code events</div>
+            <div style="color:var(--text)">Run tests after every edit, lint on save</div>
+          </div>
+          <div style="background:var(--surface2);border-radius:10px;padding:0.8rem 1rem;display:grid;grid-template-columns:130px 1fr 1fr;gap:1rem;font-size:0.78rem;border-top:2px solid #F97316">
+            <div style="font-family:'JetBrains Mono',monospace;color:#F97316;font-weight:600">Subagents</div>
+            <div style="color:var(--muted)">Isolated Claude instances for expert delegation</div>
+            <div style="color:var(--text)">Parallel tasks, isolated context, specialization</div>
+          </div>
+        </div>
+        <div class="s-callout" style="border-left-color:#F97316">
+          <div class="s-callout-label">&#9670; Skills + Subagents</div>
+          <div class="s-callout-text">You can wire a skill into a custom subagent — giving that subagent a specific set of instructions, tools, and behavior. This is the pattern for building highly specialized, isolated AI workers within a larger workflow.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 9: Sharing Skills -->
+  <div class="slide" id="skills-slide-8">
+    <div class="slide-card">
+      <div class="slide-band" style="background:#EC4899"></div>
+      <div class="slide-header">
+        <div class="slide-eyebrow"><span style="color:#EC4899">&#9670;</span> Sharing &nbsp;&middot;&nbsp; Slide 9 of 11</div>
+        <div class="slide-title">Sharing &amp; <span style="color:#EC4899">Distributing Skills</span></div>
+        <div class="slide-subtitle">A skill that only lives on your machine is useful. A skill your whole team shares is leverage. Three levels of distribution — from a colleague to the whole enterprise.</div>
+      </div>
+      <div class="slide-body">
+        <div class="s-three-col" style="margin-bottom:1.25rem">
+          <div class="s-icon-card" style="border-top:3px solid #22C55E">
+            <div class="s-icon">&#128101;</div>
+            <div class="s-icon-label" style="color:#22C55E">Team Repository</div>
+            <div class="s-icon-sub">Commit your <span style="font-family:'JetBrains Mono',monospace">.claude/skills/</span> folder to a shared Git repo. Anyone who clones the repo gets the skills automatically.</div>
+          </div>
+          <div class="s-icon-card" style="border-top:3px solid #EC4899">
+            <div class="s-icon">&#127760;</div>
+            <div class="s-icon-label" style="color:#EC4899">Plugins</div>
+            <div class="s-icon-sub">Package skills as a plugin for broader distribution. Others install them with <span style="font-family:'JetBrains Mono',monospace">/plugin install</span> — no manual setup, no file copying.</div>
+          </div>
+          <div class="s-icon-card" style="border-top:3px solid #A78BFA">
+            <div class="s-icon">&#127970;</div>
+            <div class="s-icon-label" style="color:#A78BFA">Enterprise Managed</div>
+            <div class="s-icon-sub">Deploy skills org-wide via enterprise managed settings. Every developer in the organization gets the skill — no action required on their end.</div>
+          </div>
+        </div>
+        <div class="s-callout" style="border-left-color:#EC4899">
+          <div class="s-callout-label">&#9670; Security note</div>
+          <div class="s-callout-text">Treat skills like installing software. Review the SKILL.md, scripts, and any bundled files before running them. Skills with access to external URLs or sensitive data deserve extra scrutiny — a compromised dependency can affect everything.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 10: Troubleshooting -->
+  <div class="slide" id="skills-slide-9">
+    <div class="slide-card">
+      <div class="slide-band" style="background:#EF4444"></div>
+      <div class="slide-header">
+        <div class="slide-eyebrow"><span style="color:#EF4444">&#9670;</span> Troubleshooting &nbsp;&middot;&nbsp; Slide 10 of 11</div>
+        <div class="slide-title">When Skills <span style="color:#EF4444">Don't Work</span></div>
+        <div class="slide-subtitle">Most skill issues fall into three buckets — triggering, conflicts, and runtime errors. Here's how to diagnose each one.</div>
+      </div>
+      <div class="slide-body">
+        <div class="s-steps" style="margin-bottom:1.25rem">
+          <div class="s-step">
+            <div class="s-step-num" style="background:#FBBF24;color:#000">1</div>
+            <div class="s-step-body">
+              <div class="s-step-label">Skill won't trigger</div>
+              <div class="s-step-text">The description doesn't match your request well enough. Rewrite it to be more specific: add explicit trigger phrases, list natural variations, and test with 5–10 different phrasings of the same request.</div>
+            </div>
+          </div>
+          <div class="s-step">
+            <div class="s-step-num" style="background:#F97316">2</div>
+            <div class="s-step-body">
+              <div class="s-step-label">Priority conflicts</div>
+              <div class="s-step-text">Two skills have overlapping descriptions and both load — or the wrong one wins. Make descriptions more distinctive. Project skills take priority over personal skills; bundled skills are lowest priority.</div>
+            </div>
+          </div>
+          <div class="s-step">
+            <div class="s-step-num" style="background:#EF4444">3</div>
+            <div class="s-step-body">
+              <div class="s-step-label">Runtime errors</div>
+              <div class="s-step-text">A script fails, a referenced file is missing, or a tool is blocked by allowed-tools. Check that bundled files exist at the referenced paths and that the required tools aren't restricted in frontmatter.</div>
+            </div>
+          </div>
+        </div>
+        <div class="s-callout red">
+          <div class="s-callout-label">&#9670; Eval-first mindset</div>
+          <div class="s-callout-text">Before deploying a skill, create 10–20 test prompts — a mix that should and shouldn't trigger it. Run them and check the results. A small eval suite catches triggering bugs before they reach your team.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 11: Key Takeaways -->
+  <div class="slide" id="skills-slide-10">
+    <div class="slide-card">
+      <div class="slide-band" style="background:linear-gradient(90deg,#A78BFA,#22C55E)"></div>
+      <div class="slide-header">
+        <div class="slide-eyebrow"><span style="color:#22C55E">&#9670;</span> Summary &nbsp;&middot;&nbsp; Slide 11 of 11</div>
+        <div class="slide-title">Key <span style="color:#22C55E">Takeaways</span></div>
+        <div class="slide-subtitle">The most important ideas from the Agent Skills curriculum — worth returning to when you're building or debugging a skill.</div>
+      </div>
+      <div class="slide-body">
+        <div class="s-two-col" style="margin-bottom:1.25rem">
+          <div>
+            <div class="s-steps">
+              <div class="s-step" style="background:transparent;border:none;padding:0.5rem 0">
+                <div class="s-step-num" style="background:#22C55E;color:#000;width:24px;height:24px;font-size:0.7rem">1</div>
+                <div class="s-step-body"><div class="s-step-label">Teach Claude once</div><div class="s-step-text">A skill encodes your workflow so you never have to re-explain it. Write it once, use it across every project and session.</div></div>
+              </div>
+              <div class="s-step" style="background:transparent;border:none;padding:0.5rem 0">
+                <div class="s-step-num" style="background:#A78BFA;width:24px;height:24px;font-size:0.7rem">2</div>
+                <div class="s-step-body"><div class="s-step-label">Description is everything</div><div class="s-step-text">Claude loads your skill based solely on the description field. A weak description means a skill that doesn't fire — make it specific and list natural trigger phrases.</div></div>
+              </div>
+              <div class="s-step" style="background:transparent;border:none;padding:0.5rem 0">
+                <div class="s-step-num" style="background:#3B82F6;width:24px;height:24px;font-size:0.7rem">3</div>
+                <div class="s-step-body"><div class="s-step-label">Progressive disclosure</div><div class="s-step-text">Split large skills into SKILL.md + scripts + references + assets. Claude loads only what it needs — keeping context lean and cost low.</div></div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="s-steps">
+              <div class="s-step" style="background:transparent;border:none;padding:0.5rem 0">
+                <div class="s-step-num" style="background:#FBBF24;color:#000;width:24px;height:24px;font-size:0.7rem">4</div>
+                <div class="s-step-body"><div class="s-step-label">Scripts for determinism</div><div class="s-step-text">Anything that needs to be consistent — parsing, formatting, calculations — belongs in a script, not in the LLM's inference loop.</div></div>
+              </div>
+              <div class="s-step" style="background:transparent;border:none;padding:0.5rem 0">
+                <div class="s-step-num" style="background:#EC4899;width:24px;height:24px;font-size:0.7rem">5</div>
+                <div class="s-step-body"><div class="s-step-label">Share at the right level</div><div class="s-step-text">Personal → team repo → plugin → enterprise managed. Start local, share when it works, scale when the team adopts it.</div></div>
+              </div>
+              <div class="s-step" style="background:transparent;border:none;padding:0.5rem 0">
+                <div class="s-step-num" style="background:#EF4444;width:24px;height:24px;font-size:0.7rem">6</div>
+                <div class="s-step-body"><div class="s-step-label">Eval before deploying</div><div class="s-step-text">10–20 test prompts before sharing with your team. A small eval suite prevents bad triggering behavior from reaching others.</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="s-callout" style="border-left-color:#22C55E">
+          <div class="s-callout-label">&#9670; Continue learning</div>
+          <div class="s-callout-text">Full course available at <strong>anthropic.skilljar.com/introduction-to-agent-skills</strong> — covering configuration, advanced multi-file skills, plugins, enterprise deployment, and a complete troubleshooting guide.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOT INDICATORS -->
+  <div class="deck-dots" id="skillsDots"></div>
+
+  <!-- BOTTOM NAV -->
+  <div class="deck-nav" style="margin-top:1rem">
+    <button class="deck-btn" id="skillsPrev2" onclick="skillsNav(-1)" disabled>&#8592; Back</button>
+    <div style="font-size:0.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace;text-align:center;flex:1">Use arrow keys &#8592; &#8594; or click to navigate</div>
+    <button class="deck-btn primary" id="skillsNext2" onclick="skillsNav(1)">Next &#8594;</button>
+  </div>
+
+</div>
 </div>
 
 <!-- CASE STUDIES (hidden by default) -->
@@ -2876,18 +3345,37 @@ function updateProgress(){
 
 // ── SECTION TOGGLE ──
 let _csInited=false;
-function showSection(key){
+function showSection(key, basicsTab){
   document.getElementById("sectionStart").style.display=key==="start"?"":"none";
   document.getElementById("sectionTerms").style.display=key==="terms"?"":"none";
   document.getElementById("sectionCases").style.display=key==="cases"?"":"none";
   document.getElementById("sectionTldr").style.display=key==="tldr"?"":"none";
+  document.getElementById("sectionSkills").style.display=key==="skills"?"":"none";
   document.getElementById("navStart").classList.toggle("active",key==="start");
   document.getElementById("navTerms").classList.toggle("active",key==="terms");
   document.getElementById("navCases").classList.toggle("active",key==="cases");
-  document.getElementById("navTldr").classList.toggle("active",key==="tldr");
+  document.getElementById("navTldr").classList.toggle("active",key==="tldr"||key==="skills");
   if(key==="cases"&&!_csInited){initCaseStudies();_csInited=true;}
-
+  // Close basics dropdown and highlight active sub-item
+  document.getElementById("basicsDropdownWrap").classList.remove("open");
+  document.querySelectorAll(".basics-dropdown-item").forEach(function(btn){
+    var label=btn.textContent.trim().toLowerCase();
+    btn.classList.toggle("active",
+      (label==="prompting"&&key==="tldr")||(label==="skills"&&key==="skills")
+    );
+  });
 }
+
+function toggleBasicsDropdown(e){
+  e.stopPropagation();
+  var wrap=document.getElementById("basicsDropdownWrap");
+  wrap.classList.toggle("open");
+}
+// Close dropdown when clicking outside
+document.addEventListener("click",function(){
+  var wrap=document.getElementById("basicsDropdownWrap");
+  if(wrap) wrap.classList.remove("open");
+});
 
 function showTrack(track){
   // Only changes which path card panel is visible — does NOT affect term grid
@@ -3460,6 +3948,60 @@ document.getElementById("subEmailFooter").addEventListener("keydown",function(e)
 renderGrid();
 document.getElementById("totalTerms").textContent=TERMS.length;
 document.getElementById("visibleTerms").textContent=TERMS.length;
+
+// ── SKILLS SLIDESHOW ──
+(function(){
+  let cur=0;
+  const TOTAL=11;
+  function update(){
+    for(let i=0;i<TOTAL;i++){
+      const s=document.getElementById("skills-slide-"+i);
+      if(s) s.classList.toggle("active",i===cur);
+    }
+    const pct=((cur+1)/TOTAL*100).toFixed(2);
+    const fill=document.getElementById("skillsFill");
+    if(fill) fill.style.width=pct+"%";
+    ["skillsCounter"].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el) el.textContent=(cur+1)+" / "+TOTAL;
+    });
+    ["skillsPrev","skillsPrev2"].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el) el.disabled=cur===0;
+    });
+    ["skillsNext","skillsNext2"].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el){
+        el.disabled=cur===TOTAL-1;
+        el.textContent=cur===TOTAL-1?"Done ✓":"Next →";
+      }
+    });
+    document.querySelectorAll(".skills-dot").forEach((d,i)=>d.classList.toggle("active",i===cur));
+    const page=document.querySelector(".skills-page");
+    if(page&&cur>0) page.scrollIntoView({behavior:"smooth",block:"start"});
+  }
+  window.skillsNav=function(dir){
+    cur=Math.max(0,Math.min(TOTAL-1,cur+dir));
+    update();
+  };
+  document.addEventListener("DOMContentLoaded",function(){
+    const dotsEl=document.getElementById("skillsDots");
+    if(!dotsEl) return;
+    for(let i=0;i<TOTAL;i++){
+      const d=document.createElement("button");
+      d.className="deck-dot skills-dot"+(i===0?" active":"");
+      d.title="Slide "+(i+1);
+      d.onclick=(function(idx){return function(){cur=idx;update();};})(i);
+      dotsEl.appendChild(d);
+    }
+  });
+  document.addEventListener("keydown",function(e){
+    const skills=document.getElementById("sectionSkills");
+    if(!skills||skills.style.display==="none") return;
+    if(e.key==="ArrowRight"||e.key==="ArrowDown") skillsNav(1);
+    if(e.key==="ArrowLeft"||e.key==="ArrowUp") skillsNav(-1);
+  });
+})();
 
 </script>
 </body>
